@@ -1,0 +1,14 @@
+:root {
+  --td-button-border-radius: 16px;
+  /* --td-button-primary-bg-color: #0052D9;
+  --td-button-primary-border-color: #0052D9; */
+}
+
+body {
+  margin: 0;
+  background-color: #f5f6f7;
+}
+
+.t-action-sheet__description {
+  margin: 0;
+}
