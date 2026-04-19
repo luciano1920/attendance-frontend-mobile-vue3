@@ -1,8 +1,8 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 10:50
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-19 10:33
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-19 14:39
  * @FilePath     : \attendance-frontend-mobile\src\layouts\MobileLayout.vue
  * @Description  : 移动端页面布局
 -->
@@ -107,7 +107,7 @@ onMounted(() => {
 
   .t-tab-bar-item__content {
     // border-radius: 16px !important;
-    transition: all 0.5s ease;
+    // transition: all 0.2s ease;
 
     &--checked {
       transform: scale(1.05);

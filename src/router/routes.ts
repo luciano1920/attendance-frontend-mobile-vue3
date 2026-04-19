@@ -1,8 +1,8 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 15:42
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-31 11:10
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-19 14:49
  * @FilePath     : \attendance-frontend-mobile\src\router\routes.ts
  * @Description  : 所有路由配置
  */
@@ -54,6 +54,15 @@ export const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/auth/UserRegisterPage.vue'),
         meta: {
           title: '用户注册'
+        }
+      },
+      // 用户忘记密码重置页
+      {
+        path: 'forgot',
+        name: '用户重置密码页',
+        component: () => import('@/pages/auth/UserForgotPage.vue'),
+        meta: {
+          title: '忘记密码'
         }
       },
 

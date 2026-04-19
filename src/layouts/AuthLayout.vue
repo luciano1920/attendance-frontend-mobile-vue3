@@ -1,15 +1,15 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-31 11:03
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-02 11:22
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-19 12:09
  * @FilePath     : \attendance-frontend-mobile\src\layouts\AuthLayout.vue
  * @Description  : 认证页通用布局
 -->
 <template>
   <div id="auth-layout">
     <RouterView v-slot="{ Component }">
-      <Transition name="auth-content-animation" mode="out-in" appear>
+      <Transition name="auth-content-animation-unset" mode="out-in" appear>
         <component :is="Component" :key="$route.fullPath" />
       </Transition>
     </RouterView>

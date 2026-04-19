@@ -1,7 +1,8 @@
 :root {
   --td-button-border-radius: 16px;
-  /* --td-button-primary-bg-color: #0052D9;
-  --td-button-primary-border-color: #0052D9; */
+  --td-button-font-weight: 600;
+  --td-font-family: HarmonyOS Sans SC, PingFang SC, Microsoft YaHei, Arial Regular;
+  --td-font-family-medium: HarmonyOS Sans SC, PingFang SC, Microsoft YaHei, Arial Medium;
 }
 
 body {
@@ -12,3 +13,8 @@ body {
 .t-action-sheet__description {
   margin: 0;
 }
+
+.t-button {
+  font-family: 'HarmonyOS Sans SC', Arial, sans-serif;
+}
+

@@ -5,6 +5,7 @@ interface ImportMetaEnv {
 	readonly VITE_APP_TITLE: string;
 	readonly VITE_APP_SYSTEM_TITLE: string;
 	readonly VITE_APP_DESCRIPTION: string;
+	readonly VITE_APP_SLOGAN: string
 
 	// 默认主题模式
 	readonly VITE_DEFAULT_THEME: 'light' | 'dark';

@@ -1,8 +1,8 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-24 22:04
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-02 15:23
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-19 15:05
  * @FilePath     : \attendance-frontend-mobile\src\pages\auth\UserLoginPage.vue
  * @Description  : 用户登录页面
 -->
@@ -14,12 +14,16 @@
       </template>
     </t-button>
 
-    <div class="logo">
-      <SvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
-    </div>
+    <div class="login-header">
+      <div class="header-title">
+        <div class="title">欢迎回来</div>
+        <div class="desc">登录你的考勤系统</div>
+      </div>
 
-    <div class="title">欢迎回来</div>
-    <div class="desc">{{ systemDescription }}</div>
+      <div class="logo">
+        <SvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
+      </div>
+    </div>
 
     <t-form
       :data="formData"
@@ -31,18 +35,13 @@
       <t-form-item label="账号" name="username">
         <t-input v-model="formData.username" borderless placeholder="请输入工号或手机号">
           <template #prefixIcon>
-            <SvgIcon name="smartphone" />
+            <SvgIcon name="user" />
           </template>
         </t-input>
       </t-form-item>
 
       <t-form-item label="密码" name="password">
-        <t-input
-          v-model="formData.password"
-          borderless
-          type="password"
-          placeholder="请输入用户密码"
-        >
+        <t-input v-model="formData.password" borderless type="password" placeholder="请输入密码">
           <template #prefixIcon>
             <SvgIcon name="lock" />
           </template>
@@ -52,11 +51,11 @@
       <t-form-item label="验证码" name="code">
         <t-input v-model="formData.code" borderless placeholder="请输入验证码">
           <template #prefixIcon>
-            <SvgIcon name="shield-check" />
+            <SvgIcon name="smartphone" />
           </template>
           <template #suffix>
             <t-button
-              style="color: #155dfb; font-weight: 500"
+              style="font-weight: 500"
               size="extra-small"
               theme="primary"
               variant="text"
@@ -78,12 +77,12 @@
         </t-input>
       </t-form-item>
 
-      <t-button size="large" theme="primary" type="submit" class="form-submit">登 录</t-button>
+      <t-button size="large" theme="primary" type="submit" class="form-submit">立即登录</t-button>
     </t-form>
 
     <div class="tips">
-      没有账号？
-      <t-link @click="router.push('/auth/register')" class="tips-link">立即注册</t-link>
+      <t-link theme="primary" @click="router.push('/auth/register')">注册账号</t-link>
+      <t-link theme="primary" @click="router.push('/auth/forgot')">忘记密码？</t-link>
     </div>
   </div>
 </template>
@@ -107,7 +106,6 @@ import CaptchaWrapper from '@/components/captcha/CaptchaWrapper.vue'
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
-const systemDescription = import.meta.env.VITE_APP_DESCRIPTION
 
 interface FormData {
   username?: string
@@ -204,53 +202,57 @@ const handleSubmit = async () => {
 #user-login-page {
   display: flex;
   flex-direction: column;
-  padding: 48px 32px;
+  padding: 32px;
 
-  .logo {
-    background-color: #0052D9;
-    box-shadow: 0 6px 16px rgba(21, 93, 251, 0.3);
+  background: url('@/assets/svgs/bg/login.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: top;
+
+  .login-header {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 20px;
-    padding: 8px;
-    margin-top: 24px;
-    transform: rotate(-7deg);
-  }
+    justify-content: space-between;
+    padding: 18px 0 32px;
 
-  .title {
-    font-size: 30px;
-    font-weight: 700;
-    color: #001442;
-    margin-top: 24px;
-    margin-bottom: 6px;
-  }
+    .header-title {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
 
-  .desc {
-    font-size: 15px;
-    color: #62748e;
-    margin-bottom: 24px;
+      .title {
+        font-size: 30px;
+        font-weight: 700;
+        color: #001442;
+      }
+
+      .desc {
+        font-size: 15px;
+        color: #62748e;
+      }
+    }
+
+    .logo {
+      background-color: #0052d9;
+      box-shadow: 0 6px 16px rgba(21, 93, 251, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 20px;
+      padding: 8px;
+      transform: rotate(-7deg);
+    }
   }
 
   .tips {
     display: flex;
     align-items: center;
-    justify-content: center;
-    margin-top: 24px;
+    justify-content: space-between;
     font-size: 14px;
     color: #62748e;
-
-    .tips-link {
-      color: #155dfb;
-      cursor: pointer;
-      transition: all 0.3s ease;
-
-      &:hover {
-        opacity: 0.8;
-      }
-    }
+    padding: 0 8px;
   }
 
   .form-submit {
@@ -265,9 +267,13 @@ const handleSubmit = async () => {
   }
 }
 
+.t-form {
+  background: transparent;
+}
+
 :deep(.t-form__item) {
   padding: 0;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 
   &::after {
     display: none;
@@ -276,11 +282,13 @@ const handleSubmit = async () => {
   .t-form__label {
     color: #535d6d;
     font-size: 14px;
+    padding-bottom: 4px;
+    padding-left: 4px;
   }
 }
 
 :deep(.t-input) {
-  background-color: #f3f3f4;
+  // background-color: #f3f3f4;
   border: 1px solid #e7e8eb;
   border-radius: 16px;
   padding: 12px;

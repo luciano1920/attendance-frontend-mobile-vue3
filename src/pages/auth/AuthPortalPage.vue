@@ -1,8 +1,8 @@
 <!--
- * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-24 22:02
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-19 10:35
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-19 15:09
  * @FilePath     : \attendance-frontend-mobile\src\pages\auth\AuthPortalPage.vue
  * @Description  : 系统认证登录门户页
 -->
@@ -14,48 +14,49 @@
 
     <div class="system-title">{{ systemTitle }}</div>
     <div class="system-desc">{{ systemDescription }}</div>
+    <div class="system-slogan">
+      <SvgIcon name="check-circle" />
+      {{ systemSlogan }}
+    </div>
 
     <div class="auth-action">
-      <div class="login-action" @click="router.push('/auth/login')">
-        <div class="login-avatar-wrapper">
-          <img src="../../assets/images/avatar.png" class="user-avatar" alt="avatar" />
-          <SvgIcon name="user-circle" color="#2b7fff" class="avatar-badge" />
-        </div>
+      <t-button
+        theme="primary"
+        size="large"
+        style="width: 90%; gap: 8px"
+        @click="router.push('/auth/login')"
+      >
+        <template #icon>
+          <SvgIcon name="user" />
+        </template>
+        账号密码登录
+      </t-button>
 
-        <div class="login-user-desc">
-          <div class="login-user-name">账号密码登录</div>
-          <div class="login-user-role">
-            <span>数智产品研发中心</span>
-            <span>·</span>
-            <span>罗钧</span>
-          </div>
-        </div>
+      <t-button
+        variant="outline"
+        size="large"
+        style="width: 90%; gap: 8px; background-color: #fff"
+        @click="router.push('/tianyiBox')"
+      >
+        <template #icon>
+          <SvgIcon name="shield-check" color="#0052d9" />
+        </template>
+        天翼认证登录
+      </t-button>
 
-        <t-button theme="light" shape="round" size="small" class="login-button">登录</t-button>
-      </div>
+      <t-button
+        variant="outline"
+        size="large"
+        style="width: 90%; gap: 8px; background-color: #fff"
+        @click="router.push('/auth/register')"
+      >
+        <template #icon>
+          <SvgIcon name="user-plus" color="#0052d9" />
+        </template>
+        注册新账号
+      </t-button>
 
-      <div class="login-action" @click="router.push('/tianyiBox')">
-        <div class="login-avatar-wrapper">
-          <img src="../../assets/images/telecom.png" class="user-avatar" alt="avatar" />
-          <SvgIcon name="shield-check" color="#00bc7d" class="avatar-badge" />
-        </div>
-
-        <div class="login-user-desc">
-          <div class="login-user-name">天翼认证登录</div>
-          <div class="login-user-role">
-            <span>数智产品研发中心</span>
-            <span>·</span>
-            <span>罗钧</span>
-          </div>
-        </div>
-
-        <t-button theme="light" shape="round" size="small" class="login-button">登录</t-button>
-      </div>
-
-      <div class="register-action" @click="router.push('/auth/register')">
-        <SvgIcon name="plus-circle" />
-        <div>注册新账号</div>
-      </div>
+      <div class="footer-tip">登录即表示同意《用户协议》和《隐私政策》</div>
     </div>
   </div>
 </template>
@@ -77,6 +78,7 @@ const userStore = useUserStore()
 
 const systemTitle = import.meta.env.VITE_APP_TITLE
 const systemDescription = import.meta.env.VITE_APP_DESCRIPTION
+const systemSlogan = import.meta.env.VITE_APP_SLOGAN
 
 // 获取统一登录所需的 code，如果没有 code 则不执行统一登陆
 const unifiedLoginCode = computed(() => getUrlQueryParamsUtil().code)
@@ -123,19 +125,22 @@ watchEffect(() => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 60px 32px;
-  height: 70vh;
+  padding: 14vh 32px;
+  gap: 16px;
+  background: url('@/assets/svgs/bg/portal.svg');
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-position: 10% center;
 
   .system-logo {
-    background-color: #0052D9;
+    background-color: #0052d9;
     box-shadow: 0 6px 16px rgba(21, 93, 251, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     width: 54px;
     height: 54px;
-    border-radius: 20px;
+    border-radius: 24px;
     padding: 8px;
   }
 
@@ -143,14 +148,24 @@ watchEffect(() => {
     font-size: 24px;
     font-weight: 700;
     color: #001442;
-    margin-top: 24px;
-    margin-bottom: 8px;
   }
 
   .system-desc {
     font-size: 14px;
-    color: #62748e;
-    margin-bottom: 48px;
+    color: #86909c;
+  }
+
+  .system-slogan {
+    background-color: #e8f0fc;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: #0052d9;
+    border-radius: 20px;
+    gap: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .auth-action {
@@ -159,109 +174,19 @@ watchEffect(() => {
     align-items: center;
     justify-content: center;
     width: 100%;
-    gap: 16px;
+    gap: 12px;
 
-    .login-action {
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      width: 100%;
-      background-color: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 16px;
-      padding: 12px 16px;
-      transition: all 0.2s ease;
+    position: absolute;
+    bottom: 24px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    text-align: center;
 
-      &:hover {
-        background-color: #f1f5f9;
-      }
-
-      &:active {
-        transform: scale(0.98);
-      }
-
-      .login-avatar-wrapper {
-        position: relative;
-        display: inline-block;
-
-        .user-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          border: 1px solid #e2e8f0;
-          box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
-          padding: 2px;
-        }
-
-        .avatar-badge {
-          position: absolute;
-          bottom: 4px;
-          right: -2px;
-          width: 16px;
-          height: 16px;
-          background-color: #fff;
-          border-radius: 50%;
-          padding: 1px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-      }
-
-      .login-user-desc {
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        gap: 2px;
-
-        .login-user-name {
-          font-size: 16px;
-          font-weight: 600;
-          color: rgb(15, 23, 43);
-        }
-
-        .login-user-role {
-          font-size: 13px;
-          color: rgb(98, 116, 142);
-        }
-      }
+    .footer-tip {
+      font-size: 12px;
+      color: #86909c;
     }
-
-    .register-action {
-      box-sizing: border-box;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      background-color: rgb(255, 255, 255);
-      border: 1px dashed rgb(202, 213, 226);
-      border-radius: 16px;
-      padding: 16px;
-      color: rgb(69, 85, 108);
-      transition: all 0.2s ease;
-
-      &:hover {
-        background-color: rgb(239, 246, 255);
-        border-color: rgb(81, 162, 255);
-        color: #0052D9;
-      }
-
-      &:active {
-        transform: scale(0.98);
-      }
-    }
-  }
-}
-
-:deep(.t-button--round) {
-  background-color: rgb(239, 246, 255);
-  font-weight: 400;
-  font-size: 15px;
-  font-family: normal;
-
-  &:hover {
-    background-color: rgb(219, 234, 254);
   }
 }
 </style>
