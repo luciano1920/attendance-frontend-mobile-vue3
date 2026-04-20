@@ -1,8 +1,8 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-29 16:15
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-30 23:10
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-20 10:43
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\ApplyPage.vue
  * @Description  : 考勤申请页面
 -->
@@ -12,30 +12,46 @@
 
     <!-- 考勤申请选项条目 -->
     <div class="apply-action">
-      <div style="font-weight: 600; margin-bottom: 12px">常用申请</div>
+      <div class="apply-action-title">选择申请类型</div>
 
-      <div class="common-apply-card">
-        <div v-for="(item, index) in commonApplyList" :key="index" class="common-card-item">
-          <div class="common-card-item-icon" :style="{ backgroundColor: item.bgColor }">
-            <SvgIcon :name="item.icon" :color="item.color" size="24px" />
+      <div class="apply-action-grid">
+        <div class="apply-action-item short-item">
+          <IconContainer icon="coffee" theme="blue" />
+          <div class="apply-action-item-label">
+            <div class="apply-action-item-name">请假申请</div>
+            <div class="apply-action-item-desc">事假/病假</div>
           </div>
-          <div class="common-card-item-name" :style="{ '--hover-color': item.color }">
-            {{ item.name }}
-          </div>
-          <div class="common-card-item-desc">{{ item.description }}</div>
         </div>
-      </div>
 
-      <div style="font-weight: 600; margin: 12px 0">系统设置</div>
-
-      <div class="face-apply-card">
-        <div class="face-card-item" :style="{ '--face-hover-color': faceApplyConfig.color }">
-          <div class="face-card-item-icon" :style="{ backgroundColor: faceApplyConfig.bgColor }">
-            <SvgIcon :name="faceApplyConfig.icon" :color="faceApplyConfig.color" size="24px" />
+        <div class="apply-action-item short-item">
+          <IconContainer icon="plane" theme="orange" />
+          <div class="apply-action-item-label">
+            <div class="apply-action-item-name">外出申请</div>
+            <div class="apply-action-item-desc">公差/出差/驻点</div>
           </div>
-          <div>
-            <div class="face-card-item-name">{{ faceApplyConfig.name }}</div>
-            <div class="face-card-item-desc">{{ faceApplyConfig.description }}</div>
+        </div>
+
+        <div class="apply-action-item short-item">
+          <IconContainer icon="clipboard-pen" theme="red" />
+          <div class="apply-action-item-label">
+            <div class="apply-action-item-name">补卡申请</div>
+            <div class="apply-action-item-desc">忘记打卡/设备故障</div>
+          </div>
+        </div>
+
+        <div class="apply-action-item short-item">
+          <IconContainer icon="moon" theme="green" />
+          <div class="apply-action-item-label">
+            <div class="apply-action-item-name">调休申请</div>
+            <div class="apply-action-item-desc">申请调休休假</div>
+          </div>
+        </div>
+
+        <div class="apply-action-item long-item">
+          <IconContainer icon="scan-face" theme="purple" />
+          <div class="apply-action-item-label">
+            <div class="apply-action-item-name">人脸录入</div>
+            <div class="apply-action-item-desc">录入人脸用于人脸识别打卡</div>
           </div>
         </div>
       </div>
@@ -44,119 +60,79 @@
 </template>
 
 <script setup lang="ts">
-import SvgIcon from '@/components/SvgIcon.vue'
-import { getCommonApplyList, getFaceUpdateApplyConfig } from '@/constants/apply'
-
-// 申请选项数据
-const commonApplyList = getCommonApplyList()
-const faceApplyConfig = getFaceUpdateApplyConfig()
+import IconContainer from '@/components/IconContainer.vue'
 </script>
 
 <style scoped lang="scss">
 .apply-action {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: #fff;
   padding: 16px;
-  margin: 16px;
-  border-radius: 16px;
-  box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
 
-  .common-apply-card {
+  .apply-action-title {
+    font-size: 14px;
+    color: #86909c;
+    margin-bottom: 8px;
+    margin-left: 4px;
+  }
+
+  .apply-action-grid {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    gap: 16px;
+    gap: 12px 12px;
+    align-items: flex-start;
+    align-content: flex-start;
+    position: relative;
 
-    .common-card-item {
-      width: 30vw;
+    .apply-action-item {
+      box-sizing: border-box;
+      position: relative;
+      flex-shrink: 0;
       display: flex;
       flex-direction: column;
-      background-color: #f8fafc;
+      justify-content: center;
+      align-items: flex-start;
+      border-radius: 16px 16px 16px 16px;
+      background-color: rgba(255, 255, 255, 1);
       padding: 16px;
-      border-radius: 16px;
+      gap: 8px;
       transition: all 0.3s ease;
 
-      .common-card-item-icon {
-        box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
+      &:active {
+        transform: scale(0.98);
+      }
+
+      .apply-action-item-label {
         display: flex;
-        align-items: center;
+        flex-direction: column;
         justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 14px;
-        padding: 8px;
-        margin-bottom: 12px;
-      }
+        align-items: flex-start;
+        gap: 2px;
 
-      .common-card-item-name {
-        margin-bottom: 4px;
-        color: #272b34;
-        transition: all 0.3s ease;
-      }
+        .apply-action-item-name {
+          font-size: 16px;
+          font-weight: 600;
+          color: #171a1d;
+        }
 
-      .common-card-item-desc {
-        font-size: 13px;
-        color: #858a99;
-      }
-
-      &:hover {
-        background-color: #f1f5f9;
-
-        .common-card-item-name {
-          color: var(--hover-color);
+        .apply-action-item-desc {
+          font-size: 13px;
+          color: #86909c;
         }
       }
     }
-  }
 
-  .face-apply-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    .short-item {
+      width: calc((100% - 12px) / 2);
+      height: 132px;
+    }
 
-    .face-card-item {
-      width: calc(60vw + 48px);
-      display: flex;
+    .long-item {
+      width: 100%;
+      height: 80px;
+      flex-direction: row;
       align-items: center;
-      background-color: #f8fafc;
-      padding: 16px;
+      justify-content: flex-start;
       gap: 12px;
-      border-radius: 16px;
-      transition: all 0.3s ease;
-
-      .face-card-item-icon {
-        box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 28px;
-        height: 28px;
-        border-radius: 14px;
-        padding: 8px;
-      }
-
-      .face-card-item-name {
-        margin-bottom: 4px;
-        color: #272b34;
-        transition: all 0.3s ease;
-      }
-
-      .face-card-item-desc {
-        font-size: 13px;
-        color: #858a99;
-      }
-
-      &:hover {
-        background-color: #f1f5f9;
-
-        .face-card-item-name {
-          color: var(--face-hover-color);
-        }
-      }
     }
   }
 }

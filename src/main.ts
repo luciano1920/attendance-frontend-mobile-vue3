@@ -21,7 +21,7 @@ import SvgIcon from '@/components/SvgIcon.vue' // 引入你修改后的组件
 import '@/styles/global.css' // 引入全局样式
 import '@/styles/fonts.css' // 引入全局字体样式
 
-// import './permission' // 引入全局权限控制
+import './permission' // 引入全局权限控制
 
 const app = createApp(App)
 
