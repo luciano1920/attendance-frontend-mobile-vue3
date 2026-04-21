@@ -1,13 +1,14 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-19 17:07
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-07 09:30
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-20 15:03
  * @FilePath     : \attendance-frontend-mobile\src\main.ts
  * @Description  :
  */
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
 import router from './router'
@@ -24,8 +25,11 @@ import '@/styles/fonts.css' // 引入全局字体样式
 import './permission' // 引入全局权限控制
 
 const app = createApp(App)
+const pinia = createPinia()
 
-app.use(createPinia())
+pinia.use(piniaPluginPersistedstate)
+
+app.use(pinia)
 app.use(router)
 app.use(TDesign)
 app.component('SvgIcon', SvgIcon)

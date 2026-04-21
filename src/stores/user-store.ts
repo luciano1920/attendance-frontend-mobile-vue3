@@ -1,8 +1,8 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 16:39
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-27 10:32
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-20 15:04
  * @FilePath     : \attendance-frontend-mobile\src\stores\user-store.ts
  * @Description  : 用户信息全局状态
  */
@@ -70,61 +70,67 @@ interface TokenInfo {
 /**
  * 用户登录信息全局状态
  */
-export const useUserStore = defineStore('user', () => {
-  // ---------- state ----------
-  const loginUser = ref<LoginUserVO>({
-    accessToken: getTokenUtil(),
-    refreshToken: getRefreshTokenUtil(),
-    expiresTime: getExpiresTimeUtil(),
-    userInfo: {} as UserInfoVO
-  })
-
-  // ---------- actions ----------
-  /** 重置令牌（仅清除本地） */
-  function resetUserState() {
-    clearAuthInfoUtil()
-    loginUser.value = {
-      accessToken: null,
-      refreshToken: null,
-      expiresTime: null,
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    // ---------- state ----------
+    const loginUser = ref<LoginUserVO>({
+      accessToken: getTokenUtil(),
+      refreshToken: getRefreshTokenUtil(),
+      expiresTime: getExpiresTimeUtil(),
       userInfo: {} as UserInfoVO
+    })
+
+    // ---------- actions ----------
+    /** 重置令牌（仅清除本地） */
+    function resetUserState() {
+      clearAuthInfoUtil()
+      loginUser.value = {
+        accessToken: null,
+        refreshToken: null,
+        expiresTime: null,
+        userInfo: {} as UserInfoVO
+      }
     }
-  }
 
-  /** 获取登录用户信息 */
-  async function fetchLoginUserInfo() {
-    const res = await fetchUserInfoUsingGet()
-    if (res.data.code === 0 && res.data.data) {
-      loginUser.value.userInfo = res.data.data
+    /** 获取登录用户信息 */
+    async function fetchLoginUserInfo() {
+      const res = await fetchUserInfoUsingGet()
+      if (res.data.code === 0 && res.data.data) {
+        loginUser.value.userInfo = res.data.data
+      }
     }
-  }
 
-  /**
-   * 设置登录用户信息
-   * @param newLoginUser 传入完整的 LoginUserVO 对象或仅传入 TokenInfo 信息
-   */
-  function setLoginUserInfo(newLoginUser: LoginUserVO | TokenInfo) {
-    if ('userInfo' in newLoginUser) {
-      // 传入完整的 LoginUserVO 对象
-      loginUser.value = newLoginUser
-    } else {
-      // 仅传入 accessToken、refreshToken、expiresTime
-      loginUser.value.accessToken = newLoginUser.accessToken
-      loginUser.value.refreshToken = newLoginUser.refreshToken
-      loginUser.value.expiresTime = newLoginUser.expiresTime
-      setTokenUtil(newLoginUser.accessToken)
-      setRefreshTokenUtil(newLoginUser.refreshToken)
-      setExpiresTimeUtil(newLoginUser.expiresTime)
+    /**
+     * 设置登录用户信息
+     * @param newLoginUser 传入完整的 LoginUserVO 对象或仅传入 TokenInfo 信息
+     */
+    function setLoginUserInfo(newLoginUser: LoginUserVO | TokenInfo) {
+      if ('userInfo' in newLoginUser) {
+        // 传入完整的 LoginUserVO 对象
+        loginUser.value = newLoginUser
+      } else {
+        // 仅传入 accessToken、refreshToken、expiresTime
+        loginUser.value.accessToken = newLoginUser.accessToken
+        loginUser.value.refreshToken = newLoginUser.refreshToken
+        loginUser.value.expiresTime = newLoginUser.expiresTime
+        setTokenUtil(newLoginUser.accessToken)
+        setRefreshTokenUtil(newLoginUser.refreshToken)
+        setExpiresTimeUtil(newLoginUser.expiresTime)
+      }
     }
-  }
 
-  return {
-    // state
-    loginUser,
+    return {
+      // state
+      loginUser,
 
-    // actions
-    fetchLoginUserInfo,
-    resetUserState,
-    setLoginUserInfo
+      // actions
+      fetchLoginUserInfo,
+      resetUserState,
+      setLoginUserInfo
+    }
+  },
+  {
+    persist: true // 持久化存储
   }
-})
+)

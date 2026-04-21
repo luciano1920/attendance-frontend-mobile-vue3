@@ -17,7 +17,10 @@
         </div>
       </div>
 
-      <div class="system-rule">考勤规则</div>
+      <t-button size="small" variant="outline" class="system-rule">
+        <SvgIcon name="file-text" />
+        考勤规则
+      </t-button>
     </div>
 
     <div class="attendance-container">
@@ -40,24 +43,21 @@ const loginUserInfo = userStore.loginUser.userInfo
 
 <style lang="scss" scoped>
 #home-page {
-  background-color: #f6f6f6;
-  height: 120%;
+  padding: 16px 16px 96px;
 }
 
 .user-info-bar {
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 32px 20px 96px;
-  border-bottom-left-radius: 40px;
-  border-bottom-right-radius: 40px;
-  background-image: linear-gradient(to right bottom, #0052D9 0%, rgb(25, 60, 184) 100%);
+  padding: 12px 4px;
 
   .user-avatar {
-    width: 44px;
-    height: 44px;
+    width: 48px;
+    height: 48px;
     border-radius: 50%;
-    border: 2px solid #5885ff;
+    border: 1px solid #c4c6cd;
+    padding: 1px;
   }
 
   .user-desc {
@@ -70,38 +70,21 @@ const loginUserInfo = userStore.loginUser.userInfo
     .user-name {
       font-size: 18px;
       font-weight: 600;
-      color: #fff;
+      color: #171a1d;
     }
 
     .user-role {
-      font-size: 12px;
-      color: #f3f3f3;
+      font-size: 13px;
+      color: #86909c;
     }
   }
 
   .system-rule {
-    padding: 6px 12px;
-    text-align: center;
-    border-radius: 16px;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #fff;
-    font-size: 12px;
-    transition: all 0.3s ease;
-
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
+    color: #0052d9;
+    background-color: #fff;
+    --td-button-border-radius: 12px;
+    font-weight: 500;
   }
-}
-
-.attendance-container {
-  position: absolute;
-  padding: 16px 16px 96px;
-  z-index: 10;
-  top: 100px;
-  width: 100vw;
-  box-sizing: border-box;
 }
 
 :deep(.t-calendar) {

@@ -1,8 +1,8 @@
 <!--
- * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-29 11:07
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-18 21:27
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-20 11:44
  * @FilePath     : \attendance-frontend-mobile\src\pages\user\UserCenterPage.vue
  * @Description  : 用户中心（我的）页面
 -->
@@ -10,23 +10,17 @@
   <div id="user-center-page">
     <!-- 用户简介区域 -->
     <div class="user-profile">
-      <div class="user-profile-title">
-        <div style="color: #001442; font-size: 24px; font-weight: 700">个人中心</div>
-        <SvgIcon name="bell" size="20px" color="#858a99" />
-      </div>
       <div class="user-profile-info">
         <img
           :src="loginUserInfo.avatar || '@/assets/images/avatar.png'"
           class="user-avatar"
           alt="avatar"
         />
-        <div class="user-desc">
-          <div class="user-name">{{ loginUserInfo.username }}</div>
-          <div class="user-role">
-            <span>{{ loginUserInfo.dept?.name }}</span>
-            <!-- <span>·</span>
+        <div class="user-name">{{ loginUserInfo.username }}</div>
+        <div class="user-role">
+          <span>{{ loginUserInfo.dept?.name }}</span>
+          <!-- <span>·</span>
             <span>研发工程师</span> -->
-          </div>
         </div>
       </div>
     </div>
@@ -41,19 +35,24 @@
       </div>
 
       <t-cell-group theme="card" class="user-action-list">
-        <t-cell title="考勤设置" arrow hover>
+        <t-cell title="消息中心" arrow hover>
           <template #leftIcon>
-            <SvgIcon name="settings" size="20px" color="#858a99" />
+            <IconContainer icon="bell" theme="orange" />
+          </template>
+        </t-cell>
+        <t-cell title="应用设置" arrow hover>
+          <template #leftIcon>
+            <IconContainer icon="settings" theme="blue" />
           </template>
         </t-cell>
         <t-cell title="帮助中心" arrow hover>
           <template #leftIcon>
-            <SvgIcon name="question-mark-circle" size="20px" color="#858a99" />
+            <IconContainer icon="question-mark-circle" theme="green" />
           </template>
         </t-cell>
         <t-cell title="关于系统" arrow hover>
           <template #leftIcon>
-            <SvgIcon name="info" size="20px" color="#858a99" />
+            <IconContainer icon="info" theme="purple" />
           </template>
         </t-cell>
       </t-cell-group>
@@ -62,6 +61,10 @@
         <SvgIcon name="log-out" />
         退出登录
       </t-button>
+
+      <t-footer :text="`Copyright © 2026-${new Date().getFullYear()} 数智产品研发中心.`" />
+      <t-footer :text="systemTitle + ' ' + systemVersion" />
+      <!-- <div class="system-version">{{ systemTitle }} {{ systemVersion }}</div> -->
     </div>
   </div>
 </template>
@@ -72,10 +75,14 @@ import { logoutUsingPost } from '@/api/auth-controller'
 import { ActionSheetPlugin, Message } from 'tdesign-mobile-vue'
 import { useUserStore } from '@/stores/user-store'
 import SvgIcon from '@/components/SvgIcon.vue'
+import IconContainer from '@/components/IconContainer.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
 const loginUserInfo = userStore.loginUser.userInfo
+
+const systemTitle = import.meta.env.VITE_APP_TITLE
+const systemVersion = import.meta.env.VITE_APP_SYSTEM_VERSION
 
 // 统计数据
 const statisticsData = [
@@ -119,12 +126,20 @@ const handleLogout = async () => {
 </script>
 
 <style lang="scss" scoped>
+#user-center-page {
+  height: 112vh;
+  overflow: auto;
+}
+
 .user-profile {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 48px 24px 32px;
-  background-color: #fff;
+  padding: 24px;
+  background: url('@/assets/svgs/bg/profile.svg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top center;
 
   .user-profile-title {
     display: flex;
@@ -134,35 +149,30 @@ const handleLogout = async () => {
 
   .user-profile-info {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 16px;
+    justify-content: center;
+    gap: 10px;
 
     .user-avatar {
-      width: 60px;
-      height: 60px;
+      width: 72px;
+      height: 72px;
       border-radius: 50%;
       border: 1px solid #e2e8f0;
       box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
       padding: 1px;
     }
 
-    .user-desc {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 8px;
+    .user-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #fff;
+    }
 
-      .user-name {
-        font-size: 20px;
-        font-weight: 600;
-        color: rgb(15, 23, 43);
-      }
-
-      .user-role {
-        font-size: 14px;
-        color: rgb(98, 116, 142);
-      }
+    .user-role {
+      font-size: 14px;
+      color: #fff;
+      font-weight: 400;
     }
   }
 }
@@ -172,7 +182,6 @@ const handleLogout = async () => {
   flex-direction: column;
   gap: 16px;
   padding: 16px 0;
-  height: calc(100vh - 200px);
 
   .user-attendance-statistics {
     display: flex;
@@ -182,13 +191,13 @@ const handleLogout = async () => {
     padding: 16px;
     margin: 0 16px;
     border-radius: 16px;
-    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
 
     .statistics-item {
       flex: 1 0 25%;
       display: flex;
       flex-direction: column;
       align-items: center;
+      gap: 2px;
 
       .item-value {
         font-size: 24px;
@@ -208,18 +217,21 @@ const handleLogout = async () => {
 
     .t-cell-group--card {
       border-radius: 16px !important;
-      box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
     }
 
     .t-cell {
       align-items: center;
       line-height: 1;
+      padding: 10px 16px;
 
       .t-cell__left,
       .t-cell__right {
         display: flex;
         align-items: center;
         line-height: 1;
+      }
+      .t-cell__title-text {
+        font-weight: 500 !important;
       }
     }
   }
@@ -228,7 +240,13 @@ const handleLogout = async () => {
     margin: 0 16px;
     background-color: #fff;
     color: #d54941;
-    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.1);
+  }
+
+  .system-version {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 400;
+    color: #c9cdd4;
   }
 }
 </style>
