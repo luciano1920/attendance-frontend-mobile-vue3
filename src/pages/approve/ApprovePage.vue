@@ -1,10 +1,10 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-30 11:37
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-07 09:48
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-23 00:28
  * @FilePath     : \attendance-frontend-mobile\src\pages\approve\ApprovePage.vue
- * @Description  :
+ * @Description  : 审批/申请记录列表页
 -->
 <template>
   <div id="approve-page">

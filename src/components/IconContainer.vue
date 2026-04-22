@@ -2,9 +2,9 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-20 00:53
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-20 10:51
+ * @LastEditTime : 2026-04-23 00:24
  * @FilePath     : \attendance-frontend-mobile\src\components\IconContainer.vue
- * @Description  :
+ * @Description  : 图标容器组件
 -->
 <template>
   <div class="icon-container" :style="containerStyle">

@@ -1,10 +1,10 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-30 14:37
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-30 22:55
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-23 00:27
  * @FilePath     : \attendance-frontend-mobile\src\pages\approve\components\ApproveInfoCard.vue
- * @Description  :
+ * @Description  : 审批/申请记录列表展示卡片组件
 -->
 <template>
   <div class="approve-info-card">

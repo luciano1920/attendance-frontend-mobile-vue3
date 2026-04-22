@@ -1,3 +1,11 @@
+<!--
+ * @Author       : luciano1920 1290582790@qq.com
+ * @Date         : 2026-04-19 14:46
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-23 00:29
+ * @FilePath     : \attendance-frontend-mobile\src\pages\auth\UserForgotPage.vue
+ * @Description  : 用户忘记密码页
+-->
 <template>
   <div id="user-forgot-page">
     <t-button theme="light" shape="circle" @click="router.push('/auth')">

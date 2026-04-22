@@ -89,7 +89,7 @@ const statisticsData = [
   { value: 10, desc: '本月打卡', color: '#2ba471' },
   { value: 8, desc: '补卡', color: '#e37318' },
   { value: 5, desc: '无需打卡', color: '#0052d9' },
-  { value: 2, desc: '缺卡', color: '#d54941' }
+  { value: 2, desc: '缺卡', color: '#d54941' },
 ]
 
 /** 退出登录 */
@@ -108,7 +108,6 @@ const handleLogout = async () => {
         try {
           const res = await logoutUsingPost()
           if (res.data.code === 0) {
-            ActionSheetPlugin.close()
             userStore.resetUserState()
             Message.success('退出登录成功')
             router.replace('/auth')
@@ -118,9 +117,11 @@ const handleLogout = async () => {
         } catch (error) {
           Message.error('退出登录失败，请稍后重试')
           console.error('退出登录错误:', error)
+        } finally {
+          ActionSheetPlugin.close()
         }
       }
-    }
+    },
   })
 }
 </script>

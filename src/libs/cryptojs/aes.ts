@@ -6,7 +6,6 @@
  * @FilePath     : \attendance-frontend-mobile\src\libs\cryptojs\aes.ts
  * @Description  : AES 加密解密
  */
-// utils/aes.ts
 import CryptoJS from 'crypto-js'
 
 const AES_KEY_DEFAULT = 'XwKsGlMcdPMEhR1B'

@@ -3,6 +3,7 @@
   --td-button-font-weight: 600;
   --td-font-family: HarmonyOS Sans SC, PingFang SC, Microsoft YaHei, Arial Regular;
   --td-font-family-medium: HarmonyOS Sans SC, PingFang SC, Microsoft YaHei, Arial Medium;
+  --td-tag-square-border-radius: 6px;
 }
 
 body {
@@ -17,4 +18,3 @@ body {
 .t-button {
   font-family: 'HarmonyOS Sans SC', Arial, sans-serif;
 }
-

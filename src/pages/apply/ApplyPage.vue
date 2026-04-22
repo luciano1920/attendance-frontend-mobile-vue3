@@ -2,9 +2,9 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-29 16:15
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-20 10:43
+ * @LastEditTime : 2026-04-21 23:54
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\ApplyPage.vue
- * @Description  : 考勤申请页面
+ * @Description  : 考勤申请入口页面
 -->
 <template>
   <div id="apply-page">
@@ -15,7 +15,7 @@
       <div class="apply-action-title">选择申请类型</div>
 
       <div class="apply-action-grid">
-        <div class="apply-action-item short-item">
+        <div class="apply-action-item short-item" @click="$router.push('/apply/leave')">
           <IconContainer icon="coffee" theme="blue" />
           <div class="apply-action-item-label">
             <div class="apply-action-item-name">请假申请</div>
