@@ -14,7 +14,7 @@ export const RECORD_TYPE_ENUM = {
   MAKE_UP: 3, // 补卡
   LEAVE: 4, // 请假
   OUTING: 5, // 外出
-  ADJUST: 6, // 调休
+  REST: 6, // 调休
   NON_WORKDAY: 7, // 非工作日
 }
 

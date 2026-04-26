@@ -1,8 +1,8 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-24 09:51
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-24 14:33
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-23 15:09
  * @FilePath     : \attendance-frontend-mobile\src\api\user-controller.ts
  * @Description  : 用户模块-API接口
  */
@@ -12,7 +12,7 @@ import request from '@/libs/axios/request'
 export async function fetchUserInfoUsingGet(options?: { [key: string]: any }) {
   return request('/admin-api/system/user/profile/get', {
     method: 'GET',
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -20,7 +20,7 @@ export async function fetchUserInfoUsingGet(options?: { [key: string]: any }) {
 export async function fetchApproverInfoUsingGet(options?: { [key: string]: any }) {
   return request('/admin-api/system/person-info/get', {
     method: 'GET',
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -29,9 +29,9 @@ export async function fetchUnifiedUserInfoUsingGet(params: any, options?: { [key
   return request('/admin-api/system/auth/get-permission-info', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -40,10 +40,10 @@ export async function fetchUserDetailInfoUsingGet(body: any, options?: { [key: s
   return request('/app-api/attenfront/facechange-record/get', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -52,10 +52,10 @@ export async function updateUserPasswordUsingPost(body: any, options?: { [key: s
   return request('/authserver/users/updatePass', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -64,9 +64,21 @@ export async function saveUserPasswordUsingPost(body: any, options?: { [key: str
   return request('/authserver/users/forgotPass', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
+  })
+}
+
+/** 获取假期代理人 POST /admin-api/system/user/getProxyUser */
+export async function fetchAgentUserUsingPost(body: any, options?: { [key: string]: any }) {
+  return request('/admin-api/system/user/getProxyUser', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
   })
 }

@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-20 15:42
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-21 23:52
+ * @LastEditTime : 2026-04-26 10:47
  * @FilePath     : \attendance-frontend-mobile\src\router\routes.ts
  * @Description  : 所有路由配置
  */
@@ -129,6 +129,38 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/apply/LeaveFormPage.vue'),
     meta: {
       title: '请假申请',
+    },
+  },
+  {
+    path: '/apply/makeup',
+    name: '补卡申请页',
+    component: () => import('@/pages/apply/MakeupFormPage.vue'),
+    meta: {
+      title: '补卡申请',
+    },
+  },
+  {
+    path: '/apply/outing',
+    name: '外出申请页',
+    component: () => import('@/pages/apply/OutingFormPage.vue'),
+    meta: {
+      title: '外出申请',
+    },
+  },
+  {
+    path: '/apply/rest',
+    name: '调休申请页',
+    component: () => import('@/pages/apply/RestFormPage.vue'),
+    meta: {
+      title: '调休申请',
+    },
+  },
+  {
+    path: '/apply/face-update',
+    name: '人脸变更申请页',
+    component: () => import('@/pages/apply/FaceUpdateFormPage.vue'),
+    meta: {
+      title: '人脸变更申请',
     },
   },
 ]
