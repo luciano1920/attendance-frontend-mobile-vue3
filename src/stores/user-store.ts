@@ -91,12 +91,33 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  let loadingPromise: Promise<void> | null = null
+
   /** 获取登录用户信息 */
   async function fetchLoginUserInfo() {
-    const res = await fetchUserInfoUsingGet()
-    if (res.data.code === 0 && res.data.data) {
-      loginUser.value.userInfo = res.data.data
-    }
+    // 已加载，直接返回
+    if (Array.isArray(loginUser.value.userInfo.roles)) return
+
+    // 无 token，无法获取
+    if (!loginUser.value.accessToken) return
+
+    // 请求进行中，复用同一个 promise
+    if (loadingPromise) return loadingPromise
+
+    loadingPromise = (async () => {
+      try {
+        const res = await fetchUserInfoUsingGet()
+        if (res.data.code === 0 && res.data.data) {
+          loginUser.value.userInfo = res.data.data
+        }
+      } catch {
+        // ignore
+      } finally {
+        loadingPromise = null
+      }
+    })()
+
+    return loadingPromise
   }
 
   /**

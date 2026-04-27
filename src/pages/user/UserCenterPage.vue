@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-29 11:07
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-20 11:44
+ * @LastEditTime : 2026-04-26 13:50
  * @FilePath     : \attendance-frontend-mobile\src\pages\user\UserCenterPage.vue
  * @Description  : 用户中心（我的）页面
 -->
@@ -57,7 +57,13 @@
         </t-cell>
       </t-cell-group>
 
-      <t-button size="large" class="user-logout" @click="handleLogout">
+      <t-button
+        size="large"
+        class="user-logout"
+        theme="danger"
+        variant="outline"
+        @click="handleLogout"
+      >
         <SvgIcon name="log-out" />
         退出登录
       </t-button>
@@ -238,9 +244,9 @@ const handleLogout = async () => {
   }
 
   .user-logout {
+    --td-button-danger-outline-border-color: #ffcece;
+
     margin: 0 16px;
-    background-color: #fff;
-    color: #d54941;
   }
 
   .system-version {

@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-24 16:38
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-20 12:45
+ * @LastEditTime : 2026-04-27 12:53
  * @FilePath     : \attendance-frontend-mobile\src\permission.ts
  * @Description  : 全局权限校验核心文件
  */
@@ -42,7 +42,12 @@ router.beforeEach(async (to) => {
 
   // 如果用户已登录，则重定向到首页，不需要去任何以/auth开头的页面
   if (to.path.startsWith('/auth')) {
+    Message.warning('用户已登录，请勿重复登录')
     return '/'
+  }
+
+  if (loginUser.accessToken && !loginUser.userInfo.id) {
+    await userStore.fetchLoginUserInfo()
   }
 
   // 其他情况直接放行

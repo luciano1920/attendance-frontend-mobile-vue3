@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-20 15:42
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 10:47
+ * @LastEditTime : 2026-04-27 15:27
  * @FilePath     : \attendance-frontend-mobile\src\router\routes.ts
  * @Description  : 所有路由配置
  */
@@ -10,6 +10,7 @@
 import { type RouteRecordRaw } from 'vue-router'
 import MobileLayout from '@/layouts/MobileLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
+import { ACCESS_ENUM } from '@/constants/access'
 
 export const routes: Array<RouteRecordRaw> = [
   // 天翼登录中间页
@@ -65,7 +66,6 @@ export const routes: Array<RouteRecordRaw> = [
           title: '忘记密码',
         },
       },
-
       // 无权限页面
       {
         path: 'unauthorized',
@@ -90,7 +90,7 @@ export const routes: Array<RouteRecordRaw> = [
         name: '主页',
         component: () => import('@/pages/home/HomePage.vue'),
         meta: {
-          // access: ACCESS_ENUM.USER,
+          access: ACCESS_ENUM.USER,
         },
       },
       // 考勤申请页
@@ -100,6 +100,7 @@ export const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/apply/ApplyPage.vue'),
         meta: {
           title: '考勤申请',
+          access: ACCESS_ENUM.USER,
         },
       },
       // 考勤审核页
@@ -109,6 +110,7 @@ export const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/approve/ApprovePage.vue'),
         meta: {
           title: '考勤审核',
+          access: ACCESS_ENUM.ADMIN,
         },
       },
       // 用户中心页（我的）
@@ -118,6 +120,7 @@ export const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/user/UserCenterPage.vue'),
         meta: {
           title: '我的',
+          access: ACCESS_ENUM.USER,
         },
       },
     ],
@@ -129,6 +132,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/apply/LeaveFormPage.vue'),
     meta: {
       title: '请假申请',
+      access: ACCESS_ENUM.USER,
     },
   },
   {
@@ -137,6 +141,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/apply/MakeupFormPage.vue'),
     meta: {
       title: '补卡申请',
+      access: ACCESS_ENUM.USER,
     },
   },
   {
@@ -145,6 +150,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/apply/OutingFormPage.vue'),
     meta: {
       title: '外出申请',
+      access: ACCESS_ENUM.USER,
     },
   },
   {
@@ -153,6 +159,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/apply/RestFormPage.vue'),
     meta: {
       title: '调休申请',
+      access: ACCESS_ENUM.USER,
     },
   },
   {
@@ -161,6 +168,7 @@ export const routes: Array<RouteRecordRaw> = [
     component: () => import('@/pages/apply/FaceUpdateFormPage.vue'),
     meta: {
       title: '人脸变更申请',
+      access: ACCESS_ENUM.USER,
     },
   },
 ]

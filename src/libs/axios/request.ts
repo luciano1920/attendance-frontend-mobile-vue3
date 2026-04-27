@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 16:47
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-22 09:30
+ * @LastEditTime : 2026-04-27 14:33
  * @FilePath     : \attendance-frontend-mobile\src\libs\axios\request.ts
  * @Description  : 全局请求 AXIOS 封装配置
  */
@@ -12,14 +12,7 @@ import { Message } from 'tdesign-mobile-vue'
 import { useUserStore } from '@/stores/user-store'
 import { getTokenUtil } from '@/utils/auth'
 
-let userStore: ReturnType<typeof useUserStore> | null = null
-
-function getUserStore() {
-  if (!userStore) {
-    userStore = useUserStore()
-  }
-  return userStore
-}
+const BASE_PATH = (import.meta.env.VITE_BASE_PATH || '').replace(/\/+$/, '')
 
 // 创建 Axios 实例
 const axiosInstance = axios.create({
@@ -40,7 +33,8 @@ const axiosInstance = axios.create({
 // 全局请求拦截器
 axiosInstance.interceptors.request.use(
   function (config) {
-    const token = getUserStore().loginUser.accessToken ?? getTokenUtil()
+    const userStore = useUserStore()
+    const token = userStore.loginUser.accessToken ?? getTokenUtil()
     if (token) {
       config.headers.Authorization = token
     }
@@ -55,21 +49,37 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
   function (response) {
     const { data } = response
-    // 未登录
-    if (data.code === 401 || data.code === 403) {
-      // 不是获取用户信息的请求，并且用户目前不是已经在用户登录页面，则跳转到登录页面
-      if (!window.location.pathname.includes('auth/login')) {
+    const userStore = useUserStore()
+
+    // 401：登录过期/未认证
+    if (data.code === 401) {
+      const currentPath = window.location.pathname + window.location.search
+
+      if (!currentPath.startsWith(`${BASE_PATH}/auth`)) {
         Message.warning({
-          message: '您的登录认证已失效或未登录，请先登录',
+          message: '登录认证已失效，请重新登录',
           showClose: true,
           plain: true,
         })
         userStore?.resetUserState()
-        // 只保存路径和查询参数，不包含协议和域名
-        const currentPath = window.location.pathname + window.location.search
-        window.location.href = `/auth/portal?redirect=${encodeURIComponent(currentPath)}`
+        window.location.href = `${BASE_PATH}/auth/portal?redirect=${encodeURIComponent(currentPath)}`
       }
+      return Promise.reject(new Error('认证失败'))
     }
+
+    // 403：无权限访问资源（跳转无权限页面）
+    if (data.code === 403) {
+      if (!window.location.pathname.includes('/auth/unauthorized')) {
+        Message.error({
+          message: '您没有权限执行此操作',
+          showClose: true,
+          plain: true,
+        })
+        window.location.href = `${BASE_PATH}/auth/unauthorized`
+      }
+      return Promise.reject(new Error('无权限'))
+    }
+
     return response
   },
   function (error) {
