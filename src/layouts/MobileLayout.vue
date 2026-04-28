@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 10:50
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-20 10:49
+ * @LastEditTime : 2026-04-28 17:26
  * @FilePath     : \attendance-frontend-mobile\src\layouts\MobileLayout.vue
  * @Description  : 移动端页面布局
 -->
@@ -40,20 +40,27 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+
 import SvgIcon from '@/components/SvgIcon.vue'
+import { useUserStore } from '@/stores/user-store'
+import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
 
 const router = useRouter()
 const route = useRoute()
 
+const userStore = useUserStore()
+const { loginUser } = storeToRefs(userStore)
+
 //  当前活动标签的响应式状态，默认值为根路径 '/'
 const activeTab = ref('/')
 // 导航菜单列表配置
-const tabMenuList = [
+const tabMenuList = ref([
   { value: '/', label: '打卡', icon: 'calendar-check' },
-  { value: '/apply', label: '申请', icon: 'file-text' },
-  { value: '/approve', label: '审批', icon: 'shield-check' },
-  { value: '/profile', label: '我的', icon: 'user-circle' }
-]
+  { value: '/apply', label: '申请', icon: 'clipboard-pen' },
+  { value: '/approve', label: '记录', icon: 'file-text' },
+  { value: '/profile', label: '我的', icon: 'user-circle' },
+])
 
 /**
  * 根据菜单点击进行导航跳转的函数
@@ -76,6 +83,12 @@ router.afterEach((to, from) => {
 // 组件挂载时初始化当前选中项
 onMounted(() => {
   activeTab.value = route.path
+
+  const userLevel = getUserAccessLevel(loginUser.value.userInfo.roles)
+  if (userLevel === ACCESS_ENUM.ADMIN && tabMenuList.value[2]) {
+    tabMenuList.value[2].label = '审批'
+    tabMenuList.value[2].icon = 'shield-check'
+  }
 })
 </script>
 

@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 14:57
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 15:41
+ * @LastEditTime : 2026-04-28 16:46
  * @FilePath     : \attendance-frontend-mobile\src\api\approve-controller.ts
  * @Description  : 考勤审批模块-API接口
  */
@@ -50,8 +50,8 @@ export async function fetchApprovalRecordByPageUsingPost(
   })
 }
 
-/** 获取考勤审批人员 GET /app-api/attenfront/order-flow/checkPerson */
-export async function fetchApproversUsingGet(options?: { [key: string]: any }) {
+/** 获取考勤审批人员选项列表 GET /app-api/attenfront/order-flow/checkPerson */
+export async function fetchApproversListUsingGet(options?: { [key: string]: any }) {
   return request('/app-api/attenfront/order-flow/checkPerson', {
     method: 'GET',
     ...(options || {}),

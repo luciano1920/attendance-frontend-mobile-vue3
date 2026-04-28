@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 16:39
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-22 08:48
+ * @LastEditTime : 2026-04-28 15:03
  * @FilePath     : \attendance-frontend-mobile\src\stores\user-store.ts
  * @Description  : 用户信息全局状态
  */
@@ -51,7 +51,7 @@ interface UserInfoVO {
   /** 用户岗位 */
   posts: any[]
   /** 部门审批人 */
-  approver: any[]
+  checker: any[]
 }
 
 interface LoginUserVO {

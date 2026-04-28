@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-24 22:02
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 16:36
+ * @LastEditTime : 2026-04-28 16:54
  * @FilePath     : \attendance-frontend-mobile\src\pages\auth\AuthPortalPage.vue
  * @Description  : 系统认证登录门户页
 -->
@@ -24,7 +24,7 @@
         theme="primary"
         size="large"
         style="width: 90%; gap: 8px"
-        @click="router.push('/auth/login')"
+        @click="router.push({ path: '/auth/login', query: route.query })"
       >
         <template #icon>
           <SvgIcon name="user" />
@@ -67,7 +67,6 @@ import { useRoute, useRouter } from 'vue-router'
 import { Message } from 'tdesign-mobile-vue'
 
 import { unifiedLoginUsingGet } from '@/api/auth-controller'
-import { fetchApproverInfoUsingGet } from '@/api/user-controller'
 import { useUserStore } from '@/stores/user-store'
 import { getUrlQueryParamsUtil } from '@/utils'
 import SvgIcon from '@/components/SvgIcon.vue'
@@ -89,21 +88,14 @@ const handleUnifiedLogin = async () => {
     return
   }
 
-  const res_login = await unifiedLoginUsingGet({ code: unifiedLoginCode.value })
-  if (res_login.data.data && res_login.data.code === 0) {
+  const res = await unifiedLoginUsingGet({ code: unifiedLoginCode.value })
+  if (res.data.data && res.data.code === 0) {
     userStore.setLoginUserInfo({
-      accessToken: res_login.data.data.accessToken,
-      refreshToken: res_login.data.data.refreshToken,
-      expiresTime: res_login.data.data.expiresTime,
+      accessToken: res.data.data.accessToken,
+      refreshToken: res.data.data.refreshToken,
+      expiresTime: res.data.data.expiresTime,
     })
     userStore.fetchLoginUserInfo()
-
-    const res_approver = await fetchApproverInfoUsingGet()
-    if (res_approver.data.code === 0 && res_approver.data.data) {
-      const loginUser = userStore.loginUser
-      loginUser.userInfo.checker = res_approver.data.data
-      userStore.setLoginUserInfo(loginUser)
-    }
 
     // 判断是否有重定向地址，如果有则跳转到该地址，否则跳转到首页
     router.push({
@@ -112,7 +104,7 @@ const handleUnifiedLogin = async () => {
     })
   } else {
     Message.error({
-      content: '登录失败，' + res_login.data.msg,
+      content: '登录失败，' + res.data.msg,
       offset: [10, 16],
     })
   }

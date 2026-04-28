@@ -2,13 +2,12 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-19 17:07
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 08:49
+ * @LastEditTime : 2026-04-28 16:48
  * @FilePath     : \attendance-frontend-mobile\src\main.ts
  * @Description  :
  */
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-// import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 
 import App from './App.vue'
 import router from './router'
@@ -26,8 +25,6 @@ import './permission' // 引入全局权限控制
 
 const app = createApp(App)
 const pinia = createPinia()
-
-// pinia.use(piniaPluginPersistedstate)
 
 app.use(pinia)
 app.use(router)

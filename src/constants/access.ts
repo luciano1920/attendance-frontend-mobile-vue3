@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-27 10:01
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 11:14
+ * @LastEditTime : 2026-04-28 17:14
  * @FilePath     : \attendance-frontend-mobile\src\constants\access.ts
  * @Description  : 鉴权模块常量类
  */
@@ -33,4 +33,34 @@ export const ACCESS_WEIGHT: Record<string, number> = {
   [ACCESS_ENUM.NOT_LOGIN]: 0,
   [ACCESS_ENUM.USER]: 1,
   [ACCESS_ENUM.ADMIN]: 2,
+}
+
+/**
+ * 根据用户角色代码判断用户权限级别
+ * @param userRoles 用户角色数组
+ * @returns 用户权限级别
+ */
+export const getUserAccessLevel = (userRoles: any[]): string => {
+  // 如果用户没有角色，则返回未登录权限
+  if (!userRoles || userRoles.length === 0) {
+    return ACCESS_ENUM.NOT_LOGIN
+  }
+
+  // 遍历用户的所有角色，找到最高权限级别
+  let maxWeight = 0
+  let maxAccessLevel: string = ACCESS_ENUM.NOT_LOGIN
+
+  for (const role of userRoles) {
+    const accessLevel = ROLE_ACCESS_MAP[role.code]
+
+    if (!accessLevel) continue
+
+    const weight = ACCESS_WEIGHT[accessLevel]
+    if (weight !== undefined && weight > maxWeight) {
+      maxWeight = weight
+      maxAccessLevel = accessLevel
+    }
+  }
+
+  return maxAccessLevel
 }
