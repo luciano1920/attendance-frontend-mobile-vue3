@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-24 22:02
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-19 15:09
+ * @LastEditTime : 2026-04-28 16:36
  * @FilePath     : \attendance-frontend-mobile\src\pages\auth\AuthPortalPage.vue
  * @Description  : 系统认证登录门户页
 -->
@@ -94,24 +94,27 @@ const handleUnifiedLogin = async () => {
     userStore.setLoginUserInfo({
       accessToken: res_login.data.data.accessToken,
       refreshToken: res_login.data.data.refreshToken,
-      expiresTime: res_login.data.data.expiresTime
+      expiresTime: res_login.data.data.expiresTime,
     })
     userStore.fetchLoginUserInfo()
 
     const res_approver = await fetchApproverInfoUsingGet()
     if (res_approver.data.code === 0 && res_approver.data.data) {
       const loginUser = userStore.loginUser
-      loginUser.userInfo.approver = res_approver.data.data
+      loginUser.userInfo.checker = res_approver.data.data
       userStore.setLoginUserInfo(loginUser)
     }
 
     // 判断是否有重定向地址，如果有则跳转到该地址，否则跳转到首页
     router.push({
       path: (route.query.redirect as string) ?? '/',
-      replace: true
+      replace: true,
     })
   } else {
-    Message.error('登录失败，' + res_login.data.msg)
+    Message.error({
+      content: '登录失败，' + res_login.data.msg,
+      offset: [10, 16],
+    })
   }
 }
 

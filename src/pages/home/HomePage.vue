@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-30 23:21
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 11:44
+ * @LastEditTime : 2026-04-28 16:34
  * @FilePath     : \attendance-frontend-mobile\src\pages\home\HomePage.vue
  * @Description  : 系统首页
 -->
@@ -122,7 +122,10 @@ const getAttendanceRecordDataByMonth = async (date: Date) => {
     await nextTick()
     calendarKey.value++
   } else {
-    Message.error(res.data.msg || '获取月度考勤数据失败')
+    Message.error({
+      content: res.data.msg || '获取月度考勤数据失败',
+      offset: [10, 16],
+    })
   }
 }
 
@@ -137,7 +140,10 @@ const getAttendanceRecordDataByDay = async (date: Date) => {
   if (res.data.code === 0 && res.data.data) {
     recordDayData.value = res.data.data
   } else {
-    Message.error(res.data.msg || '获取当日考勤数据失败')
+    Message.error({
+      content: res.data.msg || '获取当日考勤数据失败',
+      offset: [10, 16],
+    })
   }
 }
 

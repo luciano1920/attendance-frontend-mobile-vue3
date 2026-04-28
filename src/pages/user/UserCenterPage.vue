@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-29 11:07
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 13:50
+ * @LastEditTime : 2026-04-28 16:35
  * @FilePath     : \attendance-frontend-mobile\src\pages\user\UserCenterPage.vue
  * @Description  : 用户中心（我的）页面
 -->
@@ -115,13 +115,16 @@ const handleLogout = async () => {
           const res = await logoutUsingPost()
           if (res.data.code === 0) {
             userStore.resetUserState()
-            Message.success('退出登录成功')
+            Message.success({ content: '退出登录成功', offset: [10, 16] })
             router.replace('/auth')
           } else {
-            Message.error('退出登录失败，' + res.data.msg)
+            Message.error({
+              content: '退出登录失败，' + res.data.msg,
+              offset: [10, 16],
+            })
           }
         } catch (error) {
-          Message.error('退出登录失败，请稍后重试')
+          Message.error({ content: '退出登录失败，请稍后重试', offset: [10, 16] })
           console.error('退出登录错误:', error)
         } finally {
           ActionSheetPlugin.close()

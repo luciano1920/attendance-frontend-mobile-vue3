@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-27 10:41
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 14:46
+ * @LastEditTime : 2026-04-28 16:24
  * @FilePath     : \attendance-frontend-mobile\src\access.ts
  * @Description  : 全局权限校验核心文件
  */
@@ -90,7 +90,7 @@ router.beforeEach(async (to) => {
 
     // 权限校验
     if (!checkAccess(loginUser.value, needAccess)) {
-      Message.error('您没有权限访问该页面')
+      Message.error({ content: '您没有权限访问该页面', offset: [10, 16] })
       return '/auth/unauthorized'
     }
   } else {
@@ -105,7 +105,7 @@ router.beforeEach(async (to) => {
     }
 
     // 需要权限且不在公开页面，重定向到登录页
-    Message.error('请先登录')
+    Message.error({ content: '用户未登录，请先登录', offset: [10, 16] })
     return `/auth/portal?redirect=${encodeURIComponent(to.fullPath)}`
   }
 })

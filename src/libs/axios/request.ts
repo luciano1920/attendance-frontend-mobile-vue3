@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 16:47
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 14:33
+ * @LastEditTime : 2026-04-28 16:28
  * @FilePath     : \attendance-frontend-mobile\src\libs\axios\request.ts
  * @Description  : 全局请求 AXIOS 封装配置
  */
@@ -56,11 +56,7 @@ axiosInstance.interceptors.response.use(
       const currentPath = window.location.pathname + window.location.search
 
       if (!currentPath.startsWith(`${BASE_PATH}/auth`)) {
-        Message.warning({
-          message: '登录认证已失效，请重新登录',
-          showClose: true,
-          plain: true,
-        })
+        Message.warning({ content: '登录认证已失效，请重新登录', offset: [10, 16] })
         userStore?.resetUserState()
         window.location.href = `${BASE_PATH}/auth/portal?redirect=${encodeURIComponent(currentPath)}`
       }
@@ -70,11 +66,7 @@ axiosInstance.interceptors.response.use(
     // 403：无权限访问资源（跳转无权限页面）
     if (data.code === 403) {
       if (!window.location.pathname.includes('/auth/unauthorized')) {
-        Message.error({
-          message: '您没有权限执行此操作',
-          showClose: true,
-          plain: true,
-        })
+        Message.error({ content: '您没有权限执行此操作', offset: [10, 16] })
         window.location.href = `${BASE_PATH}/auth/unauthorized`
       }
       return Promise.reject(new Error('无权限'))

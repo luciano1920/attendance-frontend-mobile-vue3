@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-24 22:04
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-19 15:05
+ * @LastEditTime : 2026-04-28 16:30
  * @FilePath     : \attendance-frontend-mobile\src\pages\auth\UserLoginPage.vue
  * @Description  : 用户登录页面
 -->
@@ -95,7 +95,7 @@ import { Message } from 'tdesign-mobile-vue'
 import SliderVerify from '@/components/SliderVerify.vue'
 import {
   fetchSmsVerificationCodeUsingGet,
-  loginWithSmsVerificationCode
+  loginWithSmsVerificationCode,
 } from '@/api/auth-controller'
 import { fetchApproverInfoUsingGet } from '@/api/user-controller'
 import { useUserStore } from '@/stores/user-store'
@@ -154,12 +154,15 @@ const captchaSuccess = async (params: { captchaVerification: string }) => {
   const res = await fetchSmsVerificationCodeUsingGet({
     captchaVerification: params.captchaVerification,
     mobile: formData.username,
-    scene: 1
+    scene: 1,
   })
   if (res.data.code === 0) {
-    Message.success('验证码发送成功')
+    Message.success({ content: '验证码发送成功', offset: [10, 16] })
   } else {
-    Message.error(res.data.msg)
+    Message.error({
+      content: res.data.msg,
+      offset: [10, 16],
+    })
   }
 }
 
@@ -170,30 +173,33 @@ const handleSubmit = async () => {
     password: rsaEncrypt(formData.password as string),
     code: formData.code,
     captchaVerification: formData.captchaVerification,
-    sence: 1 // TODO: 这里后端拼写错误，后期要改为：sence -> scene
+    sence: 1, // TODO: 这里后端拼写错误，后期要改为：sence -> scene
   })
   if (res_login.data.code === 0 && res_login.data.data) {
     userStore.setLoginUserInfo({
       accessToken: res_login.data.data.accessToken,
       refreshToken: res_login.data.data.refreshToken,
-      expiresTime: res_login.data.data.expiresTime
+      expiresTime: res_login.data.data.expiresTime,
     })
     userStore.fetchLoginUserInfo()
 
     const res_approver = await fetchApproverInfoUsingGet()
     if (res_approver.data.code === 0 && res_approver.data.data) {
       const loginUser = userStore.loginUser
-      loginUser.userInfo.approver = res_approver.data.data
+      loginUser.userInfo.checker = res_approver.data.data
       userStore.setLoginUserInfo(loginUser)
     }
 
     // 判断是否有重定向地址，如果有则跳转到该地址，否则跳转到首页
     router.push({
       path: (route.query.redirect as string) ?? '/',
-      replace: true
+      replace: true,
     })
   } else {
-    Message.error('登录失败，' + res_login.data.msg)
+    Message.error({
+      content: '登录失败，' + res_login.data.msg,
+      offset: [10, 16],
+    })
   }
 }
 </script>

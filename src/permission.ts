@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-24 16:38
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 12:53
+ * @LastEditTime : 2026-04-28 16:25
  * @FilePath     : \attendance-frontend-mobile\src\permission.ts
  * @Description  : 全局权限校验核心文件
  */
@@ -33,7 +33,7 @@ router.beforeEach(async (to) => {
   if (!loginUser.accessToken) {
     // 如果目标路径不是以/auth开头，则重定向到登录页面
     if (!to.path.startsWith('/auth')) {
-      Message.error('用户未登录，请先登录')
+      Message.error({ content: '用户未登录，请先登录', offset: [10, 16] })
       return `/auth/portal?redirect=${to.fullPath}`
     }
     // 如果目标路径是/auth开头，则直接放行
@@ -42,7 +42,6 @@ router.beforeEach(async (to) => {
 
   // 如果用户已登录，则重定向到首页，不需要去任何以/auth开头的页面
   if (to.path.startsWith('/auth')) {
-    Message.warning('用户已登录，请勿重复登录')
     return '/'
   }
 

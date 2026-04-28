@@ -1,8 +1,8 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-28 15:13
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-04-02 11:29
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-04-28 16:27
  * @FilePath     : \attendance-frontend-mobile\src\components\SliderVerify.vue
  * @Description  : 滑动验证弹窗组件（采用 vue3-slide-verify 库进行封装）
 -->
@@ -55,7 +55,7 @@ const msg = ref('')
 // 后端返回的验证所需信息
 const authInfo = reactive({
   token: null,
-  secretKey: null
+  secretKey: null,
 })
 
 /** 获取图形滑动验证所需的验证信息 */
@@ -63,13 +63,13 @@ const getVerificationInfo = async () => {
   const res = await fetchImageCaptchaUsingGet({
     captchaType: 'blockPuzzle',
     clientUid: deviceId.value,
-    ts: Date.now() // 现在的时间戳
+    ts: Date.now(), // 现在的时间戳
   })
   if (res.data.repData && res.data.repCode === '0000') {
     authInfo.token = res.data.repData.token
     authInfo.secretKey = res.data.repData.secretKey
   } else {
-    Message.error(res.data.repMsg)
+    Message.error({ content: res.data.repMsg, offset: [10, 16] })
   }
 }
 
@@ -84,27 +84,28 @@ const onSuccess = async (detail: { timestamp: number; left: number }) => {
   // }, 1000)
 
   if (!authInfo.token || !authInfo.secretKey) {
-    Message.error('验证信息获取失败')
+    Message.error({ content: '验证信息获取失败', offset: [10, 16] })
+
     return
   }
 
   const res = await checkImageCaptchaUsingGet({
     captchaType: 'blockPuzzle',
     pointJson: aesEncrypt(JSON.stringify({ x: detail.left, y: 5.0 }), authInfo.secretKey),
-    token: authInfo.token
+    token: authInfo.token,
   })
   if (res.data.repCode === '0000') {
     const captchaVerification = aesEncrypt(
       authInfo.token + '---' + JSON.stringify({ x: detail.left, y: 5.0 }),
-      authInfo.secretKey
+      authInfo.secretKey,
     )
-    Message.success('验证成功')
+    Message.success({ content: '验证成功', offset: [10, 16] })
     setTimeout(() => {
       // 验证通过，将验证信息传递给父组件
       props.verify?.(captchaVerification)
     }, 1000)
   } else {
-    Message.error(res.data.repMsg)
+    Message.error({ content: res.data.repMsg, offset: [10, 16] })
     // 要重新获取图形验证码信息
     getVerificationInfo()
     setTimeout(() => {
@@ -143,7 +144,7 @@ onMounted(() => {
 
 defineExpose({
   open,
-  close
+  close,
 })
 </script>
 
