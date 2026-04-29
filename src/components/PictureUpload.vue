@@ -2,9 +2,9 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-27 16:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 16:25
+ * @LastEditTime : 2026-04-28 22:39
  * @FilePath     : \attendance-frontend-mobile\src\components\PictureUpload.vue
- * @Description  :
+ * @Description  : 移动端图片上传组件（二次封装）
 -->
 <template>
   <div class="picture-upload">

@@ -2,7 +2,7 @@
  * @Author : luciano1920 1290582790@qq.com
  * @Date : 2026-04-21 23:49
  * @LastEditors : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 13:27
+ * @LastEditTime : 2026-04-29 11:01
  * @FilePath : \attendance-frontend-mobile\src\pages\apply\LeaveFormPage.vue
  * @Description : 请假申请表单页面
 -->
@@ -10,7 +10,7 @@
   <div id="leave-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="$router.push('/apply')" />
+      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">请假申请</div>
         <div class="form-desc">填写请假信息，等待审批</div>
@@ -45,10 +45,12 @@
       <t-form
         ref="formRef"
         :data="formData"
+        :rules="rules"
         show-error-message
         label-align="left"
         label-width="auto"
         scroll-to-first-error="smooth"
+        :required-mark="false"
       >
         <t-form-item label="申请人" content-align="right">
           <t-input v-model="loginUserInfo.username" align="right" borderless disabled />
@@ -70,7 +72,7 @@
           />
         </t-form-item>
 
-        <!-- <t-form-item
+        <t-form-item
           arrow
           label="请假类型"
           name="leaveType"
@@ -84,11 +86,11 @@
             disabled
             placeholder="点击选择请假类型"
           />
-        </t-form-item> -->
-
-        <t-form-item label="请假类型" name="leaveType" content-align="right">
-          <RadioButtonGroup v-model="formData.leaveType" :options="leaveTypeOptions" />
         </t-form-item>
+
+        <!-- <t-form-item label="请假类型" name="leaveType" content-align="right">
+          <RadioButtonGroup v-model="formData.leaveType" :options="leaveTypeOptions" />
+        </t-form-item> -->
 
         <t-form-item
           arrow
@@ -109,7 +111,7 @@
         <t-form-item
           arrow
           label="请假开始时间"
-          name="appLeaveTimeVOS.startTime"
+          name="appLeaveTimeVOS.0.startTime"
           content-align="right"
           @click="timeRangePickerRef?.openStart()"
         >
@@ -125,7 +127,7 @@
         <t-form-item
           arrow
           label="请假结束时间"
-          name="appLeaveTimeVOS.startTime"
+          name="appLeaveTimeVOS.0.endTime"
           content-align="right"
           @click="timeRangePickerRef?.openEnd()"
         >
@@ -153,6 +155,18 @@
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
         </t-form-item>
+
+        <t-form-item label="请假地点" name="leaveAddress" content-align="right">
+          <t-textarea
+            v-model="formData.leaveAddress"
+            placeholder="请输入请假地点"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+          />
+        </t-form-item>
+
+        <t-form-item label="附件" name="fileIds" content-align="right">
+          <PictureUpload :success-upload="handleSuccess" :remove-upload="handleRemove" />
+        </t-form-item>
       </t-form>
 
       <t-button theme="primary" size="large" @click="handleSubmit" class="form-submit-action">
@@ -164,37 +178,58 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import type { Form, RadioOptionObj } from 'tdesign-mobile-vue'
+import { useRouter } from 'vue-router'
+import { Message } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
-import { fetchApproversUsingGet } from '@/api/approve-controller'
+import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
 import { fetchAgentUserUsingPost } from '@/api/user-controller'
+import { createLeaveApplyUsingPost } from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
-import TimeRangePickerPopup from '@/components/TimeRangePickerPopup.vue'
-import RadioButtonGroup from '@/components/RadioButtonGroup.vue'
+import PictureUpload from '@/components/PictureUpload.vue'
+import TimeRangePickerPopup from './components/TimeRangePickerPopup.vue'
+
+const router = useRouter()
 
 const userStore = useUserStore()
 const loginUserInfo = userStore.loginUser.userInfo
 
+// 表单数据
 const formData = reactive({
   checkPartyAccount: '',
   leaveType: '',
   leaveProxyPartyAccount: '',
   specificJob: '',
   leaveReason: '',
+  leaveAddress: '',
   fileIds: [],
-  appLeaveTimeVOS: {
-    startTime: '',
-    endTime: '',
-  },
+  appLeaveTimeVOS: [{ startTime: '', endTime: '' }],
 })
+// 表单组件实例
+const formRef = ref()
 
-const leaveTypeOptions = ref<RadioOptionObj[]>([])
+// 表单校验规则
+const rules = {
+  checkPartyAccount: [{ required: true, message: '请选择审批人', trigger: 'change' }],
+  leaveType: [{ required: true, message: '请选择请假类型', trigger: 'change' }],
+  'appLeaveTimeVOS.0.startTime': [
+    { required: true, message: '请选择请假开始时间', trigger: 'change' },
+  ],
+  'appLeaveTimeVOS.0.endTime': [
+    { required: true, message: '请选择请假结束时间', trigger: 'change' },
+  ],
+  leaveReason: [
+    { required: true, message: '请输入请假原因', trigger: 'blur' },
+    { max: 250, message: '请假原因不超过 250 字', trigger: 'blur' },
+  ],
+}
 
+// usePicker 组合式函数需要的选项数据
 const pickerOptions = ref<PickerOptionsMap>({
   checkPartyAccount: [],
+  leaveType: [],
   leaveProxyPartyAccount: [],
 })
 
@@ -202,11 +237,10 @@ const pickerOptions = ref<PickerOptionsMap>({
 const picker = usePicker(formData, pickerOptions.value)
 
 const timeRangePickerRef = ref<InstanceType<typeof TimeRangePickerPopup>>()
-const formRef = ref<InstanceType<typeof Form>>()
 
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
-  const res = await fetchApproversUsingGet()
+  const res = await fetchApproversListUsingGet()
   if (res.data.data && res.data.code === 0) {
     pickerOptions.value.checkPartyAccount = res.data.data.map((item: any) => {
       return { label: item.nickname, value: item.partyAccount }
@@ -228,7 +262,7 @@ const getLeaveTypeList = async () => {
   }
   const res = await fetchDictOptionsListUsingGet({ type: leaveDictKey })
   if (res.data.code === 0 && res.data.data) {
-    leaveTypeOptions.value = res.data.data.map((item: any) => {
+    pickerOptions.value.leaveType = res.data.data.map((item: any) => {
       return { label: item.label, value: item.value }
     })
   }
@@ -244,9 +278,40 @@ const getAgentUserList = async () => {
   }
 }
 
+/**
+ * 上传附件成功的回调
+ * @param fileList 上传附件列表
+ */
+const handleSuccess = (fileList: any) => {
+  formData.fileIds = fileList.map((item: any) => item.url)
+}
+
+/**
+ * 移除上传附件的回调
+ * @param fileList 上传附件列表
+ */
+const handleRemove = (fileList: any) => {
+  formData.fileIds = fileList.map((item: any) => item.url)
+}
+
 /** 提交表单 */
-const handleSubmit = () => {
-  console.log('提交给后端的完整 formData:', formData)
+const handleSubmit = async () => {
+  try {
+    const valid = await formRef.value.validate()
+    if (valid !== true) {
+      return
+    }
+
+    const res = await createLeaveApplyUsingPost(formData)
+    if (res.data.code === 0) {
+      Message.success({ content: '提交成功', offset: [10, 16] })
+      router.push('/apply')
+    } else {
+      Message.error({ content: res.data.msg, offset: [10, 16] })
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 onMounted(() => {
@@ -338,6 +403,6 @@ onMounted(() => {
 
 .form-submit-action {
   width: 100%;
-  margin-top: 16px;
+  margin: 16px 0;
 }
 </style>

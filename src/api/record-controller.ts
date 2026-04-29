@@ -33,13 +33,12 @@ export async function fetchRecordByDayUsingPost(body: any, options?: { [key: str
 }
 
 /** 获得目前可以补卡的记录 POST /app-api/attenfront/transaction-record/getAttenCorrect */
-export async function fetchAllowMakeupDayUsingPost(body: any, options?: { [key: string]: any }) {
+export async function fetchAllowMakeupDayUsingPost(options?: { [key: string]: any }) {
   return request('/app-api/attenfront/transaction-record/getAttenCorrect', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    data: body,
     ...(options || {}),
   })
 }

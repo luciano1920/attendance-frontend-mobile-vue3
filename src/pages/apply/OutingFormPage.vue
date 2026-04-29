@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 13:27
+ * @LastEditTime : 2026-04-28 23:47
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\OutingFormPage.vue
  * @Description  : 外出申请表单页面
 -->
@@ -10,7 +10,7 @@
   <div id="outing-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="$router.push('/apply')" />
+      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">外出申请</div>
         <div class="form-desc">记录外出行程，合规管理</div>
@@ -22,9 +22,7 @@
       <SvgIcon name="triangle-alert" color="#E37318" style="margin-top: 2px" />
       <div class="notice-content">
         <div class="notice-title">外出须知</div>
-        <div class="notice-desc">
-          若当日的申请外出时间不能完全覆盖当日全部工作时间，则当日仍需要打卡
-        </div>
+        <div class="notice-desc">若当日外出时间不能覆盖当日全部工作时间，当日仍需打卡</div>
       </div>
     </div>
 
@@ -42,15 +40,17 @@
       </t-popup>
 
       <!-- 时间范围选择器弹出层 -->
-      <TimeRangePickerPopup ref="timeRangePickerRef" v-model="formData.appLeaveTimeVOS" />
+      <TimeRangePickerPopup ref="timeRangePickerRef" v-model="formData.appTravelTimeVOS" />
 
       <t-form
         ref="formRef"
         :data="formData"
+        :rules="rules"
         show-error-message
         label-align="left"
         label-width="auto"
         scroll-to-first-error="smooth"
+        :required-mark="false"
       >
         <t-form-item label="申请人" content-align="right">
           <t-input v-model="loginUserInfo.username" align="right" borderless disabled />
@@ -88,14 +88,18 @@
           />
         </t-form-item> -->
 
-        <t-form-item label="外出类型" name="leaveType" content-align="right">
-          <RadioButtonGroup v-model="formData.leaveType" :options="leaveTypeOptions" />
+        <t-form-item label="外出类型" name="travelType" content-align="right">
+          <RadioButtonGroup
+            v-model="formData.travelType"
+            :options="outingTypeOptions"
+            theme="orange"
+          />
         </t-form-item>
 
         <t-form-item
           arrow
           label="外出开始时间"
-          name="appLeaveTimeVOS.startTime"
+          name="appTravelTimeVOS.0.startTime"
           content-align="right"
           @click="timeRangePickerRef?.openStart()"
         >
@@ -111,7 +115,7 @@
         <t-form-item
           arrow
           label="外出结束时间"
-          name="appLeaveTimeVOS.startTime"
+          name="appTravelTimeVOS.0.endTime"
           content-align="right"
           @click="timeRangePickerRef?.openEnd()"
         >
@@ -124,12 +128,16 @@
           />
         </t-form-item>
 
-        <t-form-item label="外出原因" name="leaveReason" content-align="right">
+        <t-form-item label="外出原因" name="travelReason" content-align="right">
           <t-textarea
-            v-model="formData.leaveReason"
+            v-model="formData.travelReason"
             placeholder="请输入外出原因"
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
+        </t-form-item>
+
+        <t-form-item label="附件" name="fileIds" content-align="right">
+          <PictureUpload :success-upload="handleSuccess" :remove-upload="handleRemove" />
         </t-form-item>
       </t-form>
 
@@ -140,49 +148,67 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import type { Form, RadioOptionObj } from 'tdesign-mobile-vue'
+import { useRouter } from 'vue-router'
+import { Message, type RadioOptionObj } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
-import { fetchApproversUsingGet } from '@/api/approve-controller'
+import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
-import { fetchAgentUserUsingPost } from '@/api/user-controller'
+import { createOutingApplyUsingPost } from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
-import TimeRangePickerPopup from '@/components/TimeRangePickerPopup.vue'
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue'
+import PictureUpload from '@/components/PictureUpload.vue'
+import TimeRangePickerPopup from './components/TimeRangePickerPopup.vue'
+
+const router = useRouter()
 
 const userStore = useUserStore()
 const loginUserInfo = userStore.loginUser.userInfo
 
+// 表单数据
 const formData = reactive({
   checkPartyAccount: '',
-  leaveType: '',
-  leaveProxyPartyAccount: '',
-  specificJob: '',
-  leaveReason: '',
+  travelType: '',
+  travelReason: '',
   fileIds: [],
-  appLeaveTimeVOS: {
-    startTime: '',
-    endTime: '',
-  },
+  appTravelTimeVOS: [{ startTime: '', endTime: '' }],
 })
+// 表单组件实例
+const formRef = ref()
 
-const leaveTypeOptions = ref<RadioOptionObj[]>([])
+// 表单校验规则
+const rules = {
+  checkPartyAccount: [{ required: true, message: '请选择审批人', trigger: 'change' }],
+  travelType: [{ required: true, message: '请选择外出类型', trigger: 'change' }],
+  'appTravelTimeVOS.0.startTime': [
+    { required: true, message: '请选择外出开始时间', trigger: 'change' },
+  ],
+  'appTravelTimeVOS.0.endTime': [
+    { required: true, message: '请选择外出结束时间', trigger: 'change' },
+  ],
+  travelReason: [
+    { required: true, message: '请输入外出原因', trigger: 'blur' },
+    { max: 250, message: '外出原因不超过 250 字', trigger: 'blur' },
+  ],
+}
 
+// 外出类型选项数据
+const outingTypeOptions = ref<RadioOptionObj[]>([])
+
+// usePicker 组合式函数需要的选项数据
 const pickerOptions = ref<PickerOptionsMap>({
   checkPartyAccount: [],
-  leaveProxyPartyAccount: [],
 })
 
 // 采用封装好的 Picker 组合式钩子函数
 const picker = usePicker(formData, pickerOptions.value)
 
 const timeRangePickerRef = ref<InstanceType<typeof TimeRangePickerPopup>>()
-const formRef = ref<InstanceType<typeof Form>>()
 
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
-  const res = await fetchApproversUsingGet()
+  const res = await fetchApproversListUsingGet()
   if (res.data.data && res.data.code === 0) {
     pickerOptions.value.checkPartyAccount = res.data.data.map((item: any) => {
       return { label: item.nickname, value: item.partyAccount }
@@ -191,44 +217,54 @@ const getApproverList = async () => {
 }
 
 /** 获取外出类型选项列表 */
-const getLeaveTypeList = async () => {
-  let leaveDictKey = ''
-  if (
-    loginUserInfo.userType === 1 ||
-    loginUserInfo.userType === 2 ||
-    loginUserInfo.userType === 10
-  ) {
-    leaveDictKey = 'leave_order_type_abc'
-  } else {
-    leaveDictKey = 'leave_order_type'
-  }
-  const res = await fetchDictOptionsListUsingGet({ type: leaveDictKey })
+const getOutingTypeList = async () => {
+  const res = await fetchDictOptionsListUsingGet({ type: 'travel_order_type' })
   if (res.data.code === 0 && res.data.data) {
-    leaveTypeOptions.value = res.data.data.map((item: any) => {
+    outingTypeOptions.value = res.data.data.map((item: any) => {
       return { label: item.label, value: item.value }
     })
   }
 }
 
-/** 获取代理人选项列表 */
-const getAgentUserList = async () => {
-  const res = await fetchAgentUserUsingPost({ keyword: '' })
-  if (res.data.data && res.data.code === 0) {
-    pickerOptions.value.leaveProxyPartyAccount = res.data.data.map((item: any) => {
-      return { label: item.nickname, value: item.partyAccount }
-    })
-  }
+/**
+ * 上传附件成功的回调
+ * @param fileList 上传附件列表
+ */
+const handleSuccess = (fileList: any) => {
+  formData.fileIds = fileList.map((item: any) => item.url)
+}
+
+/**
+ * 移除上传附件的回调
+ * @param fileList 上传附件列表
+ */
+const handleRemove = (fileList: any) => {
+  formData.fileIds = fileList.map((item: any) => item.url)
 }
 
 /** 提交表单 */
-const handleSubmit = () => {
-  console.log('提交给后端的完整 formData:', formData)
+const handleSubmit = async () => {
+  try {
+    const valid = await formRef.value.validate()
+    if (valid !== true) {
+      return
+    }
+
+    const res = await createOutingApplyUsingPost(formData)
+    if (res.data.code === 0) {
+      Message.success({ content: '提交成功', offset: [10, 16] })
+      router.push('/apply')
+    } else {
+      Message.error({ content: res.data.msg, offset: [10, 16] })
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 onMounted(() => {
   getApproverList()
-  getLeaveTypeList()
-  getAgentUserList()
+  getOutingTypeList()
 })
 </script>
 
@@ -320,6 +356,6 @@ onMounted(() => {
   --td-button-default-active-border-color: #954500;
 
   width: 100%;
-  margin-top: 16px;
+  margin: 16px 0;
 }
 </style>

@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 11:24
+ * @LastEditTime : 2026-04-29 11:31
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\FaceUpdateFormPage.vue
  * @Description  : 人脸变更申请表单页面
 -->
@@ -10,7 +10,7 @@
   <div id="face-update-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="$router.push('/apply')" />
+      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">人脸录入</div>
         <div class="form-desc">录入人脸，开启智能打卡</div>
@@ -33,10 +33,12 @@
       <t-form
         ref="formRef"
         :data="formData"
+        :rules="rules"
         show-error-message
         label-align="left"
         label-width="auto"
         scroll-to-first-error="smooth"
+        :required-mark="false"
       >
         <t-form-item label="申请人" content-align="right">
           <t-input v-model="loginUserInfo.username" align="right" borderless disabled />
@@ -45,12 +47,12 @@
         <t-form-item
           arrow
           label="审批人"
-          name="checkPartyAccount"
+          name="deptCheckerPartyAccount"
           content-align="right"
-          @click="picker.open('checkPartyAccount', '选择审批人')"
+          @click="picker.open('deptCheckerPartyAccount', '选择审批人')"
         >
           <t-input
-            :value="picker.getLabel('checkPartyAccount')"
+            :value="picker.getLabel('deptCheckerPartyAccount')"
             borderless
             align="right"
             disabled
@@ -61,7 +63,13 @@
 
       <div class="face-update-wrapper">
         <div class="face-update-title">请上传清晰的正面人脸照片</div>
-        <div class="face-update-action"></div>
+        <!-- 人脸上传组件 -->
+        <PictureUpload
+          class="face-update-action"
+          :max-count="1"
+          :success-upload="handleSuccess"
+          :remove-upload="handleRemove"
+        />
         <div class="face-update-tips">
           <div class="tips-item">
             <SvgIcon name="check-circle" color="#8B5CF6" size="13px" />
@@ -73,7 +81,7 @@
           </div>
           <div class="tips-item">
             <SvgIcon name="check-circle" color="#8B5CF6" size="13px" />
-            <div class="tips-desc">图片格式 JPG/PNG，不超过 5MB</div>
+            <div class="tips-desc">图片格式支持 jpg, png, jpeg，大小不超过 10MB</div>
           </div>
         </div>
       </div>
@@ -85,52 +93,97 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import type { Form } from 'tdesign-mobile-vue'
+import { useRouter } from 'vue-router'
 
 import { useUserStore } from '@/stores/user-store'
-import { fetchApproversUsingGet } from '@/api/approve-controller'
+import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
+import PictureUpload from '@/components/PictureUpload.vue'
+import { createFaceUpdateApplyUsingPost } from '@/api/apply-controller'
+import { Message } from 'tdesign-mobile-vue'
+
+const router = useRouter()
 
 const userStore = useUserStore()
 const loginUserInfo = userStore.loginUser.userInfo
 
+// 表单数据
 const formData = reactive({
-  checkPartyAccount: '',
-  leaveType: '',
-  leaveProxyPartyAccount: '',
-  specificJob: '',
-  leaveReason: '',
-  fileIds: [],
-  appLeaveTimeVOS: {
-    startTime: '',
-    endTime: '',
-  },
+  deptCheckerNickname: '',
+  deptCheckerPartyAccount: '',
+  fileUrl: '',
 })
+// 表单组件实例
+const formRef = ref()
 
+// 表单校验规则
+const rules = {
+  deptCheckerPartyAccount: [{ required: true, message: '请选择审批人', trigger: 'change' }],
+}
+
+// usePicker 组合式函数需要的选项数据
 const pickerOptions = ref<PickerOptionsMap>({
-  checkPartyAccount: [],
-  leaveProxyPartyAccount: [],
+  deptCheckerPartyAccount: [],
 })
 
 // 采用封装好的 Picker 组合式钩子函数
 const picker = usePicker(formData, pickerOptions.value)
 
-const formRef = ref<InstanceType<typeof Form>>()
-
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
-  const res = await fetchApproversUsingGet()
+  const res = await fetchApproversListUsingGet()
   if (res.data.data && res.data.code === 0) {
-    pickerOptions.value.checkPartyAccount = res.data.data.map((item: any) => {
+    pickerOptions.value.deptCheckerPartyAccount = res.data.data.map((item: any) => {
       return { label: item.nickname, value: item.partyAccount }
     })
   }
 }
 
+/**
+ * 上传附件成功的回调
+ * @param fileList 上传附件列表
+ */
+const handleSuccess = (fileList: any) => {
+  formData.fileUrl = fileList.map((item: any) => item.url).toString()
+}
+
+/**
+ * 移除上传附件的回调
+ * @param fileList 上传附件列表
+ */
+const handleRemove = (fileList: any) => {
+  formData.fileUrl = fileList.map((item: any) => item.url).toString()
+}
+
 /** 提交表单 */
-const handleSubmit = () => {
-  console.log('提交给后端的完整 formData:', formData)
+const handleSubmit = async () => {
+  // 检查是否已上传人脸照片
+  if (!formData.fileUrl) {
+    Message.error({ content: '请上传人脸照片', offset: [10, 16] })
+    return
+  }
+
+  if (formData.deptCheckerPartyAccount) {
+    formData.deptCheckerNickname = picker.getLabel('deptCheckerPartyAccount')
+  }
+
+  try {
+    const valid = await formRef.value.validate()
+    if (valid !== true) {
+      return
+    }
+
+    const res = await createFaceUpdateApplyUsingPost(formData)
+    if (res.data.code === 0) {
+      Message.success({ content: '提交成功', offset: [10, 16] })
+      router.push('/apply')
+    } else {
+      Message.error({ content: res.data.msg, offset: [10, 16] })
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 onMounted(() => {
@@ -223,7 +276,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   padding: 20px 0;
-  gap: 16px;
+  gap: 8px;
 
   .face-update-title {
     font-size: 14px;
@@ -232,11 +285,11 @@ onMounted(() => {
   }
 
   .face-update-action {
-    background: url('../../assets/svgs/bg/face-upload.svg');
-    background-repeat: no-repeat;
-    background-size: 100%;
-    height: 200px;
-    width: 200px;
+    --td-upload-add-icon-size: 0; // 隐藏默认的上传图标
+    --td-upload-width: 200px;
+    --td-upload-height: 200px;
+    --td-upload-grid-columns: 1;
+    --td-upload-background: url('@/assets/svgs/bg/face-upload.svg') center / 100% 100% no-repeat;
   }
 
   .face-update-tips {
@@ -271,6 +324,6 @@ onMounted(() => {
   --td-button-default-active-border-color: #7137bf;
 
   width: 100%;
-  margin-top: 16px;
+  margin: 16px 0;
 }
 </style>

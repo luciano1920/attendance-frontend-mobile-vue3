@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:27
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 10:39
+ * @LastEditTime : 2026-04-29 10:21
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\MakeupFormPage.vue
  * @Description  : 补卡申请表单页面
 -->
@@ -10,7 +10,7 @@
   <div id="makeup-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="$router.push('/apply')" />
+      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">补卡申请</div>
         <div class="form-desc">申请补录缺失的打卡记录</div>
@@ -22,7 +22,7 @@
       <SvgIcon name="triangle-alert" size="15px" color="#E37318" style="margin-top: 2px" />
       <div class="notice-content">
         <div class="notice-title">补卡须知</div>
-        <div class="notice-desc">补卡较多会被考核通报，需在缺卡次月5日前完成补卡申请。</div>
+        <div class="notice-desc">补卡较多会被考核通报，需在缺卡次月5日前完成申请。</div>
       </div>
     </div>
 
@@ -42,10 +42,12 @@
       <t-form
         ref="formRef"
         :data="formData"
+        :rules="rules"
         show-error-message
         label-align="left"
         label-width="auto"
         scroll-to-first-error="smooth"
+        :required-mark="false"
       >
         <t-form-item label="申请人" content-align="right">
           <t-input v-model="loginUserInfo.username" align="right" borderless disabled />
@@ -67,29 +69,38 @@
           />
         </t-form-item>
 
-        <!-- <t-form-item
+        <t-form-item label="补卡类型" name="attenCorrectionType" content-align="right">
+          <RadioButtonGroup
+            v-model="formData.attenCorrectionType"
+            :options="makeupTypeOptions"
+            theme="red"
+          />
+        </t-form-item>
+
+        <t-form-item
           arrow
-          label="补卡类型"
-          name="leaveType"
+          label="补卡日期"
+          name="attenCorrectionTime"
           content-align="right"
-          @click="picker.open('leaveType', '选择补卡类型')"
+          @click="makeupCalendarRef.showCalendar()"
         >
           <t-input
-            :value="picker.getLabel('leaveType')"
+            :value="missingDateNote"
             borderless
             align="right"
             disabled
-            placeholder="点击选择补卡类型"
+            placeholder="点击选择补卡日期"
           />
-        </t-form-item> -->
-
-        <t-form-item label="补卡类型" name="leaveType" content-align="right">
-          <RadioButtonGroup v-model="formData.leaveType" :options="leaveTypeOptions" />
+          <MakeupCalendar
+            ref="makeupCalendarRef"
+            :record-data="missingRecordDataList"
+            :on-comfirm="confirmMakeupDate"
+          />
         </t-form-item>
 
-        <t-form-item label="补卡原因" name="leaveReason" content-align="right">
+        <t-form-item label="补卡原因" name="attenCorrectionReason" content-align="right">
           <t-textarea
-            v-model="formData.leaveReason"
+            v-model="formData.attenCorrectionReason"
             placeholder="请输入补卡原因"
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
@@ -105,47 +116,88 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import type { Form, RadioOptionObj } from 'tdesign-mobile-vue'
+import { useRouter } from 'vue-router'
+import { Message, type RadioOptionObj } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
-import { fetchApproversUsingGet } from '@/api/approve-controller'
+import { createMakeupApplyUsingPost } from '@/api/apply-controller'
+import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
-import { fetchAgentUserUsingPost } from '@/api/user-controller'
+import { fetchAllowMakeupDayUsingPost } from '@/api/record-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue'
+import MakeupCalendar from './components/MakeupCalendar.vue'
+
+const router = useRouter()
 
 const userStore = useUserStore()
 const loginUserInfo = userStore.loginUser.userInfo
 
+// 表单数据
 const formData = reactive({
   checkPartyAccount: '',
-  leaveType: '',
-  leaveProxyPartyAccount: '',
-  specificJob: '',
-  leaveReason: '',
-  fileIds: [],
-  appLeaveTimeVOS: {
-    startTime: '',
-    endTime: '',
-  },
+  attenCorrectionType: '',
+  attenCorrectionReason: '',
+  attenCorrectionTime: [] as string[],
 })
+// 表单组件实例
+const formRef = ref()
 
-const leaveTypeOptions = ref<RadioOptionObj[]>([])
+// 表单校验规则
+const rules = {
+  checkPartyAccount: [{ required: true, message: '请选择审批人', trigger: 'change' }],
+  attenCorrectionType: [{ required: true, message: '请选择补卡类型', trigger: 'change' }],
+  attenCorrectionTime: [{ required: true, message: '请选择补卡日期', trigger: 'change' }],
+  attenCorrectionReason: [
+    { required: true, message: '请输入补卡原因', trigger: 'blur' },
+    { max: 250, message: '补卡原因不超过 250 字', trigger: 'blur' },
+  ],
+}
 
+// 补卡类型选项列表
+const makeupTypeOptions = ref<RadioOptionObj[]>([])
+
+// usePicker 组合式函数需要的选项数据
 const pickerOptions = ref<PickerOptionsMap>({
   checkPartyAccount: [],
-  leaveProxyPartyAccount: [],
 })
 
 // 采用封装好的 Picker 组合式钩子函数
 const picker = usePicker(formData, pickerOptions.value)
 
-const formRef = ref<InstanceType<typeof Form>>()
+// 缺卡日期记录数据列表
+const missingRecordDataList = ref<any[]>([])
+// 缺卡日期字符串
+const missingDateNote = ref<string>('')
+// 补卡日历弹出层实例
+const makeupCalendarRef = ref()
+
+/** 获取可以补卡的日期列表 */
+const getAllowMakeupDayList = async () => {
+  const res = await fetchAllowMakeupDayUsingPost()
+  if (res.data.code === 0 && res.data.data) {
+    missingRecordDataList.value = res.data.data
+  } else {
+    Message.error({
+      content: res.data.msg || '获取可补卡日期列表失败',
+      offset: [10, 16],
+    })
+  }
+}
+
+/**
+ * 日历组件确认选择回调函数
+ * @param dateList 选择的日期列表
+ */
+const confirmMakeupDate = (dateList: string[]) => {
+  formData.attenCorrectionTime = dateList
+  missingDateNote.value = dateList.join('、')
+}
 
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
-  const res = await fetchApproversUsingGet()
+  const res = await fetchApproversListUsingGet()
   if (res.data.data && res.data.code === 0) {
     pickerOptions.value.checkPartyAccount = res.data.data.map((item: any) => {
       return { label: item.nickname, value: item.partyAccount }
@@ -154,44 +206,39 @@ const getApproverList = async () => {
 }
 
 /** 获取补卡类型选项列表 */
-const getLeaveTypeList = async () => {
-  let leaveDictKey = ''
-  if (
-    loginUserInfo.userType === 1 ||
-    loginUserInfo.userType === 2 ||
-    loginUserInfo.userType === 10
-  ) {
-    leaveDictKey = 'leave_order_type_abc'
-  } else {
-    leaveDictKey = 'leave_order_type'
-  }
-  const res = await fetchDictOptionsListUsingGet({ type: leaveDictKey })
+const getMakeupTypeList = async () => {
+  const res = await fetchDictOptionsListUsingGet({ type: 'attencorrection_order_type' })
   if (res.data.code === 0 && res.data.data) {
-    leaveTypeOptions.value = res.data.data.map((item: any) => {
+    makeupTypeOptions.value = res.data.data.map((item: any) => {
       return { label: item.label, value: item.value }
     })
   }
 }
 
-/** 获取代理人选项列表 */
-const getAgentUserList = async () => {
-  const res = await fetchAgentUserUsingPost({ keyword: '' })
-  if (res.data.data && res.data.code === 0) {
-    pickerOptions.value.leaveProxyPartyAccount = res.data.data.map((item: any) => {
-      return { label: item.nickname, value: item.partyAccount }
-    })
-  }
-}
-
 /** 提交表单 */
-const handleSubmit = () => {
-  console.log('提交给后端的完整 formData:', formData)
+const handleSubmit = async () => {
+  try {
+    const valid = await formRef.value.validate()
+    if (valid !== true) {
+      return
+    }
+
+    const res = await createMakeupApplyUsingPost(formData)
+    if (res.data.code === 0) {
+      Message.success({ content: '提交成功', offset: [10, 16] })
+      router.push('/apply')
+    } else {
+      Message.error({ content: res.data.msg, offset: [10, 16] })
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 onMounted(() => {
   getApproverList()
-  getLeaveTypeList()
-  getAgentUserList()
+  getMakeupTypeList()
+  getAllowMakeupDayList()
 })
 </script>
 
@@ -277,6 +324,6 @@ onMounted(() => {
 
 .form-submit-action {
   width: 100%;
-  margin-top: 16px;
+  margin: 16px 0;
 }
 </style>

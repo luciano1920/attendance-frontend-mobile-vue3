@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 11:24
+ * @LastEditTime : 2026-04-27 16:10
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\RestFormPage.vue
  * @Description  : 调休申请表单页面
 -->
@@ -10,7 +10,7 @@
   <div id="rest-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="$router.push('/apply')" />
+      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">调休申请</div>
         <div class="form-desc">合理调配休假时间</div>
@@ -31,15 +31,17 @@
       </t-popup>
 
       <!-- 时间范围选择器弹出层 -->
-      <TimeRangePickerPopup ref="timeRangePickerRef" v-model="formData.appLeaveTimeVOS" />
+      <TimeRangePickerPopup ref="timeRangePickerRef" v-model="formData.compLeaveTime" />
 
       <t-form
         ref="formRef"
         :data="formData"
+        :rules="rules"
         show-error-message
         label-align="left"
         label-width="auto"
         scroll-to-first-error="smooth"
+        :required-mark="false"
       >
         <t-form-item label="申请人" content-align="right">
           <t-input v-model="loginUserInfo.username" align="right" borderless disabled />
@@ -64,7 +66,7 @@
         <t-form-item
           arrow
           label="调休开始时间"
-          name="appLeaveTimeVOS.startTime"
+          name="compLeaveTime.0.startTime"
           content-align="right"
           @click="timeRangePickerRef?.openStart()"
         >
@@ -80,7 +82,7 @@
         <t-form-item
           arrow
           label="调休结束时间"
-          name="appLeaveTimeVOS.startTime"
+          name="compLeaveTime.0.endTime"
           content-align="right"
           @click="timeRangePickerRef?.openEnd()"
         >
@@ -93,9 +95,9 @@
           />
         </t-form-item>
 
-        <t-form-item label="调休原因" name="leaveReason" content-align="right">
+        <t-form-item label="调休原因" name="compLeaveReason" content-align="right">
           <t-textarea
-            v-model="formData.leaveReason"
+            v-model="formData.compLeaveReason"
             placeholder="请输入调休原因"
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
@@ -109,48 +111,56 @@
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
-import type { Form, RadioOptionObj } from 'tdesign-mobile-vue'
+import { useRouter } from 'vue-router'
+import { Message } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
-import { fetchApproversUsingGet } from '@/api/approve-controller'
-import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
-import { fetchAgentUserUsingPost } from '@/api/user-controller'
+import { createRestApplyUsingPost } from '@/api/apply-controller'
+import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
-import TimeRangePickerPopup from '@/components/TimeRangePickerPopup.vue'
+import TimeRangePickerPopup from './components/TimeRangePickerPopup.vue'
+
+const router = useRouter()
 
 const userStore = useUserStore()
 const loginUserInfo = userStore.loginUser.userInfo
 
+// 表单数据
 const formData = reactive({
   checkPartyAccount: '',
-  leaveType: '',
-  leaveProxyPartyAccount: '',
-  specificJob: '',
-  leaveReason: '',
-  fileIds: [],
-  appLeaveTimeVOS: {
-    startTime: '',
-    endTime: '',
-  },
+  compLeaveReason: '',
+  compLeaveTime: [{ startTime: '', endTime: '' }],
 })
+// 表单组件实例
+const formRef = ref()
 
-const leaveTypeOptions = ref<RadioOptionObj[]>([])
+// 表单校验规则
+const rules = {
+  checkPartyAccount: [{ required: true, message: '请选择审批人', trigger: 'change' }],
+  'compLeaveTime.0.startTime': [
+    { required: true, message: '请选择调休开始时间', trigger: 'change' },
+  ],
+  'compLeaveTime.0.endTime': [{ required: true, message: '请选择调休结束时间', trigger: 'change' }],
+  compLeaveReason: [
+    { required: true, message: '请输入调休原因', trigger: 'blur' },
+    { max: 250, message: '调休原因不超过 250 字', trigger: 'blur' },
+  ],
+}
 
+// usePicker 组合式函数需要的选项数据
 const pickerOptions = ref<PickerOptionsMap>({
   checkPartyAccount: [],
-  leaveProxyPartyAccount: [],
 })
 
 // 采用封装好的 Picker 组合式钩子函数
 const picker = usePicker(formData, pickerOptions.value)
 
 const timeRangePickerRef = ref<InstanceType<typeof TimeRangePickerPopup>>()
-const formRef = ref<InstanceType<typeof Form>>()
 
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
-  const res = await fetchApproversUsingGet()
+  const res = await fetchApproversListUsingGet()
   if (res.data.data && res.data.code === 0) {
     pickerOptions.value.checkPartyAccount = res.data.data.map((item: any) => {
       return { label: item.nickname, value: item.partyAccount }
@@ -158,45 +168,28 @@ const getApproverList = async () => {
   }
 }
 
-/** 获取调休类型选项列表 */
-const getLeaveTypeList = async () => {
-  let leaveDictKey = ''
-  if (
-    loginUserInfo.userType === 1 ||
-    loginUserInfo.userType === 2 ||
-    loginUserInfo.userType === 10
-  ) {
-    leaveDictKey = 'leave_order_type_abc'
-  } else {
-    leaveDictKey = 'leave_order_type'
-  }
-  const res = await fetchDictOptionsListUsingGet({ type: leaveDictKey })
-  if (res.data.code === 0 && res.data.data) {
-    leaveTypeOptions.value = res.data.data.map((item: any) => {
-      return { label: item.label, value: item.value }
-    })
-  }
-}
-
-/** 获取代理人选项列表 */
-const getAgentUserList = async () => {
-  const res = await fetchAgentUserUsingPost({ keyword: '' })
-  if (res.data.data && res.data.code === 0) {
-    pickerOptions.value.leaveProxyPartyAccount = res.data.data.map((item: any) => {
-      return { label: item.nickname, value: item.partyAccount }
-    })
-  }
-}
-
 /** 提交表单 */
-const handleSubmit = () => {
-  console.log('提交给后端的完整 formData:', formData)
+const handleSubmit = async () => {
+  try {
+    const valid = await formRef.value.validate()
+    if (valid !== true) {
+      return
+    }
+
+    const res = await createRestApplyUsingPost(formData)
+    if (res.data.code === 0) {
+      Message.success({ content: '提交成功', offset: [10, 16] })
+      router.push('/apply')
+    } else {
+      Message.error({ content: res.data.msg, offset: [10, 16] })
+    }
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 onMounted(() => {
   getApproverList()
-  getLeaveTypeList()
-  getAgentUserList()
 })
 </script>
 
@@ -288,6 +281,6 @@ onMounted(() => {
   --td-button-default-active-border-color: #006c45;
 
   width: 100%;
-  margin-top: 16px;
+  margin: 16px 0;
 }
 </style>

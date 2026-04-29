@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-24 14:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-25 14:58
+ * @LastEditTime : 2026-04-28 14:44
  * @FilePath     : \attendance-frontend-mobile\src\components\TimeRangePickerPopup.vue
  * @Description  : 时间区间选择器 - 弹窗控制器（无头组件）
 -->
@@ -42,12 +42,12 @@ import { toTimestamp } from '@/utils/date'
 import { formatDateTimeArray, padZero, parseDateTimeToArray } from '@/utils'
 
 interface TimeRangeValue {
-  startTime: string | number
-  endTime: string | number
+  startTime: string | number | null
+  endTime: string | number | null
 }
 
 interface Props {
-  modelValue: TimeRangeValue
+  modelValue: TimeRangeValue[]
   startTimeOptions?: PickerColumnItem[]
   endTimeOptions?: PickerColumnItem[]
   disablePast?: boolean // 是否禁用选择过去的时间
@@ -66,7 +66,7 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const emit = defineEmits<{
-  (e: 'update:modelValue', value: TimeRangeValue): void
+  (e: 'update:modelValue', value: TimeRangeValue[]): void
 }>()
 
 // 当前日期
@@ -350,10 +350,12 @@ const handleConfirm = (
     endPickerState.timestamp = toTimestamp(formattedText)
   }
 
-  emit('update:modelValue', {
-    startTime: startPickerState.timestamp ?? 0,
-    endTime: endPickerState.timestamp ?? 0,
-  })
+  emit('update:modelValue', [
+    {
+      startTime: startPickerState.timestamp ?? null,
+      endTime: endPickerState.timestamp ?? null,
+    },
+  ])
 }
 
 defineExpose({
