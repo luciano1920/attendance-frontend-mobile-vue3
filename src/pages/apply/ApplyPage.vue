@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-29 16:15
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-26 10:38
+ * @LastEditTime : 2026-04-30 11:34
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\ApplyPage.vue
  * @Description  : 考勤申请入口页面
 -->
@@ -32,7 +32,7 @@
         </div>
 
         <div class="apply-action-item short-item" @click="$router.push('/apply/makeup')">
-          <IconContainer icon="clipboard-pen" theme="red" />
+          <IconContainer icon="calendar-plus" theme="red" />
           <div class="apply-action-item-label">
             <div class="apply-action-item-name">补卡申请</div>
             <div class="apply-action-item-desc">忘记打卡/设备故障</div>

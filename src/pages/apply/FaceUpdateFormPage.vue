@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-29 11:31
+ * @LastEditTime : 2026-04-29 12:30
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\FaceUpdateFormPage.vue
  * @Description  : 人脸变更申请表单页面
 -->
@@ -94,14 +94,17 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { Message } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
 import { fetchApproversListUsingGet } from '@/api/approve-controller'
+import {
+  createFaceUpdateApplyUsingPost,
+  fetchFaceUpdateRecordUsingGet,
+} from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
 import PictureUpload from '@/components/PictureUpload.vue'
-import { createFaceUpdateApplyUsingPost } from '@/api/apply-controller'
-import { Message } from 'tdesign-mobile-vue'
 
 const router = useRouter()
 
@@ -186,8 +189,13 @@ const handleSubmit = async () => {
   }
 }
 
+const getUserFaceUpdateRecord = async () => {
+  const res = await fetchFaceUpdateRecordUsingGet()
+}
+
 onMounted(() => {
   getApproverList()
+  getUserFaceUpdateRecord()
 })
 </script>
 
@@ -289,7 +297,7 @@ onMounted(() => {
     --td-upload-width: 200px;
     --td-upload-height: 200px;
     --td-upload-grid-columns: 1;
-    --td-upload-background: url('@/assets/svgs/bg/face-upload.svg') center / 100% 100% no-repeat;
+    --td-upload-background: url('@/assets/svgs/face-upload.svg') center / 100% 100% no-repeat;
   }
 
   .face-update-tips {
