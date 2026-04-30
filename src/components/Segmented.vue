@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 14:37
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 01:10
+ * @LastEditTime : 2026-04-29 15:06
  * @FilePath     : \attendance-frontend-mobile\src\components\Segmented.vue
  * @Description  : 分段控制器（Segmented）组件，选中态采用滑块风格
 -->
@@ -58,18 +58,20 @@
 <script setup lang="ts">
 import { ref, watch, nextTick, onMounted, computed } from 'vue'
 
+type SegmentedValue = string | number | boolean
+
 interface SegmentedOption {
   label?: string // 选项名
-  value: string | number // 选项值
+  value: SegmentedValue // 选项值
   disabled?: boolean // 是否禁用选项
   payload?: any // 自定义数据载体
 }
 
 interface Props {
-  value?: string | number // (v-model:value 绑定) 当前选中的值
+  value?: SegmentedValue // (v-model:value 绑定) 当前选中的值
   block?: boolean // 是否将宽度调整为父元素宽度，同时所有选项占据相同的宽度
   disabled?: boolean // 是否全部禁用
-  options?: string[] | number[] | SegmentedOption[] // 选项数据
+  options?: SegmentedValue[] | SegmentedOption[] // 选项数据
   size?: 'small' | 'middle' | 'large' // 控件尺寸
   shape?: 'default' | 'round' // 形状：默认方角，round 为胶囊
   direction?: 'horizontal' | 'vertical' // 排列方向，默认横向
@@ -91,7 +93,7 @@ const emits = defineEmits(['update:value', 'change'])
  * 选中选项触发
  * @param value 选项值
  */
-const onSelected = (value: string | number) => {
+const onSelected = (value: SegmentedValue) => {
   if (value !== props.value) {
     emits('update:value', value)
     emits('change', value)
@@ -102,7 +104,7 @@ const onSelected = (value: string | number) => {
  * 读取选项是否禁用
  * @param option 选项
  */
-const getOptionDisabled = (option: string | number | SegmentedOption) => {
+const getOptionDisabled = (option: SegmentedValue | SegmentedOption) => {
   if (typeof option == 'object') {
     return option?.disabled || false
   }
@@ -113,7 +115,7 @@ const getOptionDisabled = (option: string | number | SegmentedOption) => {
  * 读取选项的 Value 值
  * @param option 选项
  */
-const getOptionValue = (option: string | number | SegmentedOption) => {
+const getOptionValue = (option: SegmentedValue | SegmentedOption) => {
   if (typeof option == 'object') {
     return option.value
   }
@@ -124,7 +126,7 @@ const getOptionValue = (option: string | number | SegmentedOption) => {
  * 读取选项的 Label 值
  * @param option 选项
  */
-const getOptionLabel = (option: string | number | SegmentedOption) => {
+const getOptionLabel = (option: SegmentedValue | SegmentedOption) => {
   if (typeof option == 'object') {
     return option.label
   }
@@ -202,7 +204,7 @@ watch(
 
 <style lang="scss" scoped>
 .segmented {
-  --segmented-bg: #f5f5f5;
+  --segmented-bg: #eeeef0;
   --segmented-thumb-bg: #ffffff;
   --segmented-color: rgba(0, 0, 0, 0.65);
   --segmented-color-active: rgba(0, 0, 0, 0.88);

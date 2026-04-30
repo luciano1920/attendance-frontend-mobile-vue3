@@ -2,10 +2,12 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 10:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 12:40
+ * @LastEditTime : 2026-04-30 10:08
  * @FilePath     : \attendance-frontend-mobile\src\constants\record.ts
  * @Description  : 考勤记录相关常量类
  */
+
+import type { ThemeType } from '@/components/IconContainer.vue'
 
 /** 考勤记录类型枚举 */
 export const RECORD_TYPE_ENUM = {
@@ -82,4 +84,36 @@ export function recordColorCSSVariables(el: HTMLElement = document.documentEleme
   Object.entries(RECORD_TYPE_COLOR_MAP).forEach(([type, color]) => {
     el.style.setProperty(`--record-color-${type}`, color)
   })
+}
+
+/** 申请类型枚举 */
+export const APPLY_TYPE_ENUM = {
+  LEAVE: '请假', // 请假
+  OUTING: '外出', // 外出
+  MAKE_UP: '补卡', // 补卡
+  REST: '调休', // 调休
+  FACE_UPDATE: '人脸', // 人脸变更
+}
+
+/** 申请类型文本映射 */
+export const APPLY_TYPE_MAP: Record<number, string> = {
+  1: '请假',
+  2: '外出',
+  3: '补卡',
+  4: '调休',
+  5: '人脸',
+}
+
+/** 图标配置类型 */
+interface IconConfig {
+  icon: string
+  theme: ThemeType
+}
+
+export const APPLY_ICON_MAP: Record<string, IconConfig> = {
+  [APPLY_TYPE_ENUM.LEAVE]: { icon: 'coffee', theme: 'blue' },
+  [APPLY_TYPE_ENUM.OUTING]: { icon: 'plane', theme: 'orange' },
+  [APPLY_TYPE_ENUM.MAKE_UP]: { icon: 'calendar-plus', theme: 'red' },
+  [APPLY_TYPE_ENUM.REST]: { icon: 'moon', theme: 'green' },
+  [APPLY_TYPE_ENUM.FACE_UPDATE]: { icon: 'scan-face', theme: 'purple' },
 }

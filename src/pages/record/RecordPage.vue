@@ -1,14 +1,14 @@
 <!--
- * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-30 11:37
+ * @Author       : luciano1920 1290582790@qq.com
+ * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-30 14:42
- * @FilePath     : \attendance-frontend-mobile\src\pages\approve\ApprovePage.vue
+ * @LastEditTime : 2026-04-30 15:17
+ * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
 <template>
-  <div id="approve-page">
-    <div class="page-header">
+  <div id="record-page">
+    <div class="record-page-header">
       <t-navbar :fixed="false" :title="pageTitle" />
       <div class="filter-bar">
         <t-tabs v-model="approvalStatus" :space-evenly="false" @change="handleTabChange">
@@ -19,9 +19,9 @@
         <Segmented
           v-if="showSegmented"
           v-model:value="searchParams.checkManage"
-          :options="options"
+          :options="segmentOptions"
           shape="round"
-          @change="changeSegmented"
+          @change="handleSegmentChange"
         >
           <template #label="{ label, payload }">
             <SvgIcon :name="payload.icon" />
@@ -31,7 +31,7 @@
       </div>
     </div>
 
-    <div v-if="approvalRecordList.length === 0" style="padding-top: 128px">
+    <div v-if="applyRecordDataList.length === 0" style="padding-top: 128px">
       <t-loading
         text="数据加载中"
         layout="vertical"
@@ -49,24 +49,20 @@
 
     <div v-else class="record-list">
       <t-list :async-loading="listLoading" :on-scroll="handleScroll">
-        <div
-          class="approval-info-card"
-          v-for="recordItem in approvalRecordList"
-          :key="recordItem.id"
-        >
-          <div class="info-container">
+        <div class="list-item-card" v-for="recordItem in applyRecordDataList" :key="recordItem.id">
+          <div class="list-item">
             <IconContainer
               :icon="APPLY_ICON_MAP[recordItem?.orderType]?.icon ?? ''"
               :theme="APPLY_ICON_MAP[recordItem?.orderType]?.theme"
             />
-            <div class="info-content">
-              <div class="info-header">
-                <div class="info-title">{{ recordItem?.orderType }}申请</div>
+            <div class="list-item-content">
+              <div class="list-item-header">
+                <div class="list-item-title">{{ recordItem?.orderType }}申请</div>
                 <t-tag
                   v-if="recordItem.orderState === 0"
                   variant="light"
                   theme="warning"
-                  class="info-status"
+                  class="list-item-status"
                 >
                   <template #icon>
                     <SvgIcon name="clock" size="12px" />
@@ -77,7 +73,7 @@
                   v-else-if="recordItem.orderState === 1"
                   variant="light"
                   theme="success"
-                  class="info-status"
+                  class="list-item-status"
                 >
                   <template #icon>
                     <SvgIcon name="check-circle" size="12px" />
@@ -88,7 +84,7 @@
                   v-else-if="recordItem.orderState === 2"
                   variant="light"
                   theme="error"
-                  class="info-status"
+                  class="list-item-status"
                 >
                   <template #icon>
                     <SvgIcon name="close-circle" size="12px" />
@@ -96,21 +92,33 @@
                   已驳回
                 </t-tag>
               </div>
-              <div class="info-apply">
-                <div class="info-apply-person">{{ recordItem?.nickname }}</div>
-                <div class="info-apply-time" v-if="recordItem.orderState !== 0">
+              <div class="list-item-desc">
+                <div class="list-item-username">{{ recordItem?.nickname }}</div>
+                <div class="list-item-time" v-if="recordItem.orderState !== 0">
                   审批时间： {{ formatDate(recordItem?.updateTime) }}
                 </div>
               </div>
             </div>
           </div>
-          <div class="approval-info-extra">
-            <div class="info-desc">申请时间：{{ formatDate(recordItem?.createTime) }}</div>
-            <div class="info-action">
-              <t-button theme="primary" size="small" v-if="recordItem.orderState === 0">
+          <div class="list-item-extra">
+            <div class="list-item-extra-time">
+              申请时间：{{ formatDate(recordItem?.createTime) }}
+            </div>
+            <div class="list-item-action">
+              <t-button
+                v-if="recordItem.orderState === 0"
+                theme="primary"
+                size="small"
+                @click="router.push(`/record/${recordItem.id}/approve`)"
+              >
                 去审批
               </t-button>
-              <t-button theme="light" size="small" v-if="recordItem.orderState !== 0">
+              <t-button
+                v-if="recordItem.orderState !== 0"
+                theme="light"
+                size="small"
+                @click="router.push(`/record/${recordItem.id}`)"
+              >
                 详情
               </t-button>
             </div>
@@ -123,17 +131,20 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { Message, type ListProps, type TabValue } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
-import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
 import { fetchApprovalRecordByPageUsingPost } from '@/api/approve-controller'
+import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
+import { APPLY_ICON_MAP } from '@/constants/record'
+import { formatDate } from '@/utils/date'
+import IconContainer from '@/components/IconContainer.vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Segmented from '@/components/Segmented.vue'
-import { APPLY_ICON_MAP } from '@/constants/record'
-import IconContainer from '@/components/IconContainer.vue'
-import { formatDate } from '@/utils/date'
+
+const router = useRouter()
 
 const userStore = useUserStore()
 const { loginUser } = storeToRefs(userStore)
@@ -145,13 +156,13 @@ const approvalStatus = ref<string>('pending')
 
 // 分段控制选项，用于区分个人申请清单还是管理员审批清单
 const showSegmented = ref<boolean>(false) // 管理员角色才能看到分段控制器
-const options = [
+const segmentOptions = [
   { label: '审批', value: true, payload: { icon: 'check-check' } },
   { label: '我的申请', value: false, payload: { icon: 'list' } },
 ]
 
-const listLoading = ref<ListProps['asyncLoading']>('')
-const recordLoading = ref<boolean>(true)
+const listLoading = ref<ListProps['asyncLoading']>('') // 列表组件加载状态，用于控制 List 组件
+const recordLoading = ref<boolean>(true) // 记录加载状态，用于控制 Loading 组件
 
 // 查询参数
 const searchParams = reactive({
@@ -162,8 +173,13 @@ const searchParams = reactive({
 })
 const recordTotal = ref<number>(0)
 
-const approvalRecordList = ref<any[]>([])
+// 申请记录数据列表
+const applyRecordDataList = ref<any[]>([])
 
+/**
+ * Tab 切换事件处理函数
+ * @param value 选中的 Tab
+ */
 const handleTabChange = (value: TabValue) => {
   if (value === 'pending') {
     searchParams.orderState = [0]
@@ -171,26 +187,28 @@ const handleTabChange = (value: TabValue) => {
     searchParams.orderState = [1, 2]
   }
   searchParams.pageNo = 1
-  approvalRecordList.value = []
+  applyRecordDataList.value = []
   recordTotal.value = 0
-  getApprovalRecordList()
+  getApplyRecordDataList()
 }
 
-const changeSegmented = () => {
+/** Segmented 切换事件处理函数 */
+const handleSegmentChange = () => {
   searchParams.pageNo = 1
-  approvalRecordList.value = []
+  applyRecordDataList.value = []
   recordTotal.value = 0
-  getApprovalRecordList()
+  getApplyRecordDataList()
 }
 
-const getApprovalRecordList = async () => {
+/** 获取申请记录数据列表 */
+const getApplyRecordDataList = async () => {
   // 如果已经在加载中，则不再加载
   if (listLoading.value === 'loading') {
     return
   }
 
   // 如果不是第一页，且当前已加载的数据量已经达到或超过总量，则不再加载
-  if (searchParams.pageNo > 1 && approvalRecordList.value.length >= recordTotal.value) {
+  if (searchParams.pageNo > 1 && applyRecordDataList.value.length >= recordTotal.value) {
     return
   }
 
@@ -203,9 +221,9 @@ const getApprovalRecordList = async () => {
       const newList = res.data.data.list ?? []
       // 如果是第一页，直接替换；否则追加数据
       if (searchParams.pageNo === 1) {
-        approvalRecordList.value = newList
+        applyRecordDataList.value = newList
       } else {
-        approvalRecordList.value = [...approvalRecordList.value, ...newList]
+        applyRecordDataList.value = [...applyRecordDataList.value, ...newList]
       }
       recordTotal.value = res.data.data.total ?? 0
     } else {
@@ -222,10 +240,14 @@ const getApprovalRecordList = async () => {
   }
 }
 
+/**
+ * 处理列表滑动事件
+ * @param scrollBottom 滚动条距离底部的距离
+ */
 const handleScroll = (scrollBottom: number) => {
-  if (scrollBottom < 20 && approvalRecordList.value.length < recordTotal.value) {
+  if (scrollBottom < 20 && applyRecordDataList.value.length < recordTotal.value) {
     searchParams.pageNo += 1
-    getApprovalRecordList()
+    getApplyRecordDataList()
   }
 }
 
@@ -237,12 +259,12 @@ onMounted(() => {
     pageTitle.value = '考勤审批'
   }
 
-  getApprovalRecordList()
+  getApplyRecordDataList()
 })
 </script>
 
 <style lang="scss" scoped>
-:deep(.page-header) {
+:deep(.record-page-header) {
   box-sizing: border-box;
   position: fixed;
   width: 100%;
@@ -279,47 +301,52 @@ onMounted(() => {
   padding: 108px 16px 96px;
 }
 
-.approval-info-card {
+.list-item-card {
   background-color: #fff;
   border-radius: 14px;
   margin-bottom: 8px;
 
-  .info-container {
+  .list-item {
     padding: 14px 16px;
     border-bottom: 1px solid #f5f6f7;
     display: flex;
     gap: 12px;
 
-    .info-content {
+    .list-item-content {
       flex: 1;
       display: flex;
       flex-direction: column;
       justify-content: center;
       gap: 4px;
 
-      .info-header {
+      .list-item-header {
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        .info-title {
+        .list-item-title {
           color: #171a1d;
           font-size: 15px;
           font-weight: 600;
         }
 
-        .info-status {
+        .list-item-status {
           font-weight: 500;
         }
       }
 
-      .info-apply {
+      .list-item-desc {
         display: flex;
         align-items: center;
         justify-content: space-between;
 
-        .info-apply-person,
-        .info-apply-time {
+        .list-item-username {
+          color: #86909c;
+          font-size: 13px;
+          font-weight: 500;
+        }
+
+        .list-item-time {
           color: #86909c;
           font-size: 12px;
         }
@@ -327,18 +354,18 @@ onMounted(() => {
     }
   }
 
-  .approval-info-extra {
+  .list-item-extra {
     padding: 8px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    .info-desc {
+    .list-item-extra-time {
       font-size: 12px;
       color: #4e5969;
     }
 
-    .info-action {
+    .list-item-action {
       display: flex;
       align-items: center;
       gap: 8px;

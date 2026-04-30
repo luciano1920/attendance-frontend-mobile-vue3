@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-30 14:37
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 00:27
+ * @LastEditTime : 2026-04-29 17:14
  * @FilePath     : \attendance-frontend-mobile\src\pages\approve\components\ApproveInfoCard.vue
  * @Description  : 审批/申请记录列表展示卡片组件
 -->
@@ -21,7 +21,7 @@
         <div style="color: #858a99; font-size: 12px">2026-03-29 10:32:11</div>
       </div>
 
-      <t-tag variant="light-outline" theme="warning">
+      <t-tag variant="light" theme="warning">
         <template #icon>
           <SvgIcon name="clock" size="14px" />
         </template>

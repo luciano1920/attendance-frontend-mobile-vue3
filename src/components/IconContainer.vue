@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-20 00:53
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 00:24
+ * @LastEditTime : 2026-04-29 17:06
  * @FilePath     : \attendance-frontend-mobile\src\components\IconContainer.vue
  * @Description  : 图标容器组件
 -->
@@ -17,7 +17,7 @@ import { computed } from 'vue'
 import SvgIcon from '@/components/SvgIcon.vue'
 
 // 定义主题类型
-type ThemeType = 'blue' | 'red' | 'orange' | 'green' | 'purple' | 'gray'
+export type ThemeType = 'blue' | 'red' | 'orange' | 'green' | 'purple' | 'gray'
 
 // 使用interface定义Props
 interface Props {
@@ -33,7 +33,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   size: '24px',
   theme: 'gray',
-  shadow: false
+  shadow: false,
 })
 
 // 主题颜色配置
@@ -43,7 +43,7 @@ const themeColors: Record<ThemeType, { icon: string; bg: string }> = {
   orange: { icon: '#E37318', bg: '#FEF3E8' },
   green: { icon: '#2BA471', bg: '#E6F8F1' },
   purple: { icon: '#8B5CF6', bg: '#F3EFFE' },
-  gray: { icon: '#666666', bg: '#F5F5F5' }
+  gray: { icon: '#666666', bg: '#F5F5F5' },
 }
 
 // 计算图标颜色
@@ -60,7 +60,7 @@ const bgColor = computed(() => {
 const containerStyle = computed(() => {
   return {
     backgroundColor: bgColor.value,
-    boxShadow: props.shadow ? '0px 1px 4px 0px rgba(0, 0, 0, 0.1)' : 'none'
+    boxShadow: props.shadow ? '0px 1px 4px 0px rgba(0, 0, 0, 0.1)' : 'none',
   }
 })
 </script>

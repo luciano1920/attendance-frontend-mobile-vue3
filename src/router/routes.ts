@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-20 15:42
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 15:27
+ * @LastEditTime : 2026-04-30 15:14
  * @FilePath     : \attendance-frontend-mobile\src\router\routes.ts
  * @Description  : 所有路由配置
  */
@@ -99,18 +99,18 @@ export const routes: Array<RouteRecordRaw> = [
         name: '考勤申请页',
         component: () => import('@/pages/apply/ApplyPage.vue'),
         meta: {
-          title: '考勤申请',
+          title: '申请',
           access: ACCESS_ENUM.USER,
         },
       },
-      // 考勤审核页
+      // 记录列表页
       {
-        path: 'approve',
-        name: '考勤审核页',
-        component: () => import('@/pages/approve/ApprovePage.vue'),
+        path: 'record',
+        name: '申请记录列表页',
+        component: () => import('@/pages/record/RecordPage.vue'),
         meta: {
-          title: '考勤审核',
-          access: ACCESS_ENUM.ADMIN,
+          title: '记录',
+          access: ACCESS_ENUM.USER,
         },
       },
       // 用户中心页（我的）
@@ -169,6 +169,29 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '人脸变更申请',
       access: ACCESS_ENUM.USER,
+    },
+  },
+  // 申请详情页（普通用户查看 / 撤销）
+  {
+    path: '/record/:id',
+    name: '申请详情页',
+    component: () => import('@/pages/record/RecordDetailPage.vue'),
+    props: true, // 将路由参数作为组件的 props 传递
+    meta: {
+      title: '申请详情',
+      access: ACCESS_ENUM.USER,
+    },
+  },
+
+  // 申请审批页（审批人 通过/驳回）
+  {
+    path: '/record/:id/approve',
+    name: '申请审批页',
+    component: () => import('@/pages/record/RecordApprovePage.vue'),
+    props: true, // 将路由参数作为组件的 props 传递
+    meta: {
+      title: '审批详情',
+      access: ACCESS_ENUM.ADMIN,
     },
   },
 ]

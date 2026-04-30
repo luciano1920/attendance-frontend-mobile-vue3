@@ -35,18 +35,6 @@ export async function fetchUnifiedUserInfoUsingGet(params: any, options?: { [key
   })
 }
 
-/** 获取用户个人详情信息 POST /app-api/attenfront/facechange-record/get */
-export async function fetchUserDetailInfoUsingGet(body: any, options?: { [key: string]: any }) {
-  return request('/app-api/attenfront/facechange-record/get', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  })
-}
-
 /** 用户修改密码 POST /authserver/users/updatePass */
 export async function updateUserPasswordUsingPost(body: any, options?: { [key: string]: any }) {
   return request('/authserver/users/updatePass', {

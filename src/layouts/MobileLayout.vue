@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 10:50
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 17:26
+ * @LastEditTime : 2026-04-30 14:38
  * @FilePath     : \attendance-frontend-mobile\src\layouts\MobileLayout.vue
  * @Description  : 移动端页面布局
 -->
@@ -58,7 +58,7 @@ const activeTab = ref('/')
 const tabMenuList = ref([
   { value: '/', label: '打卡', icon: 'calendar-check' },
   { value: '/apply', label: '申请', icon: 'clipboard-pen' },
-  { value: '/approve', label: '记录', icon: 'file-text' },
+  { value: '/record', label: '记录', icon: 'file-text' },
   { value: '/profile', label: '我的', icon: 'user-circle' },
 ])
 
