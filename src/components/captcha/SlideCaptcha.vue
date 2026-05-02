@@ -27,7 +27,7 @@
       :style="{
         width: componentSize.imgWidth,
         height: barSize.height,
-        lineHeight: barSize.height
+        lineHeight: barSize.height,
       }"
       class="verify-bar-area"
     >
@@ -37,7 +37,7 @@
           width: barWidth !== undefined ? barWidth : barSize.height,
           height: barSize.height,
           borderColor: barBorderColor,
-          transition: transitionWidth
+          transition: transitionWidth,
         }"
         class="verify-left-bar"
       >
@@ -48,7 +48,7 @@
             height: barSize.height,
             backgroundColor: blockBgColor,
             left: blockLeft,
-            transition: transitionLeft
+            transition: transitionLeft,
           }"
           class="verify-move-block"
           @mousedown="startDrag"
@@ -61,7 +61,7 @@
               width: Math.floor((parseInt(componentSize.imgWidth) * 47) / 310) + 'px',
               height: componentSize.imgHeight,
               top: '-' + (parseInt(componentSize.imgHeight) + vSpace) + 'px',
-              backgroundSize: componentSize.imgWidth + ' ' + componentSize.imgHeight
+              backgroundSize: componentSize.imgWidth + ' ' + componentSize.imgHeight,
             }"
             class="verify-sub-block"
           >
@@ -85,7 +85,7 @@ import {
   ref,
   computed,
   watch,
-  toRefs
+  toRefs,
 } from 'vue'
 import { aesEncrypt } from '@/libs/cryptojs/aes'
 import { resetImgBarSize } from '@/utils/captcha'
@@ -121,7 +121,7 @@ const props = withDefaults(defineProps<Props>(), {
   explain: '',
   imgSize: () => ({ width: '310px', height: '155px' }),
   blockSize: () => ({ width: '50px', height: '50px' }),
-  barSize: () => ({ width: '310px', height: '30px' })
+  barSize: () => ({ width: '310px', height: '30px' }),
 })
 
 const { mode, captchaType, type, blockSize, explain } = toRefs(props)
@@ -142,7 +142,7 @@ const componentSize = reactive<Size>({
   imgHeight: '0',
   imgWidth: '0',
   barHeight: '0',
-  barWidth: '0'
+  barWidth: '0',
 })
 const blockLeft = ref<string | undefined>(undefined) // 滑块 left 值
 const barWidth = ref<string | undefined>(undefined) // 进度条宽度
@@ -168,7 +168,7 @@ const fetchCaptchaImage = async () => {
   const res = await fetchImageCaptchaUsingGet({
     captchaType: captchaType.value,
     clientUid: deviceId.value,
-    ts: Date.now() // 现在的时间戳
+    ts: Date.now(), // 现在的时间戳
   })
   if (res.data.repCode === '0000') {
     backgroundImage.value = res.data.repData.originalImageBase64
@@ -239,7 +239,7 @@ const stopDrag = async () => {
     const params = {
       captchaType: captchaType.value,
       pointJson: aesEncrypt(JSON.stringify({ x: moveDistance, y: 5.0 }), secretKey.value),
-      token: token.value
+      token: token.value,
     }
 
     try {
@@ -266,7 +266,7 @@ const stopDrag = async () => {
 
         const captchaVerification = aesEncrypt(
           token.value + '---' + JSON.stringify({ x: moveDistance, y: 5.0 }),
-          secretKey.value
+          secretKey.value,
         )
 
         setTimeout(() => {
@@ -343,7 +343,7 @@ const init = () => {
 
 watch(
   () => props.type,
-  () => init()
+  () => init(),
 )
 
 onMounted(() => {

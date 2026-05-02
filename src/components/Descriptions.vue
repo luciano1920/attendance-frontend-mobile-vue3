@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-05-02 14:08
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 01:33
+ * @LastEditTime : 2026-05-03 02:47
  * @FilePath     : \attendance-frontend-mobile\src\components\Descriptions.vue
  * @Description  : 详情描述容器组件（支持插槽式和配置式调用）
 -->
@@ -12,7 +12,7 @@
     <div class="descriptions-header" v-if="hasHeader">
       <div class="descriptions-title">
         <slot name="title">
-          <img v-if="showTitleIcon" src="../assets/svgs/title-prefix.svg" />
+          <img v-if="showTitleIcon" src="@/assets/svgs/title-prefix.svg" />
           <span v-if="title">{{ title }}</span>
         </slot>
       </div>

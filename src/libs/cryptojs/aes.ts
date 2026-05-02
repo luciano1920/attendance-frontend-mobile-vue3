@@ -21,7 +21,7 @@ export function aesEncrypt(word: string, keyWord: string = AES_KEY_DEFAULT): str
   const secs = CryptoJS.enc.Utf8.parse(word)
   const encrypted = CryptoJS.AES.encrypt(secs, key, {
     mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7
+    padding: CryptoJS.pad.Pkcs7,
   })
   return encrypted.toString()
 }
@@ -36,7 +36,7 @@ export function aesDecrypt(word: string, keyWord: string = AES_KEY_DEFAULT): str
   const key = CryptoJS.enc.Utf8.parse(keyWord)
   const decrypt = CryptoJS.AES.decrypt(word, key, {
     mode: CryptoJS.mode.ECB,
-    padding: CryptoJS.pad.Pkcs7
+    padding: CryptoJS.pad.Pkcs7,
   })
   return CryptoJS.enc.Utf8.stringify(decrypt).toString()
 }

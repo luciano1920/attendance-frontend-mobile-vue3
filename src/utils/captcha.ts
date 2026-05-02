@@ -111,7 +111,7 @@ export const codeChars: (number | string)[] = [
   'W',
   'X',
   'Y',
-  'Z'
+  'Z',
 ]
 
 // 验证码背景色数组
@@ -124,5 +124,5 @@ export const codeForegroundColors: string[] = [
   '#993366',
   '#FF9900',
   '#66CC66',
-  '#FF33CC'
+  '#FF33CC',
 ]

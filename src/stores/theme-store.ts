@@ -35,24 +35,24 @@ export const lightTheme: Theme = {
     bg: 'rgba(255, 255, 255, 0.6)',
     text: '#000000',
     switchBg: '#ebedf0',
-    switchSliderBg: '#314659'
+    switchSliderBg: '#314659',
   },
   sider: {
-    bg: '#ffffff'
+    bg: '#ffffff',
   },
   content: {
     bgGradientStart: '#fefefe',
-    bgGradientEnd: '#ffffff'
+    bgGradientEnd: '#ffffff',
   },
   footer: {
-    bg: '#fcfcfc'
+    bg: '#fcfcfc',
   },
   auth: {
     bg: 'rgba(255, 255, 255, 0.15)',
     border: 'rgba(255, 255, 255, 0.2)',
     shadow: 'rgba(0, 0, 0, 0.15)',
-    inputBg: 'rgba(255, 255, 255, 0.7)'
-  }
+    inputBg: 'rgba(255, 255, 255, 0.7)',
+  },
 }
 
 // 暗色主题配置
@@ -61,24 +61,24 @@ export const darkTheme: Theme = {
     bg: 'rgba(0, 0, 0, 0.6)',
     text: '#e8e8e8',
     switchBg: '#303030',
-    switchSliderBg: '#314659'
+    switchSliderBg: '#314659',
   },
   sider: {
-    bg: '#141414'
+    bg: '#141414',
   },
   content: {
     bgGradientStart: '#1f1f1f',
-    bgGradientEnd: '#141414'
+    bgGradientEnd: '#141414',
   },
   footer: {
-    bg: '#0f0f0f'
+    bg: '#0f0f0f',
   },
   auth: {
     bg: 'rgba(20, 20, 20, 0.8)',
     border: 'rgba(43, 43, 43, 0.8)',
     shadow: 'rgba(128, 128, 128, 0.15)',
-    inputBg: 'rgba(29, 30, 31, 0.7)'
-  }
+    inputBg: 'rgba(29, 30, 31, 0.7)',
+  },
 }
 
 /**
@@ -133,7 +133,7 @@ export const useThemeStore = defineStore('theme', () => {
       localStorage.setItem('theme-mode', newMode)
       applyThemeToDOM()
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   // 返回状态和方法

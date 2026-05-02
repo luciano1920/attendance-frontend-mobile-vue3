@@ -13,10 +13,10 @@ export async function loginUsingPost(body: any, options?: { [key: string]: any }
   return request('/admin-api/system/auth/login', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -24,7 +24,7 @@ export async function loginUsingPost(body: any, options?: { [key: string]: any }
 export async function logoutUsingPost(options?: { [key: string]: any }) {
   return request('/admin-api/system/auth/logout', {
     method: 'POST',
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -33,10 +33,10 @@ export async function fetchImageCaptchaUsingGet(body: any, options?: { [key: str
   return request('/admin-api/system/captcha/get', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -45,25 +45,25 @@ export async function checkImageCaptchaUsingGet(body: any, options?: { [key: str
   return request('/admin-api/system/captcha/check', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
 /** 获取手机短信验证码 POST /admin-api/system/auth/send-sms-code */
 export async function fetchSmsVerificationCodeUsingGet(
   body: any,
-  options?: { [key: string]: any }
+  options?: { [key: string]: any },
 ) {
   return request('/admin-api/system/auth/send-sms-code', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -72,10 +72,10 @@ export async function loginWithSmsVerificationCode(body: any, options?: { [key: 
   return request('/admin-api/system/auth/sms-login', {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+      'Content-Type': 'application/json',
     },
     data: body,
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -84,9 +84,9 @@ export async function unifiedLoginUsingGet(params: any, options?: { [key: string
   return request('/admin-api/system/auth/getToken', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -95,9 +95,9 @@ export async function fetchTelecomLoginUrlUsingGet(params: any, options?: { [key
   return request('/admin-api/tianyi/auth/getLoginUrl', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -106,9 +106,9 @@ export async function telecomLoginUsingGet(params: any, options?: { [key: string
   return request('/admin-api/tianyi/auth/login', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }
 
@@ -117,8 +117,8 @@ export async function telecomLogoutUsingGet(params: any, options?: { [key: strin
   return request('/admin-api/tianyi/auth/logout', {
     method: 'GET',
     params: {
-      ...params
+      ...params,
     },
-    ...(options || {})
+    ...(options || {}),
   })
 }

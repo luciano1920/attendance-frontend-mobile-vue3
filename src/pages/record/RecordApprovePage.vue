@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 15:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 01:38
+ * @LastEditTime : 2026-05-03 02:47
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordApprovePage.vue
  * @Description  : 记录审批页
 -->
@@ -15,7 +15,7 @@
 
     <div class="user-info-bar">
       <!-- 用户头像 -->
-      <img src="../../assets/svgs/detail-avatar.svg" class="user-avatar" alt="avatar" />
+      <img src="@/assets/svgs/detail-avatar.svg" class="user-avatar" alt="avatar" />
       <!-- 用户简要信息 -->
       <div class="user-desc">
         <div class="user-status">

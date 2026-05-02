@@ -107,6 +107,6 @@ export const useDeviceId = () => {
   // 返回只读的设备 ID（避免外部直接修改）以及重新生成方法
   return {
     deviceId: readonly(cachedDeviceId),
-    regenerate
+    regenerate,
   }
 }

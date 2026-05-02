@@ -13,6 +13,6 @@ export async function fetchDictOptionsListUsingGet(params: any, options?: { [key
   return request('/app-api/system/dict-data/type', {
     method: 'GET',
     params,
-    ...(options || {})
+    ...(options || {}),
   })
 }

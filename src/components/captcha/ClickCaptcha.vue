@@ -6,7 +6,7 @@
           width: componentSize.imgWidth,
           height: componentSize.imgHeight,
           backgroundSize: componentSize.imgWidth + ' ' + componentSize.imgHeight,
-          marginBottom: vSpace + 'px'
+          marginBottom: vSpace + 'px',
         }"
         class="verify-img-panel"
       >
@@ -34,7 +34,7 @@
             borderRadius: '50%',
             position: 'absolute',
             top: point.y - 10 + 'px',
-            left: point.x - 10 + 'px'
+            left: point.x - 10 + 'px',
           }"
           class="point-area"
         >
@@ -47,7 +47,7 @@
         width: componentSize.imgWidth,
         color: barAreaColor,
         borderColor: barAreaBorderColor,
-        lineHeight: barSize.height
+        lineHeight: barSize.height,
       }"
       class="verify-bar-area"
     >
@@ -91,7 +91,7 @@ const props = withDefaults(defineProps<Props>(), {
   mode: 'fixed',
   vSpace: 5,
   imgSize: () => ({ width: '310px', height: '155px' }),
-  barSize: () => ({ width: '310px', height: '40px' })
+  barSize: () => ({ width: '310px', height: '40px' }),
 })
 
 const { mode, captchaType } = toRefs(props)
@@ -110,7 +110,7 @@ const componentSize = reactive<Size>({
   imgHeight: '0',
   imgWidth: '0',
   barHeight: '0',
-  barWidth: '0'
+  barWidth: '0',
 })
 const displayPoints = reactive<Point[]>([]) // 临时显示的点
 const promptText = ref('') // 提示文字
@@ -137,7 +137,7 @@ const createPoint = (pos: Point): number => {
 const transformPoints = (points: Point[], imgSize: Size): Point[] => {
   return points.map((p) => ({
     x: Math.round((310 * p.x) / parseInt(imgSize.imgWidth)),
-    y: Math.round((155 * p.y) / parseInt(imgSize.imgHeight))
+    y: Math.round((155 * p.y) / parseInt(imgSize.imgHeight)),
   }))
 }
 
@@ -147,7 +147,7 @@ const fetchCaptchaImage = async () => {
   const res = await fetchImageCaptchaUsingGet({
     captchaType: captchaType.value,
     clientUid: deviceId.value,
-    ts: Date.now() // 现在的时间戳
+    ts: Date.now(), // 现在的时间戳
   })
   if (res.data.repCode === '0000') {
     backgroundImage.value = res.data.repData.originalImageBase64
@@ -185,13 +185,13 @@ const onCanvasClick = async (e: MouseEvent) => {
       // 构建验证参数
       const captchaVerification = aesEncrypt(
         token.value + '---' + JSON.stringify(clickedPoints),
-        secretKey.value
+        secretKey.value,
       )
 
       const params = {
         captchaType: captchaType.value,
         pointJson: aesEncrypt(JSON.stringify(clickedPoints), secretKey.value),
-        token: token.value
+        token: token.value,
       }
 
       try {

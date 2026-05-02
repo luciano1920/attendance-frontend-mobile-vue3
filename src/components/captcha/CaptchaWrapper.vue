@@ -52,7 +52,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   mode: 'pop',
-  imgSize: () => ({ width: '310px', height: '155px' })
+  imgSize: () => ({ width: '310px', height: '155px' }),
 })
 
 const emit = defineEmits<{
@@ -105,14 +105,14 @@ watch(
       componentType.value = ClickCaptcha
     }
   },
-  { immediate: true }
+  { immediate: true },
 )
 
 // ==================== 暴露给父组件的方法 ====================
 defineExpose({
   show,
   closeBox,
-  refresh
+  refresh,
 })
 </script>
 
@@ -358,18 +358,18 @@ defineExpose({
 }
 
 .icon-check::before {
-  background-image: url('../../assets/svgs/icons/check.svg');
+  background-image: url('@/assets/svgs/icons/check.svg');
 }
 
 .icon-close::before {
-  background-image: url('../../assets/svgs/icons/close.svg');
+  background-image: url('@/assets/svgs/icons/close.svg');
 }
 
 .icon-right::before {
-  background-image: url('../../assets/svgs/icons/chevron-right.svg');
+  background-image: url('@/assets/svgs/icons/chevron-right.svg');
 }
 
 .icon-refresh::before {
-  background-image: url('../../assets/svgs/icons/refresh.svg');
+  background-image: url('@/assets/svgs/icons/refresh.svg');
 }
 </style>
