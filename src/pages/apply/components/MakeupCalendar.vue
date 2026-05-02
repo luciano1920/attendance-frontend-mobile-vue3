@@ -4,7 +4,7 @@
  * @LastEditors  : luciano1920 1290582790@qq.com
  * @LastEditTime : 2026-04-29 11:06
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\components\MakeupCalendar.vue
- * @Description  :
+ * @Description  : 补卡日历弹窗组件（日期可选）
 -->
 <template>
   <div class="makeup-calendar">

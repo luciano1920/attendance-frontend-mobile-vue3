@@ -1,3 +1,11 @@
+<!--
+ * @Author       : luciano1920 1290582790@qq.com
+ * @Date         : 2026-04-30 15:09
+ * @LastEditors  : luciano1920 1290582790@qq.com
+ * @LastEditTime : 2026-05-03 01:38
+ * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordDetailPage.vue
+ * @Description  : 记录详情页
+-->
 <template>
   <div id="record-detail-page">
     <div class="nav-bar" @click="router.push('/record')">

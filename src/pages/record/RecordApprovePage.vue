@@ -2,9 +2,9 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 15:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 00:56
+ * @LastEditTime : 2026-05-03 01:38
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordApprovePage.vue
- * @Description  :
+ * @Description  : 记录审批页
 -->
 <template>
   <div id="record-approve-page">

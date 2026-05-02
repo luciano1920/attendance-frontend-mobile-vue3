@@ -2,9 +2,9 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-05-02 14:08
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-02 16:15
+ * @LastEditTime : 2026-05-03 01:33
  * @FilePath     : \attendance-frontend-mobile\src\components\Descriptions.vue
- * @Description  :
+ * @Description  : 详情描述容器组件（支持插槽式和配置式调用）
 -->
 <template>
   <div class="descriptions">
@@ -30,9 +30,13 @@
     <div class="descriptions-body" v-else>
       <template v-for="(col, idx) in items" :key="idx">
         <DescriptionsItem :label="col.label" :border="border">
+          <!-- 标签区域插槽 -->
           <template #label v-if="$slots[`label-${col.field}`]">
             <slot :name="`label-${col.field}`" :row="data" :column="col"></slot>
           </template>
+
+          <!-- 作用域插槽 -->
+          <!-- 当设置了 slotName，则优先使用 item-slotName 作为插槽名 -->
           <slot
             v-if="col.slotName && $slots[`item-${col.slotName}`]"
             :name="`item-${col.slotName}`"
@@ -40,6 +44,7 @@
             :column="col"
             :value="col.field ? data?.[col.field] : undefined"
           ></slot>
+          <!-- 否则使用 field 字段作为插槽名（item-field） -->
           <slot
             v-else-if="col.field && $slots[`item-${col.field}`]"
             :name="`item-${col.field}`"
@@ -47,6 +52,8 @@
             :column="col"
             :value="data?.[col.field]"
           ></slot>
+
+          <!-- 默认显示内容 -->
           <template v-else-if="col.field">
             {{
               col.formatter
