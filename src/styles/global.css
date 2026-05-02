@@ -18,3 +18,7 @@ body {
 .t-button {
   font-family: 'HarmonyOS Sans SC', Arial, sans-serif;
 }
+
+.t-tag {
+  font-weight: 500 !important;
+}

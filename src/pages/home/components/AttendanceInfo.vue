@@ -11,12 +11,7 @@
     <div class="info-header">
       <div class="info-date">{{ formatDateCN(recordData.date) }}</div>
       <div class="info-week">{{ RECORD_WEEK_MAP[recordData.week] }}</div>
-      <t-tag
-        v-if="recordData.transactionList?.length !== 0"
-        class="info-type"
-        variant="light"
-        theme="primary"
-      >
+      <t-tag v-if="recordData.transactionList?.length !== 0" variant="light" theme="primary">
         已打卡
       </t-tag>
     </div>
@@ -66,10 +61,6 @@ defineProps<Props>()
 
     .info-week {
       font-weight: 600;
-    }
-
-    .info-type {
-      font-weight: 500;
     }
   }
 

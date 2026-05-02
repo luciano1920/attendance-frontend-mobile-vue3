@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-30 23:21
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 16:34
+ * @LastEditTime : 2026-04-30 17:02
  * @FilePath     : \attendance-frontend-mobile\src\pages\home\HomePage.vue
  * @Description  : 系统首页
 -->
@@ -11,11 +11,7 @@
     <!-- 顶部用户信息栏 -->
     <div class="user-info-bar">
       <!-- 用户头像 -->
-      <img
-        :src="loginUserInfo.avatar || '@/assets/images/avatar.png'"
-        class="user-avatar"
-        alt="avatar"
-      />
+      <img :src="loginUserInfo.avatar || defaultAvatar" class="user-avatar" alt="avatar" />
       <!-- 用户简要信息 -->
       <div class="user-desc">
         <div class="user-name">{{ loginUserInfo.username }}</div>
@@ -61,6 +57,7 @@ import {
   RECORD_TYPE_COLOR_MAP,
   recordColorCSSVariables,
 } from '@/constants/record'
+import defaultAvatar from '@/assets/svgs/home-avatar.svg'
 import SvgIcon from '@/components/SvgIcon.vue'
 
 import AttendanceCalendar from './components/AttendanceCalendar.vue'
