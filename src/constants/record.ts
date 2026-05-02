@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 10:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-30 10:08
+ * @LastEditTime : 2026-05-03 01:18
  * @FilePath     : \attendance-frontend-mobile\src\constants\record.ts
  * @Description  : 考勤记录相关常量类
  */
@@ -116,4 +116,22 @@ export const APPLY_ICON_MAP: Record<string, IconConfig> = {
   [APPLY_TYPE_ENUM.MAKE_UP]: { icon: 'calendar-plus', theme: 'red' },
   [APPLY_TYPE_ENUM.REST]: { icon: 'moon', theme: 'green' },
   [APPLY_TYPE_ENUM.FACE_UPDATE]: { icon: 'scan-face', theme: 'purple' },
+}
+
+export const APPROVE_STATUS_ENUM = {
+  PENDING: 0, // 待审批
+  APPROVED: 1, // 已通过
+  REJECTED: 2, // 已驳回
+}
+
+export const APPROVE_STATUS_MAP: Record<number, string> = {
+  0: '待审批',
+  1: '已审批',
+  2: '已驳回',
+}
+
+export const APPROVE_TAG_MAP: Record<number, any> = {
+  [APPROVE_STATUS_ENUM.PENDING]: { icon: 'clock', theme: 'warning' },
+  [APPROVE_STATUS_ENUM.APPROVED]: { icon: 'check-circle', theme: 'success' },
+  [APPROVE_STATUS_ENUM.REJECTED]: { icon: 'close-circle', theme: 'danger' },
 }

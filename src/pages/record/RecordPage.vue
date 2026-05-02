@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-30 15:17
+ * @LastEditTime : 2026-05-03 01:15
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -49,81 +49,11 @@
 
     <div v-else class="record-list">
       <t-list :async-loading="listLoading" :on-scroll="handleScroll">
-        <div class="list-item-card" v-for="recordItem in applyRecordDataList" :key="recordItem.id">
-          <div class="list-item">
-            <IconContainer
-              :icon="APPLY_ICON_MAP[recordItem?.orderType]?.icon ?? ''"
-              :theme="APPLY_ICON_MAP[recordItem?.orderType]?.theme"
-            />
-            <div class="list-item-content">
-              <div class="list-item-header">
-                <div class="list-item-title">{{ recordItem?.orderType }}申请</div>
-                <t-tag
-                  v-if="recordItem.orderState === 0"
-                  variant="light"
-                  theme="warning"
-                  class="list-item-status"
-                >
-                  <template #icon>
-                    <SvgIcon name="clock" size="12px" />
-                  </template>
-                  审批中
-                </t-tag>
-                <t-tag
-                  v-else-if="recordItem.orderState === 1"
-                  variant="light"
-                  theme="success"
-                  class="list-item-status"
-                >
-                  <template #icon>
-                    <SvgIcon name="check-circle" size="12px" />
-                  </template>
-                  已审批
-                </t-tag>
-                <t-tag
-                  v-else-if="recordItem.orderState === 2"
-                  variant="light"
-                  theme="error"
-                  class="list-item-status"
-                >
-                  <template #icon>
-                    <SvgIcon name="close-circle" size="12px" />
-                  </template>
-                  已驳回
-                </t-tag>
-              </div>
-              <div class="list-item-desc">
-                <div class="list-item-username">{{ recordItem?.nickname }}</div>
-                <div class="list-item-time" v-if="recordItem.orderState !== 0">
-                  审批时间： {{ formatDate(recordItem?.updateTime) }}
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="list-item-extra">
-            <div class="list-item-extra-time">
-              申请时间：{{ formatDate(recordItem?.createTime) }}
-            </div>
-            <div class="list-item-action">
-              <t-button
-                v-if="recordItem.orderState === 0"
-                theme="primary"
-                size="small"
-                @click="router.push(`/record/${recordItem.id}/approve`)"
-              >
-                去审批
-              </t-button>
-              <t-button
-                v-if="recordItem.orderState !== 0"
-                theme="light"
-                size="small"
-                @click="router.push(`/record/${recordItem.id}`)"
-              >
-                详情
-              </t-button>
-            </div>
-          </div>
-        </div>
+        <RecordListCard
+          v-for="recordItem in applyRecordDataList"
+          :key="recordItem.id"
+          :record="recordItem"
+        />
       </t-list>
     </div>
   </div>
@@ -131,20 +61,16 @@
 
 <script setup lang="ts">
 import { onMounted, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { Message, type ListProps, type TabValue } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
 import { fetchApprovalRecordByPageUsingPost } from '@/api/approve-controller'
 import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
-import { APPLY_ICON_MAP } from '@/constants/record'
-import { formatDate } from '@/utils/date'
-import IconContainer from '@/components/IconContainer.vue'
+import { APPROVE_STATUS_ENUM } from '@/constants/record'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Segmented from '@/components/Segmented.vue'
-
-const router = useRouter()
+import RecordListCard from './components/RecordListCard.vue'
 
 const userStore = useUserStore()
 const { loginUser } = storeToRefs(userStore)
@@ -168,7 +94,7 @@ const recordLoading = ref<boolean>(true) // 记录加载状态，用于控制 Lo
 const searchParams = reactive({
   pageNo: 1,
   pageSize: 10,
-  orderState: [0],
+  orderState: [APPROVE_STATUS_ENUM.PENDING],
   checkManage: false,
 })
 const recordTotal = ref<number>(0)
@@ -182,9 +108,9 @@ const applyRecordDataList = ref<any[]>([])
  */
 const handleTabChange = (value: TabValue) => {
   if (value === 'pending') {
-    searchParams.orderState = [0]
+    searchParams.orderState = [APPROVE_STATUS_ENUM.PENDING]
   } else {
-    searchParams.orderState = [1, 2]
+    searchParams.orderState = [APPROVE_STATUS_ENUM.APPROVED, APPROVE_STATUS_ENUM.REJECTED]
   }
   searchParams.pageNo = 1
   applyRecordDataList.value = []
@@ -299,81 +225,5 @@ onMounted(() => {
   flex-direction: column;
   justify-content: center;
   padding: 108px 16px 96px;
-}
-
-.list-item-card {
-  background-color: #fff;
-  border-radius: 14px;
-  margin-bottom: 8px;
-
-  .list-item {
-    padding: 14px 16px;
-    border-bottom: 1px solid #f5f6f7;
-    display: flex;
-    gap: 12px;
-
-    .list-item-content {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      gap: 4px;
-
-      .list-item-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        .list-item-title {
-          color: #171a1d;
-          font-size: 15px;
-          font-weight: 600;
-        }
-
-        .list-item-status {
-          font-weight: 500;
-        }
-      }
-
-      .list-item-desc {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-
-        .list-item-username {
-          color: #86909c;
-          font-size: 13px;
-          font-weight: 500;
-        }
-
-        .list-item-time {
-          color: #86909c;
-          font-size: 12px;
-        }
-      }
-    }
-  }
-
-  .list-item-extra {
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    .list-item-extra-time {
-      font-size: 12px;
-      color: #4e5969;
-    }
-
-    .list-item-action {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      --td-button-border-radius: 8px;
-      --td-button-font-weight: 500;
-      --td-button-small-font-size: 12px;
-      --td-button-small-height: 30px;
-    }
-  }
 }
 </style>

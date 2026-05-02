@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 09:08
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 09:08
+ * @LastEditTime : 2026-05-02 16:06
  * @FilePath     : \attendance-frontend-mobile\src\utils\date.ts
  * @Description  : 日期格式化工具函数
  */
@@ -21,8 +21,8 @@ export type DateInput = string | number | Date | null | undefined
 
 // 定义时间范围的返回类型
 export interface DateRange {
-  start: string
-  end: string
+  startTime: string
+  endTime: string
 }
 
 /**
@@ -55,7 +55,7 @@ function parseToDate(date: DateInput): dayjs.Dayjs | null {
  */
 export function formatDate(date: DateInput, format: string = 'YYYY-MM-DD HH:mm:ss'): string {
   const d = parseToDate(date)
-  return d ? d.format(format) : '-'
+  return d ? d.format(format) : '--'
 }
 
 /* ==========================================
@@ -86,6 +86,26 @@ export function formatTime(date: DateInput): string {
   return formatDate(date, 'HH:mm:ss')
 }
 
+/**
+ * 格式化时间段
+ * @param range 包含 startTime 和 endTime 的对象
+ * @returns 格式化后的时间段字符串，格式为 'YYYY/MM/DD HH:mm ~ YYYY/MM/DD HH:mm'。如果解析失败返回 '--'
+ */
+export function formatDateRange(range: DateRange, format: string = 'YYYY/MM/DD HH:mm'): string {
+  const { startTime, endTime } = range
+
+  // 使用已有的 formatDate 函数处理单个时间，减少重复逻辑
+  const startStr = formatDate(startTime, format)
+  const endStr = formatDate(endTime, format)
+
+  // 如果任一时间解析失败，直接返回 '-'
+  if (startStr === '--' || endStr === '--') {
+    return '--'
+  }
+
+  return `${startStr} ~ ${endStr}`
+}
+
 /* ==========================================
  3. 日期格式转时间戳功能
 ========================================== */
@@ -113,10 +133,10 @@ export function toTimestamp(date: DateInput, isSeconds: boolean = false): number
  * @returns
  */
 export function formatUTCToLocal(date: DateInput, format: string = 'YYYY-MM-DD HH:mm:ss'): string {
-  if (!date) return '-'
+  if (!date) return '--'
   // 强制当做 UTC 时间解析，然后再转为本地时间输出
   const d = dayjs.utc(date).local()
-  return d.isValid() ? d.format(format) : '-'
+  return d.isValid() ? d.format(format) : '--'
 }
 
 /* ==========================================
@@ -129,7 +149,7 @@ export function formatUTCToLocal(date: DateInput, format: string = 'YYYY-MM-DD H
  */
 export function formatRelative(date: DateInput): string {
   const d = parseToDate(date)
-  return d ? d.fromNow() : '-'
+  return d ? d.fromNow() : '--'
 }
 
 /* ==========================================
@@ -137,16 +157,16 @@ export function formatRelative(date: DateInput): string {
 ========================================== */
 /** 获取今天的开始和结束时间 */
 export function getTodayRange(): DateRange {
-  const start = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
-  const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
-  return { start, end }
+  const startTime = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss')
+  const endTime = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss')
+  return { startTime, endTime }
 }
 
 /** 获取当前月的第一天和最后一天 */
 export function getCurrentMonthRange(): DateRange {
-  const start = dayjs().startOf('month').format('YYYY-MM-DD HH:mm:ss')
-  const end = dayjs().endOf('month').format('YYYY-MM-DD HH:mm:ss')
-  return { start, end }
+  const startTime = dayjs().startOf('month').format('YYYY-MM-DD HH:mm:ss')
+  const endTime = dayjs().endOf('month').format('YYYY-MM-DD HH:mm:ss')
+  return { startTime, endTime }
 }
 
 /** 获取当前月的最后一天 */

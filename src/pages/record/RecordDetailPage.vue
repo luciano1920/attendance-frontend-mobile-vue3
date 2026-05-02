@@ -12,38 +12,11 @@
       <div class="user-desc">
         <div class="user-status">
           <div class="user-name">{{ recordDetailData?.nickname }}</div>
-          <t-tag
-            v-if="recordDetailData?.orderState === 0"
-            variant="light"
-            theme="warning"
-            style="font-weight: 500"
-          >
+          <t-tag variant="light" :theme="APPROVE_TAG_MAP[recordDetailData?.orderState]?.theme">
             <template #icon>
-              <SvgIcon name="clock" size="12px" />
+              <SvgIcon :name="APPROVE_TAG_MAP[recordDetailData?.orderState]?.icon" size="12px" />
             </template>
-            审批中
-          </t-tag>
-          <t-tag
-            v-else-if="recordDetailData?.orderState === 1"
-            variant="light"
-            theme="success"
-            style="font-weight: 500"
-          >
-            <template #icon>
-              <SvgIcon name="check-circle" size="12px" />
-            </template>
-            已审批
-          </t-tag>
-          <t-tag
-            v-else-if="recordDetailData?.orderState === 2"
-            variant="light"
-            theme="error"
-            style="font-weight: 500"
-          >
-            <template #icon>
-              <SvgIcon name="close-circle" size="12px" />
-            </template>
-            已驳回
+            {{ APPROVE_STATUS_MAP[recordDetailData?.orderState] }}
           </t-tag>
         </div>
         <div class="user-role">
@@ -52,16 +25,151 @@
       </div>
     </div>
 
-    <div class="detail-container">12121</div>
+    <div class="detail-container">
+      <!-- 基础信息-->
+      <Descriptions title="申请详情" :items="baseItems" :data="recordDetailData">
+        <template #item-orderType="{ value }">
+          <t-tag variant="light" theme="primary">{{ value }}申请</t-tag>
+        </template>
+      </Descriptions>
+
+      <!-- 请假详情 -->
+      <Descriptions
+        v-if="recordDetailData?.orderType === '请假' && recordDetailData?.leaveOrderFlowDTO"
+        title="请假详情"
+        :items="leaveItems"
+        :data="recordDetailData?.leaveOrderFlowDTO"
+      >
+        <template #item-leaveTime="{ value }">
+          <div v-for="(range, idx) in value" :key="idx">
+            {{ formatDateRange(range) }}
+          </div>
+        </template>
+        <template #item-proxy="{ value, row }">
+          {{ value }}
+          <span class="proxy-sub">({{ row?.leaveProxyPartyAccount }})</span>
+        </template>
+        <template #item-files="{ value }">
+          <div class="files-container">
+            <t-image
+              v-for="(file, idx) in value"
+              :key="idx"
+              :src="file"
+              shape="round"
+              fit="cover"
+              style="height: 72px"
+              @click="handlePreview(value)"
+            />
+          </div>
+        </template>
+      </Descriptions>
+
+      <!-- 调休详情 -->
+      <Descriptions
+        v-if="recordDetailData?.orderType === '调休' && recordDetailData?.compLeaveOrderFlowDTO"
+        title="调休详情"
+        :items="restItems"
+        :data="recordDetailData?.compLeaveOrderFlowDTO"
+      >
+        <template #item-restTime="{ value }">
+          <div v-for="(range, idx) in value" :key="idx">
+            {{ formatDateRange(range) }}
+          </div>
+        </template>
+      </Descriptions>
+
+      <!-- 外出详情 -->
+      <Descriptions
+        v-if="recordDetailData?.orderType === '外出' && recordDetailData?.travelOrderFlowDTO"
+        title="外出详情"
+        :items="outingItems"
+        :data="recordDetailData?.travelOrderFlowDTO"
+      >
+        <template #item-outingTime="{ value }">
+          <div v-for="(range, idx) in value" :key="idx">
+            {{ formatDateRange(range) }}
+          </div>
+        </template>
+        <template #item-files="{ value }">
+          <div class="files-container">
+            <t-image
+              v-for="(file, idx) in value"
+              :key="idx"
+              :src="file"
+              shape="round"
+              fit="cover"
+              style="height: 72px"
+              @click="handlePreview(value)"
+            />
+          </div>
+        </template>
+      </Descriptions>
+
+      <!-- 补卡详情 -->
+      <Descriptions
+        v-if="recordDetailData?.orderType === '补卡' && recordDetailData?.attenCorrectionFlowDTO"
+        title="补卡详情"
+        :items="makeupItems"
+        :data="recordDetailData?.attenCorrectionFlowDTO"
+      >
+        <template #item-makeupTime="{ value }">
+          <div v-for="(date, idx) in value" :key="idx">
+            {{ formatDateYMD(date) }}
+          </div>
+        </template>
+      </Descriptions>
+
+      <!-- 人脸变更详情 -->
+      <Descriptions
+        v-if="recordDetailData?.orderType === '人脸' && recordDetailData?.faceChangeOrderFlowDTO"
+        title="人脸变更详情"
+        :items="faceUpdateItems"
+        :data="recordDetailData?.faceChangeOrderFlowDTO"
+      >
+        <template #item-faceFile="{ value }">
+          <t-image
+            :src="value"
+            shape="round"
+            fit="cover"
+            style="height: 72px"
+            @click="handlePreview([value])"
+          />
+        </template>
+      </Descriptions>
+
+      <!-- 审批详情 -->
+      <Descriptions title="审批详情" :items="approvalItems" :data="recordDetailData" />
+
+      <!-- 撤销申请 -->
+      <t-button
+        v-if="recordDetailData?.orderState === APPROVE_STATUS_ENUM.PENDING"
+        theme="primary"
+        size="large"
+        @click="handleRevoke"
+      >
+        撤销申请
+      </t-button>
+    </div>
+
+    <!-- 图片预览组件 -->
+    <t-image-viewer :images="previewImgs" :visible="imgVisible" @close="imgVisible = false" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { Message } from 'tdesign-mobile-vue'
-import { fetchApprovalRecordDetailUsingGet } from '@/api/approve-controller'
+import { DialogPlugin, Message } from 'tdesign-mobile-vue'
+
+import {
+  fetchApprovalRecordDetailUsingGet,
+  revokeApplicationUsingGet,
+} from '@/api/approve-controller'
+import { APPROVE_STATUS_ENUM, APPROVE_STATUS_MAP, APPROVE_TAG_MAP } from '@/constants/record'
+import { formatDate, formatDateRange, formatDateYMD } from '@/utils/date'
 import SvgIcon from '@/components/SvgIcon.vue'
+import type { DescriptionsItemColumn } from '@/components/Descriptions.vue'
+import Descriptions from '@/components/Descriptions.vue'
 
 const router = useRouter()
 
@@ -71,8 +179,75 @@ interface Props {
 
 const props = defineProps<Props>()
 
+// 详情数据
 const recordDetailData = ref<any>()
 
+// 控制图片预览组件
+const imgVisible = ref<boolean>(false)
+// 预览图片列表
+const previewImgs = ref<string[]>([])
+
+/**
+ * 处理预览
+ * @param fileIds 预览文件的 Url 列表
+ */
+const handlePreview = (fileIds: string[]) => {
+  previewImgs.value = fileIds
+  imgVisible.value = true
+}
+
+// ==================== 配置式 items 定义 ====================
+
+const baseItems: DescriptionsItemColumn[] = [
+  { field: 'orderType', label: '申请类型' },
+  { field: 'partyAccount', label: '申请人工号' },
+  { field: 'personType', label: '申请人员类型' },
+  { field: 'mobile', label: '申请人联系方式' },
+  { field: 'createTime', label: '申请时间', formatter: (val) => formatDate(val) },
+]
+
+const leaveItems: DescriptionsItemColumn[] = [
+  { field: 'leaveType', label: '请假类型' },
+  { field: 'leaveDaySum', label: '请假天数', formatter: (val) => `${val ?? 0} 天` },
+  { field: 'appLeaveTimeVOS', label: '请假时段', slotName: 'leaveTime' },
+  { field: 'leaveReason', label: '请假原因' },
+  { field: 'specificJob', label: '现任具体工作' },
+  { field: 'leaveAddress', label: '请假地点' },
+  { field: 'leaveProxyNickname', label: '工作代理人', slotName: 'proxy' },
+  { field: 'leaveProxyMobile', label: '代理人联系方式' },
+  { field: 'fileIds', label: '附件', slotName: 'files' },
+]
+
+const restItems: DescriptionsItemColumn[] = [
+  { field: 'leaveDaySum', label: '调休天数', formatter: (val) => `${val ?? 0} 天` },
+  { field: 'appLeaveTimeVOS', label: '调休时间', slotName: 'restTime' },
+  { field: 'compLeaveReason', label: '调休原因' },
+]
+
+const outingItems: DescriptionsItemColumn[] = [
+  { field: 'travelType', label: '外出类型' },
+  { field: 'leaveDaySum', label: '外出天数', formatter: (val) => `${val ?? 0} 天` },
+  { field: 'appLeaveTimeVOS', label: '外出时间', slotName: 'outingTime' },
+  { field: 'travelReason', label: '外出原因' },
+  { field: 'fileIds', label: '附件', slotName: 'files' },
+]
+
+const makeupItems: DescriptionsItemColumn[] = [
+  { field: 'attenCorrectionType', label: '补卡类型' },
+  { field: 'attenCorrectionDaySum', label: '补卡天数', formatter: (val) => `${val ?? 0} 天` },
+  { field: 'attenCorrection', label: '补卡日期', slotName: 'makeupTime' },
+  { field: 'attenCorrectionReason', label: '补卡原因' },
+]
+
+const faceUpdateItems: DescriptionsItemColumn[] = [{ field: 'faceFile', label: '人脸照片' }]
+
+const approvalItems: DescriptionsItemColumn[] = [
+  { field: 'deptCheckerNickname', label: '审批人' },
+  { field: 'updateTime', label: '审批时间', formatter: (val) => formatDate(val) },
+  { field: 'checkMessage', label: '审批意见' },
+]
+
+/** 获取详情数据 */
 const getRecordDetail = async () => {
   if (!props.id) return
 
@@ -85,6 +260,34 @@ const getRecordDetail = async () => {
       offset: [10, 16],
     })
   }
+}
+
+/** 处理撤销申请 */
+const handleRevoke = () => {
+  DialogPlugin.confirm({
+    title: '撤销申请',
+    content: '该操作将撤销该条申请记录，此操作不可逆，是否继续？',
+    confirmBtn: '撤销',
+    cancelBtn: '取消',
+    onConfirm: async () => {
+      const res = await revokeApplicationUsingGet({ orderId: props.id })
+      if (res.data.code === 0) {
+        Message.success({
+          content: '撤销申请成功',
+          offset: [10, 16],
+        })
+        router.push({
+          path: '/record',
+          replace: true,
+        })
+      } else {
+        Message.error({
+          content: '撤销申请失败，' + res.data.msg,
+          offset: [10, 16],
+        })
+      }
+    },
+  })
 }
 
 onMounted(() => {
@@ -147,6 +350,16 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 12px 16px;
+  padding: 12px 16px 48px;
+}
+
+.proxy-sub {
+  font-size: 13px;
+  color: #86909c;
+}
+
+.files-container {
+  display: flex;
+  gap: 8px;
 }
 </style>
