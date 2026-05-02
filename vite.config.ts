@@ -11,7 +11,6 @@ import path from 'path'
 
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import svgLoader from 'vite-svg-loader'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 // https://vite.dev/config/
@@ -26,11 +25,7 @@ export default defineConfig(({ mode }) => {
     root: root,
     plugins: [
       vue(),
-      svgLoader({
-        svgoConfig: {
-          multipass: true
-        }
-      }),
+      // svg图标雪碧图插件
       createSvgIconsPlugin({
         // 指定需要缓存的图标文件夹
         iconDirs: [path.resolve(process.cwd(), 'src/assets/svgs/icons')],
