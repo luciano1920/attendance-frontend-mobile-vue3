@@ -2,12 +2,17 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-05-03 01:08
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-06 09:09
+ * @LastEditTime : 2026-05-06 17:10
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\components\RecordListCard.vue
  * @Description  : 审批/申请记录单条卡片组件
 -->
 <template>
-  <div class="record-list-card">
+  <div
+    class="record-list-card"
+    @touchstart="handleTouchStart"
+    @touchmove="handleTouchMove"
+    @touchend="handleTouchEnd"
+  >
     <div class="list-item">
       <IconContainer
         :icon="APPLY_ICON_MAP[record?.orderType]?.icon ?? ''"
@@ -58,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+import { onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 import {
@@ -79,13 +85,72 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const emit = defineEmits(['long-press'])
+
+// 设置定时器，记录触摸开始时间
+let timer: ReturnType<typeof setTimeout> | null = null
+let isMoved = false
+
+/** 手指按下时触发 */
+const handleTouchStart = () => {
+  // 重置移动状态，表示刚开始按下，尚未移动
+  isMoved = false
+
+  if (timer) {
+    clearTimeout(timer) // 防抖处理：如果上次长按还没结束又按下了，清除上次的计时器
+  }
+
+  timer = setTimeout(() => {
+    if (!isMoved) {
+      // 如果时间到了且手指没动，触发长按事件
+      emit('long-press')
+    }
+  }, 500) // 500ms 长按阈值
+}
+
+/** 手指在屏幕上滑动时触发 */
+const handleTouchMove = () => {
+  // 标记为已移动
+  isMoved = true
+
+  if (timer) {
+    clearTimeout(timer) // 既然移动了，就不可能是长按了，立即取消计时
+    timer = null
+  }
+}
+
+/** 手指离开屏幕时触发 */
+const handleTouchEnd = () => {
+  if (timer) {
+    clearTimeout(timer) // 手指提前离开了，时间未到，取消计时
+    timer = null
+  }
+}
+
+onUnmounted(() => {
+  if (timer) {
+    clearTimeout(timer)
+  }
+})
 </script>
 
 <style lang="scss" scoped>
 .record-list-card {
+  display: flex;
+  flex-direction: column;
   background-color: #fff;
   border-radius: 14px;
-  margin-bottom: 8px;
+  transition: all 0.3s ease;
+
+  // 添加以下属性禁止选中文本
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+
+  &:active {
+    transform: scale(0.95);
+  }
 
   .list-item {
     padding: 14px 16px;
@@ -146,6 +211,7 @@ const props = defineProps<Props>()
       display: flex;
       align-items: center;
       gap: 8px;
+
       --td-button-border-radius: 8px;
       --td-button-font-weight: 500;
       --td-button-small-font-size: 12px;

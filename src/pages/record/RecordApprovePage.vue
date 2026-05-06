@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 15:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 14:12
+ * @LastEditTime : 2026-05-06 11:16
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordApprovePage.vue
  * @Description  : 记录审批页
 -->
@@ -278,7 +278,7 @@ const getRecordDetail = async () => {
   const res = await fetchApprovalRecordDetailUsingGet({ id: props.id })
   if (res.data.code === 0 && res.data.data) {
     recordApproveData.value = res.data.data
-    formData.id = res.data.data.id
+    formData.id = [res.data.data.id]
   } else {
     Message.error({
       content: '获取详情失败，' + res.data.msg,
@@ -289,7 +289,7 @@ const getRecordDetail = async () => {
 
 // 审批状态数据
 const formData = reactive({
-  id: [],
+  id: [] as number[],
   orderState: undefined as number | undefined,
   checkMessage: '',
 })
