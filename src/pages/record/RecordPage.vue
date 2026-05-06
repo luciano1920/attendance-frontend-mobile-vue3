@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 01:15
+ * @LastEditTime : 2026-05-06 09:13
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -53,6 +53,7 @@
           v-for="recordItem in applyRecordDataList"
           :key="recordItem.id"
           :record="recordItem"
+          :is-approve-view="searchParams.checkManage"
         />
       </t-list>
     </div>

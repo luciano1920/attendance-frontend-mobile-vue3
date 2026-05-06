@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-05-03 01:08
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 01:08
+ * @LastEditTime : 2026-05-06 09:09
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\components\RecordListCard.vue
  * @Description  : 审批/申请记录单条卡片组件
 -->
@@ -18,7 +18,7 @@
           <div class="list-item-title">{{ record?.orderType }}申请</div>
           <t-tag variant="light" :theme="APPROVE_TAG_MAP[record?.orderState]?.theme">
             <template #icon>
-              <SvgIcon :name="APPROVE_TAG_MAP[record?.orderState]?.icon" size="12px" />
+              <SvgIcon :name="APPROVE_TAG_MAP[record?.orderState]?.icon ?? ''" size="12px" />
             </template>
             {{ APPROVE_STATUS_MAP[record?.orderState] }}
           </t-tag>
@@ -37,18 +37,18 @@
       <div class="list-item-extra-time">申请时间：{{ formatDate(record?.createTime) }}</div>
       <div class="list-item-action">
         <t-button
-          v-if="record.orderState === APPROVE_STATUS_ENUM.PENDING"
+          v-if="record?.orderState === APPROVE_STATUS_ENUM.PENDING && isApproveView"
           theme="primary"
           size="small"
-          @click="router.push(`/record/${record.id}/approve`)"
+          @click="router.push(`/record/${record?.id}/approve`)"
         >
           去审批
         </t-button>
         <t-button
-          v-if="record.orderState !== APPROVE_STATUS_ENUM.PENDING"
+          v-if="record?.orderState !== APPROVE_STATUS_ENUM.PENDING || !isApproveView"
           theme="light"
           size="small"
-          @click="router.push(`/record/${record.id}`)"
+          @click="router.push(`/record/${record?.id}`)"
         >
           详情
         </t-button>
@@ -74,6 +74,8 @@ const router = useRouter()
 
 interface Props {
   record: any
+  // 是否为审批视角
+  isApproveView?: boolean
 }
 
 const props = defineProps<Props>()

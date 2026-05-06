@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 15:09
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 02:47
+ * @LastEditTime : 2026-05-03 14:11
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordDetailPage.vue
  * @Description  : 记录详情页
 -->
@@ -33,7 +33,7 @@
       </div>
     </div>
 
-    <div class="detail-container">
+    <div class="description-container">
       <!-- 基础信息-->
       <Descriptions title="申请详情" :items="baseItems" :data="recordDetailData">
         <template #item-orderType="{ value }">
@@ -317,7 +317,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 16px 20px;
+  padding: 16px 24px;
   background-color: #fff;
 
   .user-avatar {
@@ -354,7 +354,7 @@ onMounted(() => {
   }
 }
 
-.detail-container {
+.description-container {
   display: flex;
   flex-direction: column;
   gap: 12px;
