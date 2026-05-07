@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 14:56
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-29 12:28
+ * @LastEditTime : 2026-05-07 11:25
  * @FilePath     : \attendance-frontend-mobile\src\api\apply-controller.ts
  * @Description  : 考勤申请模块-API接口
  */
@@ -75,6 +75,18 @@ export async function fetchFaceUpdateRecordUsingGet(options?: { [key: string]: a
     headers: {
       'Content-Type': 'application/json',
     },
+    ...(options || {}),
+  })
+}
+
+/** 计算时间段内的实际需考勤天数 POST /app-api/attenfront/holiday/calc */
+export async function calcActualApplyDaysUsingPost(body: any, options?: { [key: string]: any }) {
+  return request('/app-api/attenfront/holiday/calc', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
     ...(options || {}),
   })
 }

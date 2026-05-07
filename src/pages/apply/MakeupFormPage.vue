@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:27
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-29 10:21
+ * @LastEditTime : 2026-05-07 14:55
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\MakeupFormPage.vue
  * @Description  : 补卡申请表单页面
 -->
@@ -94,8 +94,12 @@
           <MakeupCalendar
             ref="makeupCalendarRef"
             :record-data="missingRecordDataList"
-            :on-comfirm="confirmMakeupDate"
+            :on-confirm="confirmMakeupDate"
           />
+        </t-form-item>
+
+        <t-form-item label="补卡天数" name="applyDays" content-align="right">
+          <t-input :value="applyDays" borderless align="right" disabled suffix="天" type="number" />
         </t-form-item>
 
         <t-form-item label="补卡原因" name="attenCorrectionReason" content-align="right">
@@ -172,6 +176,8 @@ const missingRecordDataList = ref<any[]>([])
 const missingDateNote = ref<string>('')
 // 补卡日历弹出层实例
 const makeupCalendarRef = ref()
+// 补卡申请天数
+const applyDays = ref<number>(0)
 
 /** 获取可以补卡的日期列表 */
 const getAllowMakeupDayList = async () => {
@@ -191,6 +197,7 @@ const getAllowMakeupDayList = async () => {
  * @param dateList 选择的日期列表
  */
 const confirmMakeupDate = (dateList: string[]) => {
+  applyDays.value = dateList.length
   formData.attenCorrectionTime = dateList
   missingDateNote.value = dateList.join('、')
 }

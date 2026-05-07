@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-29 12:30
+ * @LastEditTime : 2026-05-07 08:57
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\FaceUpdateFormPage.vue
  * @Description  : 人脸变更申请表单页面
 -->
@@ -189,13 +189,21 @@ const handleSubmit = async () => {
   }
 }
 
+/** 获取用户更新人脸的记录信息 */
 const getUserFaceUpdateRecord = async () => {
   const res = await fetchFaceUpdateRecordUsingGet()
+  if (res.data.code === 0 && res.data.data) {
+    formData.deptCheckerNickname = res.data.data.checkers[0].deptCheckerNickname
+    formData.deptCheckerPartyAccount = res.data.data.checkers[0].deptCheckerPartyAccount
+    formData.fileUrl = res.data.data.faceFile
+  } else {
+    Message.error({ content: res.data.msg, offset: [10, 16] })
+  }
 }
 
 onMounted(() => {
   getApproverList()
-  getUserFaceUpdateRecord()
+  // getUserFaceUpdateRecord()
 })
 </script>
 

@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 23:47
+ * @LastEditTime : 2026-05-07 15:00
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\OutingFormPage.vue
  * @Description  : 外出申请表单页面
 -->
@@ -72,22 +72,6 @@
           />
         </t-form-item>
 
-        <!-- <t-form-item
-          arrow
-          label="外出类型"
-          name="leaveType"
-          content-align="right"
-          @click="picker.open('leaveType', '选择外出类型')"
-        >
-          <t-input
-            :value="picker.getLabel('leaveType')"
-            borderless
-            align="right"
-            disabled
-            placeholder="点击选择外出类型"
-          />
-        </t-form-item> -->
-
         <t-form-item label="外出类型" name="travelType" content-align="right">
           <RadioButtonGroup
             v-model="formData.travelType"
@@ -128,6 +112,10 @@
           />
         </t-form-item>
 
+        <t-form-item label="外出天数" name="applyDays" content-align="right">
+          <t-input :value="applyDays" borderless align="right" disabled suffix="天" type="number" />
+        </t-form-item>
+
         <t-form-item label="外出原因" name="travelReason" content-align="right">
           <t-textarea
             v-model="formData.travelReason"
@@ -147,14 +135,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message, type RadioOptionObj } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
 import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
-import { createOutingApplyUsingPost } from '@/api/apply-controller'
+import { calcActualApplyDaysUsingPost, createOutingApplyUsingPost } from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue'
@@ -205,6 +193,8 @@ const pickerOptions = ref<PickerOptionsMap>({
 const picker = usePicker(formData, pickerOptions.value)
 
 const timeRangePickerRef = ref<InstanceType<typeof TimeRangePickerPopup>>()
+// 外出申请天数
+const applyDays = ref<number>(0)
 
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
@@ -242,6 +232,24 @@ const handleRemove = (fileList: any) => {
   formData.fileIds = fileList.map((item: any) => item.url)
 }
 
+/** 根据选择的时间范围，计算实际需要的考勤天数，不包含非工作日 */
+const calculateActualApplyDays = async () => {
+  if (!formData.appTravelTimeVOS[0]?.startTime || !formData.appTravelTimeVOS[0]?.endTime) {
+    return
+  }
+
+  const res = await calcActualApplyDaysUsingPost({
+    leaveTimeVo: formData.appTravelTimeVOS,
+    holidayType: '外出',
+    calcWorkDay: true, // 是否计算工作日，true 表示只计算工作日，false 表示计算包含非工作日在内的所有天数
+  })
+  if (res.data.code === 0 && res.data.data) {
+    applyDays.value = res.data.data ?? 0
+  } else {
+    Message.error({ content: res.data.msg, offset: [10, 16] })
+  }
+}
+
 /** 提交表单 */
 const handleSubmit = async () => {
   try {
@@ -265,6 +273,10 @@ const handleSubmit = async () => {
 onMounted(() => {
   getApproverList()
   getOutingTypeList()
+})
+
+watchEffect(() => {
+  calculateActualApplyDays()
 })
 </script>
 

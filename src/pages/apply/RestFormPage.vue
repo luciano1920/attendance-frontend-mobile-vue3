@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 16:10
+ * @LastEditTime : 2026-05-07 17:13
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\RestFormPage.vue
  * @Description  : 调休申请表单页面
 -->
@@ -95,6 +95,10 @@
           />
         </t-form-item>
 
+        <t-form-item label="调休天数" name="applyDays" content-align="right">
+          <t-input :value="applyDays" borderless align="right" disabled suffix="天" type="number" />
+        </t-form-item>
+
         <t-form-item label="调休原因" name="compLeaveReason" content-align="right">
           <t-textarea
             v-model="formData.compLeaveReason"
@@ -110,12 +114,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
-import { createRestApplyUsingPost } from '@/api/apply-controller'
+import { calcActualApplyDaysUsingPost, createRestApplyUsingPost } from '@/api/apply-controller'
 import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
@@ -157,6 +161,8 @@ const pickerOptions = ref<PickerOptionsMap>({
 const picker = usePicker(formData, pickerOptions.value)
 
 const timeRangePickerRef = ref<InstanceType<typeof TimeRangePickerPopup>>()
+// 调休申请天数
+const applyDays = ref<number>(0)
 
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
@@ -165,6 +171,24 @@ const getApproverList = async () => {
     pickerOptions.value.checkPartyAccount = res.data.data.map((item: any) => {
       return { label: item.nickname, value: item.partyAccount }
     })
+  }
+}
+
+/** 根据选择的时间范围，计算实际需要的考勤天数，不包含非工作日 */
+const calculateActualApplyDays = async () => {
+  if (!formData.compLeaveTime[0]?.startTime || !formData.compLeaveTime[0]?.endTime) {
+    return
+  }
+
+  const res = await calcActualApplyDaysUsingPost({
+    leaveTimeVo: formData.compLeaveTime,
+    holidayType: '调休',
+    calcWorkDay: true, // 是否计算工作日，true 表示只计算工作日，false 表示计算包含非工作日在内的所有天数
+  })
+  if (res.data.code === 0 && res.data.data) {
+    applyDays.value = res.data.data ?? 0
+  } else {
+    Message.error({ content: res.data.msg, offset: [10, 16] })
   }
 }
 
@@ -190,6 +214,10 @@ const handleSubmit = async () => {
 
 onMounted(() => {
   getApproverList()
+})
+
+watchEffect(() => {
+  calculateActualApplyDays()
 })
 </script>
 

@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-21 23:49
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 01:37
+ * @LastEditTime : 2026-05-07 14:59
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\LeaveFormPage.vue
  * @Description  : 请假申请表单页面
 -->
@@ -88,26 +88,6 @@
           />
         </t-form-item>
 
-        <!-- <t-form-item label="请假类型" name="leaveType" content-align="right">
-          <RadioButtonGroup v-model="formData.leaveType" :options="leaveTypeOptions" />
-        </t-form-item> -->
-
-        <t-form-item
-          arrow
-          label="假期代理人"
-          name="leaveProxyPartyAccount"
-          content-align="right"
-          @click="picker.open('leaveProxyPartyAccount', '选择假期代理人')"
-        >
-          <t-input
-            :value="picker.getLabel('leaveProxyPartyAccount')"
-            borderless
-            align="right"
-            disabled
-            placeholder="点击选择假期代理人"
-          />
-        </t-form-item>
-
         <t-form-item
           arrow
           label="请假开始时间"
@@ -140,26 +120,14 @@
           />
         </t-form-item>
 
-        <t-form-item label="现任具体工作" name="specificJob" content-align="right">
-          <t-textarea
-            v-model="formData.specificJob"
-            placeholder="请输入现任具体工作"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-          />
+        <t-form-item label="请假天数" name="applyDays" content-align="right">
+          <t-input :value="applyDays" borderless align="right" disabled suffix="天" type="number" />
         </t-form-item>
 
         <t-form-item label="请假原因" name="leaveReason" content-align="right">
           <t-textarea
             v-model="formData.leaveReason"
             placeholder="请输入请假原因"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-          />
-        </t-form-item>
-
-        <t-form-item label="请假地点" name="leaveAddress" content-align="right">
-          <t-textarea
-            v-model="formData.leaveAddress"
-            placeholder="请输入请假地点"
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
         </t-form-item>
@@ -177,15 +145,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, watchEffect } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
 import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
-import { fetchAgentUserUsingPost } from '@/api/user-controller'
-import { createLeaveApplyUsingPost } from '@/api/apply-controller'
+import { calcActualApplyDaysUsingPost, createLeaveApplyUsingPost } from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
 import PictureUpload from '@/components/PictureUpload.vue'
@@ -200,10 +167,7 @@ const loginUserInfo = userStore.loginUser.userInfo
 const formData = reactive({
   checkPartyAccount: '',
   leaveType: '',
-  leaveProxyPartyAccount: '',
-  specificJob: '',
   leaveReason: '',
-  leaveAddress: '',
   fileIds: [],
   appLeaveTimeVOS: [{ startTime: '', endTime: '' }],
 })
@@ -230,13 +194,14 @@ const rules = {
 const pickerOptions = ref<PickerOptionsMap>({
   checkPartyAccount: [],
   leaveType: [],
-  leaveProxyPartyAccount: [],
 })
 
 // 采用封装好的 Picker 组合式钩子函数
 const picker = usePicker(formData, pickerOptions.value)
 
 const timeRangePickerRef = ref<InstanceType<typeof TimeRangePickerPopup>>()
+// 请假申请天数
+const applyDays = ref<number>(0)
 
 /** 获取审批人选项列表 */
 const getApproverList = async () => {
@@ -268,16 +233,6 @@ const getLeaveTypeList = async () => {
   }
 }
 
-/** 获取代理人选项列表 */
-const getAgentUserList = async () => {
-  const res = await fetchAgentUserUsingPost({ keyword: '' })
-  if (res.data.data && res.data.code === 0) {
-    pickerOptions.value.leaveProxyPartyAccount = res.data.data.map((item: any) => {
-      return { label: item.nickname, value: item.partyAccount }
-    })
-  }
-}
-
 /**
  * 上传附件成功的回调
  * @param fileList 上传附件列表
@@ -292,6 +247,24 @@ const handleSuccess = (fileList: any) => {
  */
 const handleRemove = (fileList: any) => {
   formData.fileIds = fileList.map((item: any) => item.url)
+}
+
+/** 根据选择的时间范围，计算实际需要的考勤天数，不包含非工作日 */
+const calculateActualApplyDays = async () => {
+  if (!formData.appLeaveTimeVOS[0]?.startTime || !formData.appLeaveTimeVOS[0]?.endTime) {
+    return
+  }
+
+  const res = await calcActualApplyDaysUsingPost({
+    leaveTimeVo: formData.appLeaveTimeVOS,
+    holidayType: '请假',
+    calcWorkDay: true, // 是否计算工作日，true 表示只计算工作日，false 表示计算包含非工作日在内的所有天数
+  })
+  if (res.data.code === 0 && res.data.data) {
+    applyDays.value = res.data.data ?? 0
+  } else {
+    Message.error({ content: res.data.msg, offset: [10, 16] })
+  }
 }
 
 /** 提交表单 */
@@ -317,7 +290,10 @@ const handleSubmit = async () => {
 onMounted(() => {
   getApproverList()
   getLeaveTypeList()
-  getAgentUserList()
+})
+
+watchEffect(() => {
+  calculateActualApplyDays()
 })
 </script>
 
