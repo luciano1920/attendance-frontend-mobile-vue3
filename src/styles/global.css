@@ -4,6 +4,7 @@
   --td-font-family: HarmonyOS Sans SC, PingFang SC, Microsoft YaHei, Arial Regular;
   --td-font-family-medium: HarmonyOS Sans SC, PingFang SC, Microsoft YaHei, Arial Medium;
   --td-tag-square-border-radius: 6px;
+  --td-cell-left-icon-size: auto;
 }
 
 body {
@@ -21,4 +22,23 @@ body {
 
 .t-tag {
   font-weight: 500 !important;
+}
+
+.t-cell-group__title {
+  padding-left: 20px;
+  color: #86909c;
+  background-color: transparent;
+}
+
+.t-cell-group--card {
+  border-radius: 16px !important;
+}
+
+.t-collapse {
+  border-radius: 16px !important;
+}
+
+.t-pull-down-refresh {
+  height: unset;
+  min-height: calc(100vh - 208px);
 }

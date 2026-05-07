@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 10:50
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-30 14:38
+ * @LastEditTime : 2026-05-03 17:32
  * @FilePath     : \attendance-frontend-mobile\src\layouts\MobileLayout.vue
  * @Description  : 移动端页面布局
 -->
@@ -95,6 +95,7 @@ onMounted(() => {
 <style lang="scss" scoped>
 :deep(.navigation-menu) {
   --td-tab-bar-height: 54px;
+  --td-tab-bar-color: #4e5969;
   --td-brand-color-light: #0052d9;
   --td-tab-bar-active-color: #fff;
 

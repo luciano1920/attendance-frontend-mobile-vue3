@@ -2,9 +2,9 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-24 11:07
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-25 15:04
+ * @LastEditTime : 2026-05-07 16:55
  * @FilePath     : \attendance-frontend-mobile\src\composables\usePicker.ts
- * @Description  :
+ * @Description  : 选择器组合式函数
  */
 import { reactive } from 'vue'
 import type { PickerColumn, PickerValue } from 'tdesign-mobile-vue'
@@ -21,10 +21,17 @@ interface PickerState {
   options: PickerColumn
 }
 
-export function usePicker<T extends Record<string, any>>(
+/**
+ * 选择器组合式函数
+ * @description 用于管理表单字段的 Picker 选择器状态和交互
+ *
+ * @param formModel - 表单响应式对象
+ * @param optionsMap - 选项映射对象，键为字段名，值为选项列
+ */
+export const usePicker = <T extends Record<string, any>>(
   formModel: T,
   optionsMap: PickerOptionsMap,
-) {
+) => {
   const state = reactive<PickerState>({
     visible: false,
     field: '',

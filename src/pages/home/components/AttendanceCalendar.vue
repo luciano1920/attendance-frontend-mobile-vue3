@@ -150,11 +150,11 @@ const onCalendarDateFormat = (dateObj?: any) => {
   }
 
   .t-calendar__days {
-    padding: 0 8px;
+    padding: 0 14px;
   }
 
   .t-calendar__months {
-    padding: 8px;
+    padding: 8px 12px;
     height: unset;
 
     .t-calendar__dates {
