@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-06 17:04
+ * @LastEditTime : 2026-05-07 17:10
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -82,56 +82,64 @@
         :loading="recordLoading"
       />
 
-      <t-empty v-if="!recordLoading" description="暂无数据">
-        <template #icon>
-          <SvgIcon name="funnel" size="48px" />
-        </template>
-      </t-empty>
+      <t-pull-down-refresh v-if="!recordLoading" @refresh="handleRefresh">
+        <t-empty description="暂无数据">
+          <template #icon>
+            <SvgIcon name="funnel" size="48px" />
+          </template>
+        </t-empty>
+      </t-pull-down-refresh>
     </div>
 
     <div v-else class="record-list" :style="{ paddingTop: isBatchMode ? '158px' : '108px' }">
-      <t-list :async-loading="listLoading" :on-scroll="handleScroll">
-        <!-- 批量模式 -->
-        <t-checkbox-group
-          v-if="isBatchMode && canBatchMode"
-          v-model:value="batchRecordIds"
-          borderless
-        >
-          <div
-            v-for="recordItem in applyRecordDataList"
-            :key="recordItem.id"
-            class="batch-card"
-            :class="{ 'batch-card--active': batchRecordIds.includes(recordItem.id) }"
+      <t-pull-down-refresh @refresh="handleRefresh">
+        <t-list :async-loading="listLoading" :on-scroll="handleScroll">
+          <!-- 批量模式 -->
+          <t-checkbox-group
+            v-if="isBatchMode && canBatchMode"
+            v-model:value="batchRecordIds"
+            borderless
           >
-            <!-- 选中角标 -->
-            <SvgIcon
-              v-if="batchRecordIds.includes(recordItem.id)"
-              class="batch-card-check-icon"
-              name="check"
-              color="#ffffff"
-            />
+            <div
+              v-for="recordItem in applyRecordDataList"
+              :key="recordItem.id"
+              class="batch-card"
+              :class="{ 'batch-card--active': batchRecordIds.includes(recordItem.id) }"
+            >
+              <!-- 选中角标 -->
+              <SvgIcon
+                v-if="batchRecordIds.includes(recordItem.id)"
+                class="batch-card-check-icon"
+                name="check"
+                color="#ffffff"
+              />
 
-            <!-- 隐藏的 checkbox ，宽高设为父容器的 100% ，label 和 content 都默认为空-->
-            <t-checkbox :value="recordItem.id" icon="none" style="position: absolute; opacity: 0" />
+              <!-- 隐藏的 checkbox ，宽高设为父容器的 100% ，label 和 content 都默认为空-->
+              <t-checkbox
+                :value="recordItem.id"
+                icon="none"
+                style="position: absolute; opacity: 0"
+              />
 
-            <!-- 卡片内容 -->
-            <div class="batch-card-content">
-              <RecordListCard :record="recordItem" :is-approve-view="searchParams.checkManage" />
+              <!-- 卡片内容 -->
+              <div class="batch-card-content">
+                <RecordListCard :record="recordItem" :is-approve-view="searchParams.checkManage" />
+              </div>
             </div>
-          </div>
-        </t-checkbox-group>
+          </t-checkbox-group>
 
-        <!-- 非批量模式：普通卡片列表 -->
-        <template v-else>
-          <RecordListCard
-            v-for="recordItem in applyRecordDataList"
-            :key="recordItem.id"
-            :record="recordItem"
-            :is-approve-view="searchParams.checkManage"
-            @long-press="enterBatchMode(recordItem.id)"
-          />
-        </template>
-      </t-list>
+          <!-- 非批量模式：普通卡片列表 -->
+          <template v-else>
+            <RecordListCard
+              v-for="recordItem in applyRecordDataList"
+              :key="recordItem.id"
+              :record="recordItem"
+              :is-approve-view="searchParams.checkManage"
+              @long-press="enterBatchMode(recordItem.id)"
+            />
+          </template>
+        </t-list>
+      </t-pull-down-refresh>
     </div>
   </div>
 </template>
@@ -140,6 +148,7 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Message, type ListProps, type TabValue } from 'tdesign-mobile-vue'
+import { onBeforeRouteLeave } from 'vue-router'
 
 import { useUserStore } from '@/stores/user-store'
 import {
@@ -151,14 +160,15 @@ import { APPROVE_STATUS_ENUM } from '@/constants/record'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Segmented from '@/components/Segmented.vue'
 import RecordListCard from './components/RecordListCard.vue'
+import { useFilterCache } from '@/composables/useFilterCache'
 
 const userStore = useUserStore()
 const { loginUser } = storeToRefs(userStore)
 
+// ==================== 页面基础状态和筛选条件 ====================
 const pageTitle = ref<string>('申请记录')
 
-// 审批状态，绑定 TabValue
-const approvalStatus = ref<string>('pending')
+const approvalStatus = ref<string>('pending') // 审批状态，绑定 TabValue
 
 // 分段控制选项，用于区分个人申请清单还是管理员审批清单
 const showSegmented = ref<boolean>(false) // 管理员角色才能看到分段控制器
@@ -167,6 +177,7 @@ const segmentOptions = [
   { label: '我的申请', value: false, payload: { icon: 'list' } },
 ]
 
+// ==================== 列表数据 ====================
 const listLoading = ref<ListProps['asyncLoading']>('') // 列表组件加载状态，用于控制 List 组件
 const recordLoading = ref<boolean>(true) // 记录加载状态，用于控制 Loading 组件
 
@@ -177,22 +188,26 @@ const searchParams = reactive({
   orderState: [APPROVE_STATUS_ENUM.PENDING],
   checkManage: false,
 })
-const recordTotal = ref<number>(0)
 
+const recordTotal = ref<number>(0)
 // 申请记录数据列表
 const applyRecordDataList = ref<any[]>([])
 
 // ========== 批量操作 ==========
-
-// 是否处于批量操作模式
-const isBatchMode = ref<boolean>(false)
-
-// 批量操作的记录 id 列表
-const batchRecordIds = ref<Array<number>>([])
+const isBatchMode = ref<boolean>(false) // 是否处于批量操作模式
+const batchRecordIds = ref<Array<number>>([]) // 批量操作的记录 id 列表
 
 // 计算属性：判断当前是否可以批量操作
 const canBatchMode = computed(() => {
   return approvalStatus.value === 'pending' && searchParams.checkManage === true
+})
+
+// 是否全选
+const isAllSelected = computed(() => {
+  if (applyRecordDataList.value.length === 0) {
+    return false
+  }
+  return applyRecordDataList.value.every((item) => batchRecordIds.value.includes(item.id))
 })
 
 /**
@@ -213,14 +228,6 @@ const exitBatchMode = () => {
   batchRecordIds.value = []
 }
 
-// 是否全选
-const isAllSelected = computed(() => {
-  if (applyRecordDataList.value.length === 0) {
-    return false
-  }
-  return applyRecordDataList.value.every((item) => batchRecordIds.value.includes(item.id))
-})
-
 /**
  * 全选按钮的 change
  * @param checked 是否全选
@@ -234,19 +241,10 @@ const handleCheckAllChange = (checked: boolean) => {
 }
 
 // 监听 Tab 和 Segmented 切换，自动退出批量模式
-watch(approvalStatus, () => {
-  if (isBatchMode.value) {
-    exitBatchMode()
-  }
-})
-
+watch(approvalStatus, () => isBatchMode.value && exitBatchMode())
 watch(
   () => searchParams.checkManage,
-  () => {
-    if (isBatchMode.value) {
-      exitBatchMode()
-    }
-  },
+  () => isBatchMode.value && exitBatchMode(),
 )
 
 /**
@@ -280,6 +278,8 @@ const handleBatchApprove = async (state: number) => {
     })
   }
 }
+
+// ==================== 列表数据获取 ====================
 
 /**
  * Tab 切换事件处理函数
@@ -356,19 +356,61 @@ const handleScroll = (scrollBottom: number) => {
   }
 }
 
+/** 处理列表下拉刷新 */
+const handleRefresh = () => {
+  searchParams.pageNo = 1
+  applyRecordDataList.value = []
+  recordTotal.value = 0
+  getApplyRecordDataList()
+}
+
+// ==================== 路由缓存 ====================
+const filterCache = useFilterCache({
+  key: 'record_page_filter_state',
+  shouldCache: (to) => to.path.startsWith('/record/'),
+  state: () => ({
+    approvalStatus: approvalStatus.value,
+    checkManage: searchParams.checkManage,
+  }),
+  onRestore(state) {
+    // 恢复 Tab 和 Segmented 组件选中状态
+    approvalStatus.value = state.approvalStatus || 'pending'
+    searchParams.checkManage = !!state.checkManage
+
+    // 根据 approvalStatus 还原 orderState 查询参数
+    if (approvalStatus.value === 'pending') {
+      searchParams.orderState = [APPROVE_STATUS_ENUM.PENDING]
+    } else {
+      searchParams.orderState = [APPROVE_STATUS_ENUM.APPROVED, APPROVE_STATUS_ENUM.REJECTED]
+    }
+  },
+})
+
 onMounted(() => {
   const userLevel = getUserAccessLevel(loginUser.value.userInfo.roles)
+
   if (userLevel === ACCESS_ENUM.ADMIN) {
-    showSegmented.value = true
-    searchParams.checkManage = true
-    pageTitle.value = '考勤审批'
+    showSegmented.value = true // 管理员显示分段控制器
+
+    // 无缓存时管理员默认"审批"视角
+    if (!filterCache.restore()) {
+      searchParams.checkManage = true
+    }
   }
 
+  pageTitle.value = searchParams.checkManage ? '考勤审批' : '申请记录'
   getApplyRecordDataList()
 })
 </script>
 
 <style lang="scss" scoped>
+#record-page {
+  // 该页面禁止选中文本
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+
 :deep(.record-page-header) {
   box-sizing: border-box;
   position: fixed;
@@ -467,6 +509,18 @@ onMounted(() => {
     width: 100%;
     height: 100%;
   }
+
+  .batch-card-check-icon {
+    position: absolute;
+    left: 1.5px;
+    top: 1.5px;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .batch-card-content {
+    pointer-events: none; // 防止点卡片内部文案时触发两次（一次 card、一次 内部按钮）
+  }
 }
 
 .batch-card--active {
@@ -485,17 +539,5 @@ onMounted(() => {
     border-right-color: transparent;
     pointer-events: none;
   }
-}
-
-.batch-card-check-icon {
-  position: absolute;
-  left: 1.5px;
-  top: 1.5px;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.batch-card-content {
-  pointer-events: none; // 防止点卡片内部文案时触发两次（一次 card、一次 内部按钮）
 }
 </style>

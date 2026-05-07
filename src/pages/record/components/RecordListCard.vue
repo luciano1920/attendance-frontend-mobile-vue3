@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-05-03 01:08
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-06 17:10
+ * @LastEditTime : 2026-05-07 08:45
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\components\RecordListCard.vue
  * @Description  : 审批/申请记录单条卡片组件
 -->
@@ -142,11 +142,6 @@ onUnmounted(() => {
   background-color: #fff;
   border-radius: 14px;
   transition: all 0.3s ease;
-
-  // 添加以下属性禁止选中文本
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-touch-callout: none;
 
   &:active {
     transform: scale(0.95);

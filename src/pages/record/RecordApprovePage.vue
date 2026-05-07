@@ -53,10 +53,6 @@
             {{ formatDateRange(range) }}
           </div>
         </template>
-        <template #item-proxy="{ value, row }">
-          {{ value }}
-          <span class="proxy-sub">({{ row?.leaveProxyPartyAccount }})</span>
-        </template>
         <template #item-files="{ value }">
           <div class="files-container">
             <t-image
@@ -231,7 +227,6 @@ const handlePreview = (fileIds: string[]) => {
 const baseItems: DescriptionsItemColumn[] = [
   { field: 'orderType', label: '申请类型' },
   { field: 'partyAccount', label: '申请人工号' },
-  { field: 'personType', label: '申请人员类型' },
   { field: 'mobile', label: '申请人联系方式' },
   { field: 'createTime', label: '申请时间', formatter: (val) => formatDate(val) },
 ]
@@ -241,10 +236,6 @@ const leaveItems: DescriptionsItemColumn[] = [
   { field: 'leaveDaySum', label: '请假天数', formatter: (val) => `${val ?? 0} 天` },
   { field: 'appLeaveTimeVOS', label: '请假时段', slotName: 'leaveTime' },
   { field: 'leaveReason', label: '请假原因' },
-  { field: 'specificJob', label: '现任具体工作' },
-  { field: 'leaveAddress', label: '请假地点' },
-  { field: 'leaveProxyNickname', label: '工作代理人', slotName: 'proxy' },
-  { field: 'leaveProxyMobile', label: '代理人联系方式' },
   { field: 'fileIds', label: '附件', slotName: 'files' },
 ]
 
@@ -378,11 +369,6 @@ onMounted(() => {
   flex-direction: column;
   gap: 12px;
   padding: 12px 16px 48px;
-}
-
-.proxy-sub {
-  font-size: 13px;
-  color: #86909c;
 }
 
 .files-container {
