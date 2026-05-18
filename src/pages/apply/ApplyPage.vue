@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-29 16:15
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-30 11:34
+ * @LastEditTime : 2026-05-08 16:49
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\ApplyPage.vue
  * @Description  : 考勤申请入口页面
 -->
@@ -98,7 +98,7 @@ import IconContainer from '@/components/IconContainer.vue'
       transition: all 0.3s ease;
 
       &:active {
-        transform: scale(0.98);
+        transform: scale(0.95);
       }
 
       .apply-action-item-label {

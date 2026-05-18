@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 10:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 01:18
+ * @LastEditTime : 2026-05-08 09:08
  * @FilePath     : \attendance-frontend-mobile\src\constants\record.ts
  * @Description  : 考勤记录相关常量类
  */
@@ -33,13 +33,13 @@ export const RECORD_TYPE_MAP: Record<number, string> = {
 
 /** 一周七天文本映射 */
 export const RECORD_WEEK_MAP: Record<number, string> = {
-  1: '星期一',
-  2: '星期二',
-  3: '星期三',
-  4: '星期四',
-  5: '星期五',
-  6: '星期六',
-  7: '星期日',
+  1: '星期日',
+  2: '星期一',
+  3: '星期二',
+  4: '星期三',
+  5: '星期四',
+  6: '星期五',
+  7: '星期六',
 }
 
 /** 考勤记录类型色值映射 */

@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 10:58
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 11:36
+ * @LastEditTime : 2026-05-15 09:19
  * @FilePath     : \attendance-frontend-mobile\src\pages\home\components\AttendanceCalendar.vue
  * @Description  : 考勤日历组件（含图例）
 -->
@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import dayjs from 'dayjs'
-import { formatDateYMD } from '@/utils/date'
+import { formatDateYMD, isFutureDate } from '@/utils/date'
 import { RECORD_TYPE_ENUM } from '@/constants/record'
 import type { StatisticsItem } from './AttendanceStatistics.vue'
 
@@ -84,6 +84,10 @@ const handleSelectDay = (date: Date) => {
  * @param dateObj 单元格日期对象
  */
 const onCalendarDateFormat = (dateObj?: any) => {
+  if (isFutureDate(dateObj.date)) {
+    dateObj.type = 'disabled'
+  }
+
   // 在当月考勤记录中查找当前日期的记录
   const dateStr = formatDateYMD(dateObj.date)
   const record = props.recordData.find((item: any) => item.date === dateStr)

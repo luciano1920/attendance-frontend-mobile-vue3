@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-20 15:42
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-30 15:14
+ * @LastEditTime : 2026-05-08 08:53
  * @FilePath     : \attendance-frontend-mobile\src\router\routes.ts
  * @Description  : 所有路由配置
  */
@@ -126,6 +126,7 @@ export const routes: Array<RouteRecordRaw> = [
     ],
   },
 
+  // 不需要全局布局的页面
   {
     path: '/apply/leave',
     name: '请假申请页',
@@ -171,7 +172,7 @@ export const routes: Array<RouteRecordRaw> = [
       access: ACCESS_ENUM.USER,
     },
   },
-  // 申请详情页（普通用户查看 / 撤销）
+  // 申请记录详情页（普通用户查看 / 撤销）
   {
     path: '/record/:id',
     name: '申请详情页',
@@ -182,7 +183,6 @@ export const routes: Array<RouteRecordRaw> = [
       access: ACCESS_ENUM.USER,
     },
   },
-
   // 申请审批页（审批人 通过/驳回）
   {
     path: '/record/:id/approve',
@@ -192,6 +192,33 @@ export const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '审批详情',
       access: ACCESS_ENUM.ADMIN,
+    },
+  },
+  {
+    path: '/settings',
+    name: '用户设置页',
+    component: () => import('@/pages/user/UserSettingsPage.vue'),
+    meta: {
+      title: '应用设置',
+      access: ACCESS_ENUM.USER,
+    },
+  },
+  {
+    path: '/about',
+    name: '关于系统页',
+    component: () => import('@/pages/user/AboutSystemPage.vue'),
+    meta: {
+      title: '关于系统',
+      access: ACCESS_ENUM.USER,
+    },
+  },
+  {
+    path: '/help',
+    name: '帮助中心页',
+    component: () => import('@/pages/user/HelpCenterPage.vue'),
+    meta: {
+      title: '帮助中心',
+      access: ACCESS_ENUM.USER,
     },
   },
 ]

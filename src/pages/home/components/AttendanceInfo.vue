@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 11:03
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-23 12:41
+ * @LastEditTime : 2026-05-08 09:22
  * @FilePath     : \attendance-frontend-mobile\src\pages\home\components\AttendanceInfo.vue
  * @Description  : 当日考勤打卡记录详情展示组件
 -->
@@ -13,6 +13,25 @@
       <div class="info-week">{{ RECORD_WEEK_MAP[recordData.week] }}</div>
       <t-tag v-if="recordData.transactionList?.length !== 0" variant="light" theme="primary">
         已打卡
+      </t-tag>
+      <t-tag
+        v-else-if="recordData.transactionList?.length === 0 && recordData.typeList?.length === 0"
+        variant="light"
+        theme="danger"
+      >
+        缺卡
+      </t-tag>
+    </div>
+
+    <div class="info-type-list">
+      <t-tag
+        v-if="recordData.typeList?.length !== 0"
+        v-for="typeItem in recordData.typeList"
+        :key="typeItem"
+        variant="light"
+        theme="success"
+      >
+        {{ typeItem.type }}({{ typeItem.period }})
       </t-tag>
     </div>
 
@@ -51,7 +70,7 @@ defineProps<Props>()
   .info-header {
     display: flex;
     gap: 12px;
-    padding: 4px 20px;
+    padding: 4px 8px;
     align-items: center;
     justify-content: center;
 
@@ -62,6 +81,14 @@ defineProps<Props>()
     .info-week {
       font-weight: 600;
     }
+  }
+
+  .info-type-list {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .info-item {

@@ -173,3 +173,18 @@ export function getCurrentMonthRange(): DateRange {
 export function getCurrentMonthEnd(): string {
   return dayjs().endOf('month').format('YYYY-MM-DD')
 }
+
+/**
+ * 判断给定日期是否为未来日期（即晚于今天）
+ * 常用于考勤、预约等场景，禁用今天之后的日期
+ * @param date 日期入参（支持各种常见格式）
+ * @returns 如果是未来日期返回 true，否则返回 false。解析失败返回 false
+ */
+export function isFutureDate(date: DateInput): boolean {
+  const d = parseToDate(date)
+  if (!d) return false // 容错：解析失败的日期不算未来日期
+
+  // 传入 'day' 作为粒度，表示只比较年月日，忽略时分秒
+  // 例如：今天是 2026-05-02，那么 2026-05-02 的任何时间点都不会被判定为未来
+  return d.isAfter(dayjs(), 'day')
+}

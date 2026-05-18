@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 15:00
+ * @LastEditTime : 2026-05-15 08:51
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\OutingFormPage.vue
  * @Description  : 外出申请表单页面
 -->
@@ -123,10 +123,6 @@
             :autosize="{ minRows: 2, maxRows: 4 }"
           />
         </t-form-item>
-
-        <t-form-item label="附件" name="fileIds" content-align="right">
-          <PictureUpload :success-upload="handleSuccess" :remove-upload="handleRemove" />
-        </t-form-item>
       </t-form>
 
       <t-button size="large" @click="handleSubmit" class="form-submit-action">提交申请</t-button>
@@ -146,7 +142,6 @@ import { calcActualApplyDaysUsingPost, createOutingApplyUsingPost } from '@/api/
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
 import SvgIcon from '@/components/SvgIcon.vue'
 import RadioButtonGroup from '@/components/RadioButtonGroup.vue'
-import PictureUpload from '@/components/PictureUpload.vue'
 import TimeRangePickerPopup from './components/TimeRangePickerPopup.vue'
 
 const router = useRouter()
@@ -216,22 +211,6 @@ const getOutingTypeList = async () => {
   }
 }
 
-/**
- * 上传附件成功的回调
- * @param fileList 上传附件列表
- */
-const handleSuccess = (fileList: any) => {
-  formData.fileIds = fileList.map((item: any) => item.url)
-}
-
-/**
- * 移除上传附件的回调
- * @param fileList 上传附件列表
- */
-const handleRemove = (fileList: any) => {
-  formData.fileIds = fileList.map((item: any) => item.url)
-}
-
 /** 根据选择的时间范围，计算实际需要的考勤天数，不包含非工作日 */
 const calculateActualApplyDays = async () => {
   if (!formData.appTravelTimeVOS[0]?.startTime || !formData.appTravelTimeVOS[0]?.endTime) {
@@ -243,7 +222,7 @@ const calculateActualApplyDays = async () => {
     holidayType: '外出',
     calcWorkDay: true, // 是否计算工作日，true 表示只计算工作日，false 表示计算包含非工作日在内的所有天数
   })
-  if (res.data.code === 0 && res.data.data) {
+  if (res.data.code === 0) {
     applyDays.value = res.data.data ?? 0
   } else {
     Message.error({ content: res.data.msg, offset: [10, 16] })

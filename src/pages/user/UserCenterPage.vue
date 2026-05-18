@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-29 11:07
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 16:35
+ * @LastEditTime : 2026-05-18 15:17
  * @FilePath     : \attendance-frontend-mobile\src\pages\user\UserCenterPage.vue
  * @Description  : 用户中心（我的）页面
 -->
@@ -12,45 +12,45 @@
     <div class="user-profile">
       <div class="user-profile-info">
         <img
-          :src="loginUserInfo.avatar || '@/assets/images/avatar.png'"
+          :src="loginUserInfo.avatar || defaultAvatar"
           class="user-avatar"
           alt="avatar"
+          @click="handlePreview([loginUserInfo.avatar || defaultAvatar])"
         />
+        <!-- 头像预览 -->
+        <t-image-viewer :images="previewImgs" :visible="imgVisible" @close="imgVisible = false" />
+
         <div class="user-name">{{ loginUserInfo.username }}</div>
-        <div class="user-role">
-          <span>{{ loginUserInfo.dept?.name }}</span>
-          <!-- <span>·</span>
-            <span>研发工程师</span> -->
+        <div class="user-dept">
+          <div>{{ loginUserInfo.dept?.name }}</div>
+          <div>
+            部门审批人：{{ loginUserInfo.checker[0]?.nickname }}（{{
+              loginUserInfo.checker[0]?.dept
+            }}）
+          </div>
         </div>
       </div>
     </div>
 
     <!-- 用户操作区域 -->
     <div class="user-action">
-      <div class="user-attendance-statistics">
-        <div v-for="(item, index) in statisticsData" :key="index" class="statistics-item">
-          <div class="item-value" :style="{ color: item.color }">{{ item.value }}</div>
-          <div class="item-desc">{{ item.desc }}</div>
-        </div>
-      </div>
-
       <t-cell-group theme="card" class="user-action-list">
-        <t-cell title="消息中心" arrow hover>
+        <!-- <t-cell title="消息中心" arrow hover>
           <template #leftIcon>
             <IconContainer icon="bell" theme="orange" />
           </template>
-        </t-cell>
-        <t-cell title="应用设置" arrow hover>
+        </t-cell> -->
+        <t-cell title="应用设置" arrow hover @click="router.push('/settings')">
           <template #leftIcon>
             <IconContainer icon="settings" theme="blue" />
           </template>
         </t-cell>
-        <t-cell title="帮助中心" arrow hover>
+        <t-cell title="帮助中心" arrow hover @click="router.push('/help')">
           <template #leftIcon>
             <IconContainer icon="question-mark-circle" theme="green" />
           </template>
         </t-cell>
-        <t-cell title="关于系统" arrow hover>
+        <t-cell title="关于应用" arrow hover @click="router.push('/about')">
           <template #leftIcon>
             <IconContainer icon="info" theme="purple" />
           </template>
@@ -68,20 +68,21 @@
         退出登录
       </t-button>
 
-      <t-footer :text="`Copyright © 2026-${new Date().getFullYear()} 数智产品研发中心.`" />
       <t-footer :text="systemTitle + ' ' + systemVersion" />
-      <!-- <div class="system-version">{{ systemTitle }} {{ systemVersion }}</div> -->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import { logoutUsingPost } from '@/api/auth-controller'
 import { ActionSheetPlugin, Message } from 'tdesign-mobile-vue'
+
+import { logoutUsingPost } from '@/api/auth-controller'
 import { useUserStore } from '@/stores/user-store'
 import SvgIcon from '@/components/SvgIcon.vue'
 import IconContainer from '@/components/IconContainer.vue'
+import defaultAvatar from '@/assets/svgs/profile-avatar.svg'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -90,13 +91,19 @@ const loginUserInfo = userStore.loginUser.userInfo
 const systemTitle = import.meta.env.VITE_APP_TITLE
 const systemVersion = import.meta.env.VITE_APP_SYSTEM_VERSION
 
-// 统计数据
-const statisticsData = [
-  { value: 10, desc: '本月打卡', color: '#2ba471' },
-  { value: 8, desc: '补卡', color: '#e37318' },
-  { value: 5, desc: '无需打卡', color: '#0052d9' },
-  { value: 2, desc: '缺卡', color: '#d54941' },
-]
+// 控制图片预览组件
+const imgVisible = ref<boolean>(false)
+// 预览图片列表
+const previewImgs = ref<string[]>([])
+
+/**
+ * 处理预览
+ * @param fileIds 预览文件的 Url 列表
+ */
+const handlePreview = (fileIds: string[]) => {
+  previewImgs.value = fileIds
+  imgVisible.value = true
+}
 
 /** 退出登录 */
 const handleLogout = async () => {
@@ -145,7 +152,7 @@ const handleLogout = async () => {
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 24px;
+  padding: 32px 24px;
   background: url('@/assets/svgs/bg/profile.svg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -162,11 +169,11 @@ const handleLogout = async () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
 
     .user-avatar {
-      width: 72px;
-      height: 72px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       border: 1px solid #e2e8f0;
       box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.1);
@@ -179,7 +186,12 @@ const handleLogout = async () => {
       color: #fff;
     }
 
-    .user-role {
+    .user-dept {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       font-size: 14px;
       color: #fff;
       font-weight: 400;
@@ -193,41 +205,8 @@ const handleLogout = async () => {
   gap: 16px;
   padding: 16px 0;
 
-  .user-attendance-statistics {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #fff;
-    padding: 16px;
-    margin: 0 16px;
-    border-radius: 16px;
-
-    .statistics-item {
-      flex: 1 0 25%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-
-      .item-value {
-        font-size: 24px;
-        font-weight: 600;
-        // color: #2ba471;
-      }
-
-      .item-desc {
-        font-size: 14px;
-        color: #858a99;
-      }
-    }
-  }
-
   :deep(.user-action-list) {
     --td-cell-left-icon-size: auto;
-
-    .t-cell-group--card {
-      border-radius: 16px !important;
-    }
 
     .t-cell {
       align-items: center;
@@ -250,13 +229,6 @@ const handleLogout = async () => {
     --td-button-danger-outline-border-color: #ffcece;
 
     margin: 0 16px;
-  }
-
-  .system-version {
-    text-align: center;
-    font-size: 12px;
-    font-weight: 400;
-    color: #c9cdd4;
   }
 }
 </style>

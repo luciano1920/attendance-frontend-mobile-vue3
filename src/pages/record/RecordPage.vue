@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 17:10
+ * @LastEditTime : 2026-05-18 16:00
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -148,9 +148,9 @@
 import { computed, onMounted, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Message, type ListProps, type TabValue } from 'tdesign-mobile-vue'
-import { onBeforeRouteLeave } from 'vue-router'
 
 import { useUserStore } from '@/stores/user-store'
+import { useFilterCache } from '@/composables/useFilterCache'
 import {
   approveApplicationUsingPost,
   fetchApprovalRecordByPageUsingPost,
@@ -160,7 +160,6 @@ import { APPROVE_STATUS_ENUM } from '@/constants/record'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Segmented from '@/components/Segmented.vue'
 import RecordListCard from './components/RecordListCard.vue'
-import { useFilterCache } from '@/composables/useFilterCache'
 
 const userStore = useUserStore()
 const { loginUser } = storeToRefs(userStore)
@@ -307,11 +306,6 @@ const handleSegmentChange = () => {
 
 /** 获取申请记录数据列表 */
 const getApplyRecordDataList = async () => {
-  // 如果已经在加载中，则不再加载
-  if (listLoading.value === 'loading') {
-    return
-  }
-
   // 如果不是第一页，且当前已加载的数据量已经达到或超过总量，则不再加载
   if (searchParams.pageNo > 1 && applyRecordDataList.value.length >= recordTotal.value) {
     return
@@ -350,7 +344,7 @@ const getApplyRecordDataList = async () => {
  * @param scrollBottom 滚动条距离底部的距离
  */
 const handleScroll = (scrollBottom: number) => {
-  if (scrollBottom < 20 && applyRecordDataList.value.length < recordTotal.value) {
+  if (scrollBottom < 1 && applyRecordDataList.value.length < recordTotal.value) {
     searchParams.pageNo += 1
     getApplyRecordDataList()
   }

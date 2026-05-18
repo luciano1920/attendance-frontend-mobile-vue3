@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 10:28
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 17:13
+ * @LastEditTime : 2026-05-15 08:51
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\RestFormPage.vue
  * @Description  : 调休申请表单页面
 -->
@@ -185,7 +185,7 @@ const calculateActualApplyDays = async () => {
     holidayType: '调休',
     calcWorkDay: true, // 是否计算工作日，true 表示只计算工作日，false 表示计算包含非工作日在内的所有天数
   })
-  if (res.data.code === 0 && res.data.data) {
+  if (res.data.code === 0) {
     applyDays.value = res.data.data ?? 0
   } else {
     Message.error({ content: res.data.msg, offset: [10, 16] })

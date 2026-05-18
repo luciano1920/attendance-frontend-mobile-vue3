@@ -51,7 +51,7 @@ import { nextTick, onMounted, ref } from 'vue'
 
 import { fetchRecordByDayUsingPost, fetchRecordByMonthUsingPost } from '@/api/record-controller'
 import { useUserStore } from '@/stores/user-store'
-import { toTimestamp } from '@/utils/date'
+import { isFutureDate, toTimestamp } from '@/utils/date'
 import {
   ATTENDANCE_STATISTICS_CONFIG,
   RECORD_TYPE_COLOR_MAP,
@@ -91,7 +91,7 @@ const recordDayData = ref<any>({})
  * @param date 日期对象
  */
 const getAttendanceRecordDataByMonth = async (date: Date) => {
-  if (!date) return
+  if (!date || isFutureDate(date)) return
 
   const res = await fetchRecordByMonthUsingPost({ month: toTimestamp(date) })
   if (res.data.code === 0 && res.data.data) {
@@ -131,7 +131,7 @@ const getAttendanceRecordDataByMonth = async (date: Date) => {
  * @param date 日期对象
  */
 const getAttendanceRecordDataByDay = async (date: Date) => {
-  if (!date) return
+  if (!date || isFutureDate(date)) return
 
   const res = await fetchRecordByDayUsingPost({ day: toTimestamp(date) })
   if (res.data.code === 0 && res.data.data) {

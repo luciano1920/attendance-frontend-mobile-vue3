@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-26 14:37
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-29 15:06
+ * @LastEditTime : 2026-05-08 17:23
  * @FilePath     : \attendance-frontend-mobile\src\components\Segmented.vue
  * @Description  : 分段控制器（Segmented）组件，选中态采用滑块风格
 -->
@@ -207,7 +207,8 @@ watch(
   --segmented-bg: #eeeef0;
   --segmented-thumb-bg: #ffffff;
   --segmented-color: rgba(0, 0, 0, 0.65);
-  --segmented-color-active: rgba(0, 0, 0, 0.88);
+  --segmented-color-active: #0052d9;
+  --segmented-color-disabled: rgba(0, 0, 0, 0.25);
 
   display: inline-block;
   padding: 2px;
@@ -287,12 +288,12 @@ watch(
     }
 
     .segmented-item-disabled {
-      color: rgba(0, 0, 0, 0.25);
+      color: var(--segmented-color-disabled);
       cursor: not-allowed;
       pointer-events: none;
     }
 
-    // 新增滑块样式
+    // 滑块样式
     .segmented-thumb {
       position: absolute;
       top: 0;

@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 15:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-06 11:16
+ * @LastEditTime : 2026-05-18 16:24
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordApprovePage.vue
  * @Description  : 记录审批页
 -->
@@ -22,7 +22,10 @@
           <div class="user-name">{{ recordApproveData?.nickname }}</div>
           <t-tag variant="light" :theme="APPROVE_TAG_MAP[recordApproveData?.orderState]?.theme">
             <template #icon>
-              <SvgIcon :name="APPROVE_TAG_MAP[recordApproveData?.orderState]?.icon" size="12px" />
+              <SvgIcon
+                :name="APPROVE_TAG_MAP[recordApproveData?.orderState]?.icon ?? ''"
+                size="12px"
+              />
             </template>
             {{ APPROVE_STATUS_MAP[recordApproveData?.orderState] }}
           </t-tag>

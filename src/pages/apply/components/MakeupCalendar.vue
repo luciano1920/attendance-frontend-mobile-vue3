@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-29 11:06
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-29 11:06
+ * @LastEditTime : 2026-05-18 15:55
  * @FilePath     : \attendance-frontend-mobile\src\pages\apply\components\MakeupCalendar.vue
  * @Description  : 补卡日历弹窗组件（日期可选）
 -->
@@ -93,7 +93,15 @@ const onCalendarDateFormat = (dateObj?: any) => {
  * @param date 选择的日期列表
  */
 const handleConfirm = (date: TCalendarValue[]) => {
-  const selectedDateList = date.map((item: TCalendarValue) => formatDateYMD(item))
+  // Calendar 组件在以 type="multiple" 模式打开时，默认会自动将当前日期置为选中状态。
+  // 在点击确认按钮时，对组件返回的日期列表进行一次数据过滤，剔除掉那些不存在于可补卡日期列表
+  const selectedDateList = date
+    .filter((item: TCalendarValue) => {
+      const dateStr = formatDateYMD(item)
+      return props.recordData.some((record: any) => record.date === dateStr)
+    })
+    .map((item: TCalendarValue) => formatDateYMD(item))
+
   props.onConfirm?.(selectedDateList)
 }
 
