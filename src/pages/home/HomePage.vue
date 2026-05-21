@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-30 23:21
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-30 17:02
+ * @LastEditTime : 2026-05-21 16:34
  * @FilePath     : \attendance-frontend-mobile\src\pages\home\HomePage.vue
  * @Description  : 系统首页
 -->
@@ -91,7 +91,12 @@ const recordDayData = ref<any>({})
  * @param date 日期对象
  */
 const getAttendanceRecordDataByMonth = async (date: Date) => {
-  if (!date || isFutureDate(date)) return
+  recordDayData.value = {}
+  recordMonthData.value = []
+
+  if (!date || isFutureDate(date)) {
+    return
+  }
 
   const res = await fetchRecordByMonthUsingPost({ month: toTimestamp(date) })
   if (res.data.code === 0 && res.data.data) {
@@ -123,6 +128,7 @@ const getAttendanceRecordDataByMonth = async (date: Date) => {
       content: res.data.msg || '获取月度考勤数据失败',
       offset: [10, 16],
     })
+    recordMonthData.value = []
   }
 }
 
@@ -131,7 +137,12 @@ const getAttendanceRecordDataByMonth = async (date: Date) => {
  * @param date 日期对象
  */
 const getAttendanceRecordDataByDay = async (date: Date) => {
-  if (!date || isFutureDate(date)) return
+  recordDayData.value = {}
+  recordMonthData.value = []
+
+  if (!date || isFutureDate(date)) {
+    return
+  }
 
   const res = await fetchRecordByDayUsingPost({ day: toTimestamp(date) })
   if (res.data.code === 0 && res.data.data) {
@@ -141,6 +152,7 @@ const getAttendanceRecordDataByDay = async (date: Date) => {
       content: res.data.msg || '获取当日考勤数据失败',
       offset: [10, 16],
     })
+    recordDayData.value = {}
   }
 }
 

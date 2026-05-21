@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-18 16:00
+ * @LastEditTime : 2026-05-21 17:20
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -304,6 +304,12 @@ const handleSegmentChange = () => {
   getApplyRecordDataList()
 }
 
+/*
+  用于取消进行中网络请求的控制器，在发起新请求前，主动取消上一次未完成的请求
+  当用户快速切换筛选条件时，会连续触发多次请求。由于网络返回顺序不确定，如果前一次请求比后一次请求晚返回，会发生旧数据覆盖新数据的竞态错误。
+ */
+let abortController: AbortController | null = null
+
 /** 获取申请记录数据列表 */
 const getApplyRecordDataList = async () => {
   // 如果不是第一页，且当前已加载的数据量已经达到或超过总量，则不再加载
@@ -311,11 +317,22 @@ const getApplyRecordDataList = async () => {
     return
   }
 
+  // 如果存在未完成的上一次请求，直接取消它
+  if (abortController) {
+    abortController.abort()
+  }
+
+  // 每次发起新请求，都创建一个新的 AbortController 实例
+  abortController = new AbortController()
+
   listLoading.value = 'loading'
   recordLoading.value = true
 
   try {
-    const res = await fetchApprovalRecordByPageUsingPost(searchParams)
+    const res = await fetchApprovalRecordByPageUsingPost(
+      { ...searchParams },
+      { signal: abortController.signal },
+    )
     if (res.data.code === 0 && res.data.data) {
       const newList = res.data.data.list ?? []
       // 如果是第一页，直接替换；否则追加数据
@@ -331,11 +348,23 @@ const getApplyRecordDataList = async () => {
         offset: [10, 16],
       })
     }
-  } catch (error) {
+  } catch (error: any) {
+    if (error.name === 'CanceledError' || error.name === 'AbortError') {
+      return
+    }
+
     console.log(error)
+    Message.error({
+      content: '网络异常，请稍后重试',
+      offset: [10, 16],
+    })
   } finally {
-    recordLoading.value = false
-    listLoading.value = ''
+    if (!abortController?.signal.aborted) {
+      recordLoading.value = false
+      listLoading.value = ''
+    }
+    // 断开引用，防止闭包导致内存泄漏
+    abortController = null
   }
 }
 

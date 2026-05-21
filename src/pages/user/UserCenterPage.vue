@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-29 11:07
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-18 15:17
+ * @LastEditTime : 2026-05-21 17:01
  * @FilePath     : \attendance-frontend-mobile\src\pages\user\UserCenterPage.vue
  * @Description  : 用户中心（我的）页面
 -->
@@ -45,7 +45,7 @@
             <IconContainer icon="settings" theme="blue" />
           </template>
         </t-cell>
-        <t-cell title="帮助中心" arrow hover @click="router.push('/help')">
+        <!-- <t-cell title="帮助中心" arrow hover @click="router.push('/help')">
           <template #leftIcon>
             <IconContainer icon="question-mark-circle" theme="green" />
           </template>
@@ -54,7 +54,7 @@
           <template #leftIcon>
             <IconContainer icon="info" theme="purple" />
           </template>
-        </t-cell>
+        </t-cell> -->
       </t-cell-group>
 
       <t-button
@@ -78,7 +78,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ActionSheetPlugin, Message } from 'tdesign-mobile-vue'
 
-import { logoutUsingPost } from '@/api/auth-controller'
+import { userLogoutUsingPost } from '@/api/auth-controller'
 import { useUserStore } from '@/stores/user-store'
 import SvgIcon from '@/components/SvgIcon.vue'
 import IconContainer from '@/components/IconContainer.vue'
@@ -119,7 +119,7 @@ const handleLogout = async () => {
     onSelected: async (selected: any, selectedIndex: number) => {
       if (selected.label === '确认退出') {
         try {
-          const res = await logoutUsingPost()
+          const res = await userLogoutUsingPost()
           if (res.data.code === 0) {
             userStore.resetUserState()
             Message.success({ content: '退出登录成功', offset: [10, 16] })

@@ -2,47 +2,58 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-23 11:03
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-08 09:22
+ * @LastEditTime : 2026-05-21 16:32
  * @FilePath     : \attendance-frontend-mobile\src\pages\home\components\AttendanceInfo.vue
  * @Description  : 当日考勤打卡记录详情展示组件
 -->
 <template>
   <div class="attendance-info">
-    <div class="info-header">
-      <div class="info-date">{{ formatDateCN(recordData.date) }}</div>
-      <div class="info-week">{{ RECORD_WEEK_MAP[recordData.week] }}</div>
-      <t-tag v-if="recordData.transactionList?.length !== 0" variant="light" theme="primary">
-        已打卡
-      </t-tag>
-      <t-tag
-        v-else-if="recordData.transactionList?.length === 0 && recordData.typeList?.length === 0"
-        variant="light"
-        theme="danger"
-      >
-        缺卡
-      </t-tag>
-    </div>
+    <t-empty
+      description="暂无数据"
+      v-if="!recordData || Object.keys(recordData).length === 0"
+      class="info-empty"
+    >
+      <template #icon>
+        <SvgIcon name="inbox" size="40px" />
+      </template>
+    </t-empty>
 
-    <div class="info-type-list">
-      <t-tag
-        v-if="recordData.typeList?.length !== 0"
-        v-for="typeItem in recordData.typeList"
-        :key="typeItem"
-        variant="light"
-        theme="success"
-      >
-        {{ typeItem.type }}({{ typeItem.period }})
-      </t-tag>
-    </div>
-
-    <div class="info-item" v-for="item in recordData.transactionList" :key="item.time">
-      <div class="info-item-dot"></div>
-      <div class="info-item-name">上班打卡</div>
-      <div class="info-item-desc">
-        <div class="info-item-time">{{ formatTime(item.time) }}</div>
-        <div class="info-item-address">{{ item.address }}</div>
+    <template v-else>
+      <div class="info-header">
+        <div class="info-date">{{ formatDateCN(recordData.date) }}</div>
+        <div class="info-week">{{ RECORD_WEEK_MAP[recordData.week] }}</div>
+        <t-tag v-if="recordData.transactionList?.length !== 0" variant="light" theme="primary">
+          已打卡
+        </t-tag>
+        <t-tag
+          v-else-if="recordData.transactionList?.length === 0 && recordData.typeList?.length === 0"
+          variant="light"
+          theme="danger"
+        >
+          缺卡
+        </t-tag>
       </div>
-    </div>
+
+      <div class="info-type-list" v-if="recordData.typeList && recordData.typeList?.length !== 0">
+        <t-tag
+          v-for="typeItem in recordData.typeList"
+          :key="typeItem"
+          variant="light"
+          theme="success"
+        >
+          {{ typeItem.type }}({{ typeItem.period }})
+        </t-tag>
+      </div>
+
+      <div class="info-item" v-for="item in recordData.transactionList" :key="item.time">
+        <div class="info-item-dot"></div>
+        <div class="info-item-name">上班打卡</div>
+        <div class="info-item-desc">
+          <div class="info-item-time">{{ formatTime(item.time) }}</div>
+          <div class="info-item-address">{{ item.address }}</div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -66,6 +77,18 @@ defineProps<Props>()
   padding: 12px 16px;
   gap: 2px;
   border-radius: 16px;
+
+  :deep(.info-empty) {
+    padding: 4px 0;
+
+    .t-empty__icon {
+      font-size: 40px;
+    }
+
+    .t-empty__description {
+      margin-top: 8px;
+    }
+  }
 
   .info-header {
     display: flex;

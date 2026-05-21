@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 10:50
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 17:32
+ * @LastEditTime : 2026-05-18 17:30
  * @FilePath     : \attendance-frontend-mobile\src\layouts\MobileLayout.vue
  * @Description  : 移动端页面布局
 -->
@@ -42,9 +42,9 @@ import { onMounted, ref } from 'vue'
 import { RouterView, useRoute, useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 
-import SvgIcon from '@/components/SvgIcon.vue'
 import { useUserStore } from '@/stores/user-store'
 import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
+import SvgIcon from '@/components/SvgIcon.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -148,26 +148,26 @@ onMounted(() => {
 /* 定义进入和离开动画的过渡效果 */
 .mobile-content-animation-enter-active {
   transition:
-    opacity 0.4s ease-out,
-    transform 0.4s ease-out;
+    opacity 0.5s ease-out,
+    transform 0.5s ease-out;
 }
 
 .mobile-content-animation-leave-active {
   transition:
-    opacity 0.4s ease-in,
-    transform 0.4s ease-in;
+    opacity 0.5s ease-in,
+    transform 0.5s ease-in;
 }
 
 /* 新内容进入前的初始状态：从s上方 30px 处开始，透明度为 0（完全透明） */
 .mobile-content-animation-enter-from {
   opacity: 0;
-  transform: translateY(30px);
+  transform: translateY(-30px);
 }
 
 /* 旧内容离开后的最终状态：向下方移动 30px 后消失，透明度为 0 */
 .mobile-content-animation-leave-to {
   opacity: 0;
-  transform: translateY(-30px);
+  transform: translateY(30px);
 }
 
 /* 新内容进入后的最终状态：到达正常位置，透明度为 1 */
