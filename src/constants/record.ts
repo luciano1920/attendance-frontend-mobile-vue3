@@ -68,11 +68,36 @@ export const RECORD_TYPE_OPTIONS = Object.keys(RECORD_TYPE_MAP).map((key) => {
  * 色值不在此处定义，运行时从 RECORD_TYPE_COLOR_MAP 取第一个 recordType 的色值
  */
 export const ATTENDANCE_STATISTICS_CONFIG = [
-  { label: '已打卡', desc: '本月打卡', recordTypes: [1] },
-  { label: '补卡', desc: '补卡', recordTypes: [3] },
-  { label: '缺卡', desc: '缺卡', recordTypes: [2] },
-  { label: '其他', desc: '其他', recordTypes: [4, 5, 6] },
-  { label: '非工作日', desc: '非工作日', recordTypes: [7] },
+  {
+    label: '已打卡',
+    desc: '本月打卡',
+    recordTypes: [1],
+    content: '工作日当天已经成功打卡',
+  },
+  {
+    label: '补卡',
+    desc: '补卡',
+    recordTypes: [3],
+    content: '工作日当天未成功打卡，之后提交补卡申请通过',
+  },
+  {
+    label: '缺卡',
+    desc: '缺卡',
+    recordTypes: [2],
+    content: '工作日当天未成功打卡，且未提交补卡申请，或者补卡申请未通过',
+  },
+  {
+    label: '其他',
+    desc: '其他',
+    recordTypes: [4, 5, 6],
+    content: '请假 / 调休 / 外出 申请已通过并覆盖工作日全天的工作时间',
+  },
+  {
+    label: '非工作日',
+    desc: '非工作日',
+    recordTypes: [7],
+    content: '当天为非工作日',
+  },
 ]
 
 /**

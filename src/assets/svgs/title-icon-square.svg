@@ -1,0 +1,16 @@
+<svg viewBox="0 0 20.5 16.5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20.500000" height="16.500000" fill="none">
+	<defs>
+		<linearGradient id="paint_linear_3" x1="-4.63508463" x2="4.69471121" y1="3.11939979" y2="12.4492531" gradientUnits="userSpaceOnUse">
+			<stop stop-color="rgb(142,171,255)" offset="0" stop-opacity="1" />
+			<stop stop-color="rgb(0,88,229)" offset="1" stop-opacity="1" />
+		</linearGradient>
+		<linearGradient id="paint_linear_4" x1="5.88928843" x2="-4.73147058" y1="6.42633677" y2="17.0471344" gradientUnits="userSpaceOnUse">
+			<stop stop-color="rgb(181,222,255)" offset="0" stop-opacity="1" />
+			<stop stop-color="rgb(0,134,255)" offset="0.53342098" stop-opacity="1" />
+			<stop stop-color="rgb(0,116,199)" offset="1" stop-opacity="1" />
+		</linearGradient>
+	</defs>
+	<rect id="svg 1" width="20.500000" height="16.500000" x="0.000000" y="0.000000" />
+	<rect id="矩形 68" width="10.966715" height="10.966715" x="0.000000" y="0.000000" rx="1.000000" fill="url(#paint_linear_3)" transform="matrix(0.704954,-0.709253,0.704954,0.709253,0,7.77802)" />
+	<rect id="矩形 69" width="9.231524" height="9.231523" x="0.000000" y="0.000000" rx="0.500000" opacity="0.5" stroke="url(#paint_linear_4)" stroke-width="1.000000" transform="matrix(0.704954,-0.709253,0.704954,0.709253,5.8584,7.77802)" />
+</svg>

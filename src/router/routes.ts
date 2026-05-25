@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-20 15:42
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-08 08:53
+ * @LastEditTime : 2026-05-25 09:14
  * @FilePath     : \attendance-frontend-mobile\src\router\routes.ts
  * @Description  : 所有路由配置
  */
@@ -127,6 +127,15 @@ export const routes: Array<RouteRecordRaw> = [
   },
 
   // 不需要全局布局的页面
+  {
+    path: '/rules',
+    name: '考勤规则页',
+    component: () => import('@/pages/home/AttendanceRulesPage.vue'),
+    meta: {
+      title: '考勤规则',
+      access: ACCESS_ENUM.USER,
+    },
+  },
   {
     path: '/apply/leave',
     name: '请假申请页',

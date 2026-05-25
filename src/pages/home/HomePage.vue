@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-03-30 23:21
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-21 16:34
+ * @LastEditTime : 2026-05-25 16:05
  * @FilePath     : \attendance-frontend-mobile\src\pages\home\HomePage.vue
  * @Description  : 系统首页
 -->
@@ -21,9 +21,9 @@
         </div>
       </div>
 
-      <t-button size="small" variant="outline" class="system-rule">
+      <t-button size="small" variant="outline" class="system-rule" @click="router.push('/rules')">
         <SvgIcon name="file-text" />
-        考勤规则
+        帮助手册
       </t-button>
     </div>
 
@@ -48,6 +48,7 @@
 <script setup lang="ts">
 import { Message } from 'tdesign-mobile-vue'
 import { nextTick, onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
 
 import { fetchRecordByDayUsingPost, fetchRecordByMonthUsingPost } from '@/api/record-controller'
 import { useUserStore } from '@/stores/user-store'
@@ -64,6 +65,7 @@ import AttendanceCalendar from './components/AttendanceCalendar.vue'
 import AttendanceInfo from './components/AttendanceInfo.vue'
 import AttendanceStatistics, { type StatisticsItem } from './components/AttendanceStatistics.vue'
 
+const router = useRouter()
 const userStore = useUserStore()
 const loginUserInfo = userStore.loginUser.userInfo
 
@@ -138,7 +140,6 @@ const getAttendanceRecordDataByMonth = async (date: Date) => {
  */
 const getAttendanceRecordDataByDay = async (date: Date) => {
   recordDayData.value = {}
-  recordMonthData.value = []
 
   if (!date || isFutureDate(date)) {
     return

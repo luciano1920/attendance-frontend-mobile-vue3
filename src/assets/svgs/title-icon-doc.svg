@@ -1,0 +1,45 @@
+<svg viewBox="0 0 22 24" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="22.000000" height="24.000000" fill="none">
+	<defs>
+		<g id="pixso_custom_effect_0">
+			<effect x="-1.000000" y="1.000000" visibility="visible" fill="rgb(142,171,255)" fill-opacity="0.600000024" effectType="dropShadow" stdDeviation="3" radius="0" />
+		</g>
+		<filter id="filter_0" width="22.666992" height="26.000198" x="-1.000000" y="-1.000000" filterUnits="userSpaceOnUse" customEffect="url(#pixso_custom_effect_0)" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix" />
+			<feColorMatrix result="hardAlpha" in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0 " />
+			<feOffset dx="-1.000000" dy="1.000000" in="hardAlpha" />
+			<feGaussianBlur stdDeviation="1" />
+			<feComposite k2="-1" k3="1" in2="hardAlpha" operator="out" />
+			<feColorMatrix type="matrix" values="0 0 0 0 0.556863 0 0 0 0 0.670588 0 0 0 0 1 0 0 0 0.6 0 " />
+			<feBlend result="effect_dropShadow_1" in2="BackgroundImageFix" mode="normal" />
+			<feBlend result="shape" in="SourceGraphic" in2="effect_dropShadow_1" mode="normal" />
+		</filter>
+		<linearGradient id="paint_linear_2" x1="6.5396862" x2="20.6053982" y1="0.868332386" y2="14.4433002" gradientUnits="userSpaceOnUse">
+			<stop stop-color="rgb(132,162,255)" offset="0" stop-opacity="1" />
+			<stop stop-color="rgb(0,82,217)" offset="1" stop-opacity="1" />
+		</linearGradient>
+		<g id="pixso_custom_effect_1">
+			<effect x="-0.500000" y="0.500000" visibility="visible" fill="rgb(255,255,255)" fill-opacity="0.800000012" effectType="innerShadow" stdDeviation="1.5" radius="0" />
+		</g>
+		<filter id="filter_1" width="12.500000" height="16.666702" x="3.000000" y="4.333496" filterUnits="userSpaceOnUse" customEffect="url(#pixso_custom_effect_1)" color-interpolation-filters="sRGB">
+			<feFlood flood-opacity="0" result="BackgroundImageFix" />
+			<feBlend result="shape" in="SourceGraphic" in2="BackgroundImageFix" mode="normal" />
+			<feColorMatrix result="hardAlpha" in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0 " />
+			<feOffset dx="-0.500000" dy="0.500000" in="hardAlpha" />
+			<feGaussianBlur stdDeviation="0.5" />
+			<feComposite k2="-1" k3="1" in2="hardAlpha" operator="arithmetic" />
+			<feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.8 0 " />
+			<feBlend result="effect_innerShadow_1" in2="shape" mode="normal" />
+		</filter>
+	</defs>
+	<rect id="svg 15" width="22.000000" height="24.000000" x="0.000000" y="0.000000" />
+	<g id="组合 1" filter="url(#filter_0)">
+		<path id="矢量 155" d="M6.3335 2.66667C6.3335 1.74619 7.07969 1 8.00016 1L18.0002 1C18.9206 1 19.6668 1.74619 19.6668 2.66667L19.6668 16.8333C19.6668 17.7538 18.9206 18.5 18.0002 18.5L8.00016 18.5C7.07969 18.5 6.3335 17.7538 6.3335 16.8333L6.3335 2.66667Z" fill="url(#paint_linear_2)" fill-rule="nonzero" />
+		<g id="组合 2" filter="url(#filter_1)">
+			<path id="矢量 156" d="M3 6.00016C3 5.07969 3.74619 4.3335 4.66667 4.3335L13.8333 4.3335C14.7538 4.3335 15.5 5.07969 15.5 6.00016L15.5 19.3335C15.5 20.254 14.7538 21.0002 13.8333 21.0002L4.66667 21.0002C3.74619 21.0002 3 20.254 3 19.3335L3 6.00016Z" fill="rgb(255,255,255)" fill-opacity="0.400000006" fill-rule="nonzero" />
+		</g>
+		<rect id="矩形 70" width="5.833330" height="0.833333" x="4.893555" y="7.489258" rx="0.416667" fill="rgb(255,255,255)" />
+		<rect id="矩形 71" width="7.083330" height="0.833333" x="4.893555" y="9.869629" rx="0.416667" fill="rgb(255,255,255)" />
+		<rect id="矩形 72" width="7.083330" height="0.833333" x="4.893555" y="14.630402" rx="0.416667" fill="rgb(255,255,255)" />
+		<rect id="矩形 73" width="8.333330" height="0.833333" x="4.893555" y="12.250000" rx="0.416667" fill="rgb(255,255,255)" />
+	</g>
+</svg>
