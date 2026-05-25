@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-21 17:20
+ * @LastEditTime : 2026-05-25 15:56
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -141,6 +141,9 @@
         </t-list>
       </t-pull-down-refresh>
     </div>
+
+    <!-- 列表一键返回顶部 -->
+    <BackListTop text="顶部" />
   </div>
 </template>
 
@@ -159,6 +162,7 @@ import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
 import { APPROVE_STATUS_ENUM } from '@/constants/record'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Segmented from '@/components/Segmented.vue'
+import BackListTop from '@/components/BackListTop.vue'
 import RecordListCard from './components/RecordListCard.vue'
 
 const userStore = useUserStore()
@@ -178,7 +182,7 @@ const segmentOptions = [
 
 // ==================== 列表数据 ====================
 const listLoading = ref<ListProps['asyncLoading']>('') // 列表组件加载状态，用于控制 List 组件
-const recordLoading = ref<boolean>(true) // 记录加载状态，用于控制 Loading 组件
+const recordLoading = ref<boolean>(false) // 记录加载状态，用于控制 Loading 组件
 
 // 查询参数
 const searchParams = reactive({
@@ -314,6 +318,10 @@ let abortController: AbortController | null = null
 const getApplyRecordDataList = async () => {
   // 如果不是第一页，且当前已加载的数据量已经达到或超过总量，则不再加载
   if (searchParams.pageNo > 1 && applyRecordDataList.value.length >= recordTotal.value) {
+    return
+  }
+
+  if (recordLoading.value) {
     return
   }
 

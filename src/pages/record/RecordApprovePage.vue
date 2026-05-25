@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 15:10
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-18 16:24
+ * @LastEditTime : 2026-05-25 09:01
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordApprovePage.vue
  * @Description  : 记录审批页
 -->
@@ -146,6 +146,9 @@
 
       <!-- 审批详情 -->
       <Descriptions title="审批意见">
+        <DescriptionsItem label="审批人">
+          {{ recordApproveData?.deptCheckerNickname }}
+        </DescriptionsItem>
         <t-textarea
           v-model="formData.checkMessage"
           placeholder="请输入审批意见"
@@ -199,6 +202,7 @@ import { formatDate, formatDateRange, formatDateYMD } from '@/utils/date'
 import SvgIcon from '@/components/SvgIcon.vue'
 import Descriptions from '@/components/Descriptions.vue'
 import type { DescriptionsItemColumn } from '@/components/Descriptions.vue'
+import DescriptionsItem from '@/components/DescriptionsItem.vue'
 
 const router = useRouter()
 
