@@ -2,7 +2,7 @@
  * @Author       : luciano1920 1290582790@qq.com
  * @Date         : 2026-04-30 14:35
  * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-25 15:56
+ * @LastEditTime : 2026-05-26 09:51
  * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -36,9 +36,7 @@
             取消
           </t-button>
 
-          <!-- 全选 -->
           <t-checkbox
-            v-if="canBatchMode"
             :checked="isAllSelected"
             label="全选"
             borderless
@@ -79,10 +77,10 @@
         layout="vertical"
         theme="dots"
         size="32px"
-        :loading="recordLoading"
+        :loading="initLoading"
       />
 
-      <t-pull-down-refresh v-if="!recordLoading" @refresh="handleRefresh">
+      <t-pull-down-refresh v-if="!initLoading" @refresh="handleRefresh">
         <t-empty description="暂无数据">
           <template #icon>
             <SvgIcon name="funnel" size="48px" />
@@ -93,51 +91,49 @@
 
     <div v-else class="record-list" :style="{ paddingTop: isBatchMode ? '158px' : '108px' }">
       <t-pull-down-refresh @refresh="handleRefresh">
-        <t-list :async-loading="listLoading" :on-scroll="handleScroll">
-          <!-- 批量模式 -->
-          <t-checkbox-group
-            v-if="isBatchMode && canBatchMode"
-            v-model:value="batchRecordIds"
-            borderless
-          >
+        <t-list :async-loading="scrollStatus" :on-scroll="handleScroll">
+          <t-checkbox-group v-model:value="batchRecordIds" borderless>
             <div
               v-for="recordItem in applyRecordDataList"
               :key="recordItem.id"
-              class="batch-card"
-              :class="{ 'batch-card--active': batchRecordIds.includes(recordItem.id) }"
+              class="list-card-wrapper"
             >
-              <!-- 选中角标 -->
-              <SvgIcon
-                v-if="batchRecordIds.includes(recordItem.id)"
-                class="batch-card-check-icon"
-                name="check"
-                color="#ffffff"
-              />
+              <!-- 批量模式下 -->
+              <template v-if="isBatchMode">
+                <div
+                  class="batch-card"
+                  :class="{ 'batch-card--active': batchRecordIds.includes(recordItem.id) }"
+                >
+                  <SvgIcon
+                    v-if="batchRecordIds.includes(recordItem.id)"
+                    class="batch-card-check-icon"
+                    name="check"
+                    color="#ffffff"
+                  />
+                  <t-checkbox
+                    :value="recordItem.id"
+                    icon="none"
+                    style="position: absolute; opacity: 0"
+                  />
+                  <div class="batch-card-content">
+                    <RecordListCard
+                      :record="recordItem"
+                      :is-approve-view="searchParams.checkManage"
+                    />
+                  </div>
+                </div>
+              </template>
 
-              <!-- 隐藏的 checkbox ，宽高设为父容器的 100% ，label 和 content 都默认为空-->
-              <t-checkbox
-                :value="recordItem.id"
-                icon="none"
-                style="position: absolute; opacity: 0"
-              />
-
-              <!-- 卡片内容 -->
-              <div class="batch-card-content">
-                <RecordListCard :record="recordItem" :is-approve-view="searchParams.checkManage" />
-              </div>
+              <!-- 普通模式下 -->
+              <template v-else>
+                <RecordListCard
+                  :record="recordItem"
+                  :is-approve-view="searchParams.checkManage"
+                  @long-press="enterBatchMode(recordItem.id)"
+                />
+              </template>
             </div>
           </t-checkbox-group>
-
-          <!-- 非批量模式：普通卡片列表 -->
-          <template v-else>
-            <RecordListCard
-              v-for="recordItem in applyRecordDataList"
-              :key="recordItem.id"
-              :record="recordItem"
-              :is-approve-view="searchParams.checkManage"
-              @long-press="enterBatchMode(recordItem.id)"
-            />
-          </template>
         </t-list>
       </t-pull-down-refresh>
     </div>
@@ -148,7 +144,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { Message, type ListProps, type TabValue } from 'tdesign-mobile-vue'
 
@@ -160,6 +156,7 @@ import {
 } from '@/api/approve-controller'
 import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
 import { APPROVE_STATUS_ENUM } from '@/constants/record'
+
 import SvgIcon from '@/components/SvgIcon.vue'
 import Segmented from '@/components/Segmented.vue'
 import BackListTop from '@/components/BackListTop.vue'
@@ -181,8 +178,16 @@ const segmentOptions = [
 ]
 
 // ==================== 列表数据 ====================
-const listLoading = ref<ListProps['asyncLoading']>('') // 列表组件加载状态，用于控制 List 组件
-const recordLoading = ref<boolean>(false) // 记录加载状态，用于控制 Loading 组件
+const isFetching = ref(false) // 请求锁：防止并发请求
+const isFinished = ref(false) // 截断锁：数据到底 or 接口报错，停止滚动加载
+
+const initLoading = computed(() => isFetching.value && searchParams.pageNo === 1)
+const scrollStatus = computed<ListProps['asyncLoading']>(() => {
+  if (isFetching.value && searchParams.pageNo > 1) {
+    return 'loading'
+  }
+  return ''
+})
 
 // 查询参数
 const searchParams = reactive({
@@ -193,17 +198,117 @@ const searchParams = reactive({
 })
 
 const recordTotal = ref<number>(0)
-// 申请记录数据列表
-const applyRecordDataList = ref<any[]>([])
+const applyRecordDataList = ref<any[]>([]) // 申请记录数据列表
+
+// ==================== 列表数据获取 ====================
+/*
+  用于取消进行中网络请求的控制器，在发起新请求前，主动取消上一次未完成的请求
+  当用户快速切换筛选条件时，会连续触发多次请求。由于网络返回顺序不确定，如果前一次请求比后一次请求晚返回，会发生旧数据覆盖新数据的竞态错误。
+ */
+let abortController: AbortController | null = null
+
+/** 获取申请记录数据列表 */
+const getApplyRecordDataList = async () => {
+  // 如果存在未完成的上一次请求，直接取消它
+  if (abortController) {
+    abortController.abort()
+  }
+  const currentController = new AbortController() // 每次发起新请求，都创建一个新的 AbortController 实例
+  abortController = currentController
+
+  // 发请求开始就加上请求锁
+  isFetching.value = true
+
+  try {
+    const res = await fetchApprovalRecordByPageUsingPost(
+      { ...searchParams },
+      { signal: currentController.signal },
+    )
+
+    if (res.data.code === 0 && res.data.data) {
+      const newList = res.data.data.list ?? []
+      if (searchParams.pageNo === 1) {
+        applyRecordDataList.value = newList // 如果是第一页，直接替换；否则追加数据
+      } else {
+        applyRecordDataList.value = [...applyRecordDataList.value, ...newList]
+      }
+      recordTotal.value = res.data.data.total ?? 0
+
+      // 如果当前数据量 >= 分页总量，上截断锁
+      if (applyRecordDataList.value.length >= recordTotal.value) {
+        isFinished.value = true
+      }
+    } else {
+      Message.error({ content: '获取记录失败，' + res.data.msg, offset: [10, 16] })
+      // 如果获取数据失败，也要上截断锁
+      isFinished.value = true
+    }
+  } catch (error: any) {
+    if (error.name === 'CanceledError' || error.name === 'AbortError') {
+      return
+    }
+
+    Message.error({ content: '网络异常，请稍后重试', offset: [10, 16] })
+    console.log(error)
+
+    // 如果获取数据失败，也要上截断锁
+    isFinished.value = true
+  } finally {
+    if (!currentController?.signal.aborted) {
+      isFetching.value = false // 无论成功失败，只解请求锁
+    }
+    abortController = null // 断开引用，防止闭包导致内存泄漏
+  }
+}
+
+/**
+ * 处理列表滑动事件
+ * @param scrollBottom 滚动条距离底部的距离
+ */
+const handleScroll = (scrollBottom: number) => {
+  // 只有触底，且没在加载，且没被截断，才允许请求下一页
+  if (scrollBottom < 1 && !isFetching.value && !isFinished.value) {
+    searchParams.pageNo += 1
+    getApplyRecordDataList()
+  }
+}
+
+/** 处理列表下拉刷新 */
+const handleRefresh = () => {
+  // 只要重新加载数据，无条件退出批量模式
+  if (isBatchMode.value) {
+    exitBatchMode()
+  }
+
+  searchParams.pageNo = 1
+  applyRecordDataList.value = []
+  recordTotal.value = 0
+  // 下拉刷新时，打开截断锁
+  isFinished.value = false
+  getApplyRecordDataList()
+}
+
+/**
+ * Tab 切换事件处理函数
+ * @param value 选中的 Tab
+ */
+const handleTabChange = (value: TabValue) => {
+  if (value === 'pending') {
+    searchParams.orderState = [APPROVE_STATUS_ENUM.PENDING]
+  } else {
+    searchParams.orderState = [APPROVE_STATUS_ENUM.APPROVED, APPROVE_STATUS_ENUM.REJECTED]
+  }
+  handleRefresh()
+}
+
+/** Segmented 切换事件处理函数 */
+const handleSegmentChange = () => {
+  handleRefresh()
+}
 
 // ========== 批量操作 ==========
 const isBatchMode = ref<boolean>(false) // 是否处于批量操作模式
 const batchRecordIds = ref<Array<number>>([]) // 批量操作的记录 id 列表
-
-// 计算属性：判断当前是否可以批量操作
-const canBatchMode = computed(() => {
-  return approvalStatus.value === 'pending' && searchParams.checkManage === true
-})
 
 // 是否全选
 const isAllSelected = computed(() => {
@@ -218,7 +323,7 @@ const isAllSelected = computed(() => {
  * @param id 当前记录 id
  */
 const enterBatchMode = (id: number) => {
-  if (!canBatchMode.value) {
+  if (!(approvalStatus.value === 'pending' && searchParams.checkManage)) {
     return
   }
   isBatchMode.value = true
@@ -243,13 +348,6 @@ const handleCheckAllChange = (checked: boolean) => {
   }
 }
 
-// 监听 Tab 和 Segmented 切换，自动退出批量模式
-watch(approvalStatus, () => isBatchMode.value && exitBatchMode())
-watch(
-  () => searchParams.checkManage,
-  () => isBatchMode.value && exitBatchMode(),
-)
-
 /**
  * 处理批量审批
  * @param state 审批状态
@@ -264,135 +362,13 @@ const handleBatchApprove = async (state: number) => {
     orderState: state,
   })
   if (res.data.code === 0) {
-    Message.success({
-      content: '批量处理成功',
-      offset: [10, 16],
-    })
+    Message.success({ content: '批量处理成功', offset: [10, 16] })
     exitBatchMode()
     // 刷新列表
-    searchParams.pageNo = 1
-    applyRecordDataList.value = []
-    recordTotal.value = 0
-    getApplyRecordDataList()
+    handleRefresh()
   } else {
-    Message.error({
-      content: '批量处理失败，' + res.data.msg,
-      offset: [10, 16],
-    })
+    Message.error({ content: '批量处理失败，' + res.data.msg, offset: [10, 16] })
   }
-}
-
-// ==================== 列表数据获取 ====================
-
-/**
- * Tab 切换事件处理函数
- * @param value 选中的 Tab
- */
-const handleTabChange = (value: TabValue) => {
-  if (value === 'pending') {
-    searchParams.orderState = [APPROVE_STATUS_ENUM.PENDING]
-  } else {
-    searchParams.orderState = [APPROVE_STATUS_ENUM.APPROVED, APPROVE_STATUS_ENUM.REJECTED]
-  }
-  searchParams.pageNo = 1
-  applyRecordDataList.value = []
-  recordTotal.value = 0
-  getApplyRecordDataList()
-}
-
-/** Segmented 切换事件处理函数 */
-const handleSegmentChange = () => {
-  searchParams.pageNo = 1
-  applyRecordDataList.value = []
-  recordTotal.value = 0
-  getApplyRecordDataList()
-}
-
-/*
-  用于取消进行中网络请求的控制器，在发起新请求前，主动取消上一次未完成的请求
-  当用户快速切换筛选条件时，会连续触发多次请求。由于网络返回顺序不确定，如果前一次请求比后一次请求晚返回，会发生旧数据覆盖新数据的竞态错误。
- */
-let abortController: AbortController | null = null
-
-/** 获取申请记录数据列表 */
-const getApplyRecordDataList = async () => {
-  // 如果不是第一页，且当前已加载的数据量已经达到或超过总量，则不再加载
-  if (searchParams.pageNo > 1 && applyRecordDataList.value.length >= recordTotal.value) {
-    return
-  }
-
-  if (recordLoading.value) {
-    return
-  }
-
-  // 如果存在未完成的上一次请求，直接取消它
-  if (abortController) {
-    abortController.abort()
-  }
-
-  // 每次发起新请求，都创建一个新的 AbortController 实例
-  abortController = new AbortController()
-
-  listLoading.value = 'loading'
-  recordLoading.value = true
-
-  try {
-    const res = await fetchApprovalRecordByPageUsingPost(
-      { ...searchParams },
-      { signal: abortController.signal },
-    )
-    if (res.data.code === 0 && res.data.data) {
-      const newList = res.data.data.list ?? []
-      // 如果是第一页，直接替换；否则追加数据
-      if (searchParams.pageNo === 1) {
-        applyRecordDataList.value = newList
-      } else {
-        applyRecordDataList.value = [...applyRecordDataList.value, ...newList]
-      }
-      recordTotal.value = res.data.data.total ?? 0
-    } else {
-      Message.error({
-        content: '获取记录失败，' + res.data.msg,
-        offset: [10, 16],
-      })
-    }
-  } catch (error: any) {
-    if (error.name === 'CanceledError' || error.name === 'AbortError') {
-      return
-    }
-
-    console.log(error)
-    Message.error({
-      content: '网络异常，请稍后重试',
-      offset: [10, 16],
-    })
-  } finally {
-    if (!abortController?.signal.aborted) {
-      recordLoading.value = false
-      listLoading.value = ''
-    }
-    // 断开引用，防止闭包导致内存泄漏
-    abortController = null
-  }
-}
-
-/**
- * 处理列表滑动事件
- * @param scrollBottom 滚动条距离底部的距离
- */
-const handleScroll = (scrollBottom: number) => {
-  if (scrollBottom < 1 && applyRecordDataList.value.length < recordTotal.value) {
-    searchParams.pageNo += 1
-    getApplyRecordDataList()
-  }
-}
-
-/** 处理列表下拉刷新 */
-const handleRefresh = () => {
-  searchParams.pageNo = 1
-  applyRecordDataList.value = []
-  recordTotal.value = 0
-  getApplyRecordDataList()
 }
 
 // ==================== 路由缓存 ====================
@@ -436,7 +412,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 #record-page {
-  // 该页面禁止选中文本
+  /* 该页面禁止选中文本 */
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
@@ -514,61 +490,58 @@ onMounted(() => {
   padding-bottom: 96px;
   transition: padding-top 0.3s ease;
 
-  .t-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-}
-
-.batch-card {
-  position: relative;
-  margin-bottom: 10px;
-  border-radius: 14px;
-  overflow: hidden;
-  box-sizing: border-box;
-  border: 1.5px solid transparent;
-  background: #fff;
-  transition: all 0.3s ease;
-
-  &:active {
-    transform: scale(0.98);
+  .list-card-wrapper {
+    margin-bottom: 10px;
   }
 
-  .t-checkbox {
+  .batch-card {
+    position: relative;
+    border-radius: 14px;
+    overflow: hidden;
     box-sizing: border-box;
-    width: 100%;
-    height: 100%;
+    border: 1.5px solid transparent;
+    background: #fff;
+    transition: all 0.3s ease;
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    .t-checkbox {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+    }
+
+    .batch-card-check-icon {
+      position: absolute;
+      left: 1.5px;
+      top: 1.5px;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .batch-card-content {
+      pointer-events: none; /* 防止点卡片内部文案时触发两次（一次 card、一次 内部按钮） */
+    }
   }
 
-  .batch-card-check-icon {
-    position: absolute;
-    left: 1.5px;
-    top: 1.5px;
-    z-index: 1;
-    pointer-events: none;
-  }
+  .batch-card--active {
+    border-color: #0052d9;
 
-  .batch-card-content {
-    pointer-events: none; // 防止点卡片内部文案时触发两次（一次 card、一次 内部按钮）
-  }
-}
-
-.batch-card--active {
-  border-color: #0052d9;
-
-  // 选中角标（左上角三角形 + 对号）
-  &::after {
-    content: '';
-    display: block;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0;
-    border: 14px solid #0052d9;
-    border-bottom-color: transparent;
-    border-right-color: transparent;
-    pointer-events: none;
+    /* 选中角标（左上角三角形 + 对号） */
+    &::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 0;
+      border: 14px solid #0052d9;
+      border-bottom-color: transparent;
+      border-right-color: transparent;
+      pointer-events: none;
+    }
   }
 }
 </style>
