@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-03-29 11:07
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-21 17:01
- * @FilePath     : \attendance-frontend-mobile\src\pages\user\UserCenterPage.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/user/UserCenterPage.vue
  * @Description  : 用户中心（我的）页面
 -->
 <template>

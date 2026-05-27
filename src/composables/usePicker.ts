@@ -1,9 +1,9 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-24 11:07
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 16:55
- * @FilePath     : \attendance-frontend-mobile\src\composables\usePicker.ts
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/composables/usePicker.ts
  * @Description  : 选择器组合式函数
  */
 import { reactive } from 'vue'

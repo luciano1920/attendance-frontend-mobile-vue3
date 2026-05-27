@@ -1,38 +1,38 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-20 16:37
+ * @Date         : 2026-03
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-27 10:28
- * @FilePath     : \attendance-frontend-mobile\src\utils\auth.ts
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/utils/auth.ts
  * @Description  : 认证相关工具函数
  */
 
-export const TOKEN_KEY = 'attendance-mobile__token' // Token 存储 Key
+export const ACCESS_TOKEN_KEY = 'attendance-mobile__access-token' // Token 存储 Key
 export const REFRESH_TOKEN_KEY = 'attendance-mobile__refresh-token' // RefreshToken 存储 Key
 export const EXPIRES_TIME_KEY = 'attendance-mobile__expires-time' // ExpiresTime 存储 Key
 
 /**
- * 获取 Token
+ * 获取 AccessToken
  */
-export function getTokenUtil(): string | null {
-  return localStorage.getItem(TOKEN_KEY)
+export function getAccessTokenUtil(): string | null {
+  return localStorage.getItem(ACCESS_TOKEN_KEY)
 }
 
 /**
- * 设置 Token
- * @param token Token 字符串
+ * 设置 AccessToken
+ * @param token AccessToken 字符串
  */
-export function setTokenUtil(token: string | null): void {
+export function setAccessTokenUtil(token: string | null): void {
   if (token) {
-    localStorage.setItem(TOKEN_KEY, token)
+    localStorage.setItem(ACCESS_TOKEN_KEY, token)
   }
 }
 
 /**
- * 移除 Token
+ * 移除 AccessToken
  */
-export function removeTokenUtil(): void {
-  localStorage.removeItem(TOKEN_KEY)
+export function removeAccessTokenUtil(): void {
+  localStorage.removeItem(ACCESS_TOKEN_KEY)
 }
 
 /**
@@ -87,7 +87,7 @@ export function removeExpiresTimeUtil(): void {
  * 清除所有认证信息（Token + RefreshToken + ExpiresTime）
  */
 export function clearAuthInfoUtil(): void {
-  removeTokenUtil()
+  removeAccessTokenUtil()
   removeRefreshTokenUtil()
   removeExpiresTimeUtil()
 }

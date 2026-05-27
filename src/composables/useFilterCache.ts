@@ -1,10 +1,10 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-05-07 16:31
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 16:49
- * @FilePath     : \attendance-frontend-mobile\src\composables\useFilterCache.ts
- * @Description  : 页面筛选状态缓存组合式函数
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/composables/useFilterCache.ts
+ * @Description  : 页面筛选状态缓存钩子函数
  */
 import { onBeforeRouteLeave, type RouteLocationNormalized } from 'vue-router'
 

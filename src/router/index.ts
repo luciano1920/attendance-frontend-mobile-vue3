@@ -1,11 +1,3 @@
-/**
- * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-19 17:07
- * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-20 15:42
- * @FilePath     : \attendance-frontend-mobile\src\router\index.ts
- * @Description  :
- */
 import { createRouter, createWebHistory, type RouteLocationNormalized } from 'vue-router'
 import { routes } from './routes'
 

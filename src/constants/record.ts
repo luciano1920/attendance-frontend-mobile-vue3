@@ -1,12 +1,11 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-23 10:10
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-08 09:08
- * @FilePath     : \attendance-frontend-mobile\src\constants\record.ts
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/constants/record.ts
  * @Description  : 考勤记录相关常量类
  */
-
 import type { ThemeType } from '@/components/IconContainer.vue'
 
 /** 考勤记录类型枚举 */

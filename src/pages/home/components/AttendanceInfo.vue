@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-23 11:03
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-21 16:32
- * @FilePath     : \attendance-frontend-mobile\src\pages\home\components\AttendanceInfo.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/home/components/AttendanceInfo.vue
  * @Description  : 当日考勤打卡记录详情展示组件
 -->
 <template>

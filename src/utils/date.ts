@@ -1,9 +1,9 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-23 09:08
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-02 16:06
- * @FilePath     : \attendance-frontend-mobile\src\utils\date.ts
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/utils/date.ts
  * @Description  : 日期格式化工具函数
  */
 import dayjs from 'dayjs'

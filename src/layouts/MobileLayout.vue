@@ -1,9 +1,9 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-20 10:50
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-18 17:30
- * @FilePath     : \attendance-frontend-mobile\src\layouts\MobileLayout.vue
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/layouts/MobileLayout.vue
  * @Description  : 移动端页面布局
 -->
 <template>

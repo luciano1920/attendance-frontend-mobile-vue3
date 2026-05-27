@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-30 14:35
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-26 09:51
- * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordPage.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/record/RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
 <template>

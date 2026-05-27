@@ -1,12 +1,11 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-03-20 15:42
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-25 09:14
- * @FilePath     : \attendance-frontend-mobile\src\router\routes.ts
- * @Description  : 所有路由配置
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/router/routes.ts
+ * @Description  : 路由配置
  */
-
 import { type RouteRecordRaw } from 'vue-router'
 import MobileLayout from '@/layouts/MobileLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
@@ -49,14 +48,14 @@ export const routes: Array<RouteRecordRaw> = [
         },
       },
       // 用户注册
-      {
-        path: 'register',
-        name: '用户注册页',
-        component: () => import('@/pages/auth/UserRegisterPage.vue'),
-        meta: {
-          title: '用户注册',
-        },
-      },
+      // {
+      //   path: 'register',
+      //   name: '用户注册页',
+      //   component: () => import('@/pages/auth/UserRegisterPage.vue'),
+      //   meta: {
+      //     title: '用户注册',
+      //   },
+      // },
       // 用户忘记密码重置页
       {
         path: 'forgot',
@@ -212,22 +211,22 @@ export const routes: Array<RouteRecordRaw> = [
       access: ACCESS_ENUM.USER,
     },
   },
-  {
-    path: '/about',
-    name: '关于系统页',
-    component: () => import('@/pages/user/AboutSystemPage.vue'),
-    meta: {
-      title: '关于系统',
-      access: ACCESS_ENUM.USER,
-    },
-  },
-  {
-    path: '/help',
-    name: '帮助中心页',
-    component: () => import('@/pages/user/HelpCenterPage.vue'),
-    meta: {
-      title: '帮助中心',
-      access: ACCESS_ENUM.USER,
-    },
-  },
+  // {
+  //   path: '/about',
+  //   name: '关于系统页',
+  //   component: () => import('@/pages/user/AboutSystemPage.vue'),
+  //   meta: {
+  //     title: '关于系统',
+  //     access: ACCESS_ENUM.USER,
+  //   },
+  // },
+  // {
+  //   path: '/help',
+  //   name: '帮助中心页',
+  //   component: () => import('@/pages/user/HelpCenterPage.vue'),
+  //   meta: {
+  //     title: '帮助中心',
+  //     access: ACCESS_ENUM.USER,
+  //   },
+  // },
 ]

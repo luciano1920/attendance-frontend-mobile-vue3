@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-23 10:58
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-15 09:19
- * @FilePath     : \attendance-frontend-mobile\src\pages\home\components\AttendanceCalendar.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/home/components/AttendanceCalendar.vue
  * @Description  : 考勤日历组件（含图例）
 -->
 <template>

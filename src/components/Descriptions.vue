@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-05-02 14:08
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-22 16:49
- * @FilePath     : \attendance-frontend-mobile\src\components\Descriptions.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/components/Descriptions.vue
  * @Description  : 详情描述容器组件（支持插槽式和配置式调用）
 -->
 <template>

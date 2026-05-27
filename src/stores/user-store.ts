@@ -1,9 +1,9 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-20 16:39
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 15:03
- * @FilePath     : \attendance-frontend-mobile\src\stores\user-store.ts
+ * @Date         : 2026-03
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/stores/user-store.ts
  * @Description  : 用户信息全局状态
  */
 import { ref } from 'vue'
@@ -14,11 +14,12 @@ import {
   clearAuthInfoUtil,
   getExpiresTimeUtil,
   getRefreshTokenUtil,
-  getTokenUtil,
+  getAccessTokenUtil,
   setExpiresTimeUtil,
   setRefreshTokenUtil,
-  setTokenUtil,
+  setAccessTokenUtil,
 } from '@/utils/auth'
+import { Message } from 'tdesign-mobile-vue'
 
 //------ 默认用户信息结构 ------
 interface UserInfoVO {
@@ -73,7 +74,7 @@ interface TokenInfo {
 export const useUserStore = defineStore('user', () => {
   // ---------- state ----------
   const loginUser = ref<LoginUserVO>({
-    accessToken: getTokenUtil(),
+    accessToken: getAccessTokenUtil(),
     refreshToken: getRefreshTokenUtil(),
     expiresTime: getExpiresTimeUtil(),
     userInfo: {} as UserInfoVO,
@@ -109,9 +110,14 @@ export const useUserStore = defineStore('user', () => {
         const res = await fetchUserInfoUsingGet()
         if (res.data.code === 0 && res.data.data) {
           loginUser.value.userInfo = res.data.data
+        } else {
+          Message.error({
+            content: '获取用户信息失败，' + res.data.msg,
+            offset: [10, 16],
+          })
         }
-      } catch {
-        // ignore
+      } catch (error) {
+        console.error(error)
       } finally {
         loadingPromise = null
       }
@@ -133,7 +139,7 @@ export const useUserStore = defineStore('user', () => {
       loginUser.value.accessToken = newLoginUser.accessToken
       loginUser.value.refreshToken = newLoginUser.refreshToken
       loginUser.value.expiresTime = newLoginUser.expiresTime
-      setTokenUtil(newLoginUser.accessToken)
+      setAccessTokenUtil(newLoginUser.accessToken)
       setRefreshTokenUtil(newLoginUser.refreshToken)
       setExpiresTimeUtil(newLoginUser.expiresTime)
     }

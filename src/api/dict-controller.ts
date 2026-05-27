@@ -1,9 +1,9 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-24 09:04
+ * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-24 14:41
- * @FilePath     : \attendance-frontend-mobile\src\api\dict-controller.ts
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/api/dict-controller.ts
  * @Description  : 全局字典配置模块-API接口
  */
 import request from '@/libs/axios/request'

@@ -60,7 +60,7 @@
 import { getCurrentInstance, nextTick, onMounted, reactive, ref, toRefs } from 'vue'
 import { aesEncrypt } from '@/libs/cryptojs/aes'
 import { resetImgBarSize } from '@/utils/captcha'
-import { fetchImageCaptchaUsingGet, checkImageCaptchaUsingGet } from '@/api/auth-controller'
+import { fetchImageCaptchaUsingGet, checkImageCaptchaUsingGet } from '@/api/captcha-controller'
 import { useDeviceId } from '@/composables/useDeviceId'
 
 const { deviceId } = useDeviceId() // 获取设备 UUID
@@ -103,7 +103,7 @@ const token = ref('') // 后端返回的 token
 const requiredClickCount = ref(3) // 需要点击的总字数
 const targetPoints = reactive<Point[]>([]) // 后端返回的目标坐标
 const clickedPoints = reactive<Point[]>([]) // 用户已点击的坐标
-let clickCount = ref(1) // 当前已点击次数
+const clickCount = ref(1) // 当前已点击次数
 const backgroundImage = ref('') // 背景图片 base64
 const wordList = reactive<string[]>([]) // 需要点击的文字列表
 const componentSize = reactive<Size>({

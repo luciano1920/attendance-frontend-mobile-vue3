@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-24 14:28
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 14:44
- * @FilePath     : \attendance-frontend-mobile\src\components\TimeRangePickerPopup.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/apply/components/TimeRangePickerPopup.vue
  * @Description  : 时间区间选择器 - 弹窗控制器（无头组件）
 -->
 <template>

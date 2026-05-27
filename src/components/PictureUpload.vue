@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-27 16:35
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 22:39
- * @FilePath     : \attendance-frontend-mobile\src\components\PictureUpload.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/components/PictureUpload.vue
  * @Description  : 移动端图片上传组件（二次封装）
 -->
 <template>
@@ -39,7 +39,7 @@ import {
 } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
-import { getTokenUtil } from '@/utils/auth'
+import { getAccessTokenUtil } from '@/utils/auth'
 
 const userStore = useUserStore()
 
@@ -62,9 +62,9 @@ const acceptFileType = ref<string>('image/jpeg,image/png,image/jpg')
 const actionUrl = import.meta.env.VITE_API_BASE_URL + '/admin-api/infra/file/upload'
 // 上传的请求头
 const uploadHeaders = computed(() => {
-  const token = userStore.loginUser.accessToken ?? getTokenUtil()
+  const accessToken = userStore.loginUser.accessToken ?? getAccessTokenUtil()
   return {
-    Authorization: token ?? '',
+    Authorization: accessToken ?? '',
   }
 })
 

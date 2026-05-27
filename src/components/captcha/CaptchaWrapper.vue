@@ -1,16 +1,16 @@
 <template>
-  <div v-show="showBox" :class="mode == 'pop' ? 'mask' : ''">
+  <div v-show="showBox" :class="mode === 'pop' ? 'mask' : ''">
     <div
-      :class="mode == 'pop' ? 'verifybox' : ''"
+      :class="mode === 'pop' ? 'verifybox' : ''"
       :style="{ maxWidth: parseInt(imgSize.width) + 20 + 'px' }"
     >
-      <div v-if="mode == 'pop'" class="verifybox-top">
+      <div v-if="mode === 'pop'" class="verifybox-top">
         请完成安全验证
         <span class="verifybox-close" @click="closeBox">
           <i class="iconfont icon-close"></i>
         </span>
       </div>
-      <div :style="{ padding: mode == 'pop' ? '10px' : '0' }" class="verifybox-bottom">
+      <div :style="{ padding: mode === 'pop' ? '10px' : '0' }" class="verifybox-bottom">
         <!-- 验证码容器 -->
         <component
           :is="componentType"

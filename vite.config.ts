@@ -1,11 +1,3 @@
-/**
- * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-19 17:07
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-26 16:16
- * @FilePath     : \attendance-frontend-mobile\vite.config.ts
- * @Description  : Vite 全局配置
- */
 import { fileURLToPath, URL } from 'node:url'
 import path from 'path'
 

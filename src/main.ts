@@ -1,11 +1,3 @@
-/**
- * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-19 17:07
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-03 02:54
- * @FilePath     : \attendance-frontend-mobile\src\main.ts
- * @Description  : 项目入口
- */
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 

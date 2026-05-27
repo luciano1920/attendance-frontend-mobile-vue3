@@ -1,9 +1,9 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-24 09:04
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-27 17:26
- * @FilePath     : \attendance-frontend-mobile\src\api\file-controller.ts
+ * @Date         : 2026-03
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/api/file-controller.ts
  * @Description  : 文件服务模块-API接口
  */
 import request from '@/libs/axios/request'

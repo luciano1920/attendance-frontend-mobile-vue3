@@ -1,9 +1,9 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-24 16:38
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 16:58
- * @FilePath     : \attendance-frontend-mobile\src\permission.ts
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/permission.ts
  * @Description  : 全局权限校验核心文件
  */
 import { storeToRefs } from 'pinia'

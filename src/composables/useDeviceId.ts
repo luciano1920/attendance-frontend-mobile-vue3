@@ -1,9 +1,9 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-28 18:37
+ * @Date         : 2026-03
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-29 10:53
- * @FilePath     : \attendance-frontend-mobile\src\composables\useDeviceId.ts
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/composables/useDeviceId.ts
  * @Description  : 设备唯一标识符（UUID）的组合式函数
  */
 import { ref, readonly } from 'vue'

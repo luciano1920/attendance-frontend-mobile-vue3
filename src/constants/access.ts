@@ -1,9 +1,9 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-27 10:01
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 17:14
- * @FilePath     : \attendance-frontend-mobile\src\constants\access.ts
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/constants/access.ts
  * @Description  : 鉴权模块常量类
  */
 

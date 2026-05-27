@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-05-03 01:08
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 08:45
- * @FilePath     : \attendance-frontend-mobile\src\pages\record\components\RecordListCard.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/record/components/RecordListCard.vue
  * @Description  : 审批/申请记录单条卡片组件
 -->
 <template>

@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-26 10:28
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 08:57
- * @FilePath     : \attendance-frontend-mobile\src\pages\apply\FaceUpdateFormPage.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/apply/FaceUpdateFormPage.vue
  * @Description  : 人脸变更申请表单页面
 -->
 <template>

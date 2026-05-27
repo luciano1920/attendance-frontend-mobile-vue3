@@ -1,9 +1,9 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-31 11:03
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-19 12:09
- * @FilePath     : \attendance-frontend-mobile\src\layouts\AuthLayout.vue
+ * @Date         : 2026-03
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/layouts/AuthLayout.vue
  * @Description  : 认证页通用布局
 -->
 <template>

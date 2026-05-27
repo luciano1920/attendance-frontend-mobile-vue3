@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-05-25 09:12
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-25 14:37
- * @FilePath     : \attendance-frontend-mobile\src\pages\home\AttendanceRulesPage.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/home/AttendanceRulesPage.vue
  * @Description  : 考勤规则（帮助手册）页面
 -->
 <template>

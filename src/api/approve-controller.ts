@@ -1,12 +1,11 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-23 14:57
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 16:46
- * @FilePath     : \attendance-frontend-mobile\src\api\approve-controller.ts
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-05
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/api/approve-controller.ts
  * @Description  : 考勤审批模块-API接口
  */
-
 import request from '@/libs/axios/request'
 
 /** 审批考勤申请 POST /app-api/attenfront/order-flow/check */

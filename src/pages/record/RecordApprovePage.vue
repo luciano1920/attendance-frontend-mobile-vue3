@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-30 15:10
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-25 09:01
- * @FilePath     : \attendance-frontend-mobile\src\pages\record\RecordApprovePage.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/record/RecordApprovePage.vue
  * @Description  : 记录审批页
 -->
 <template>

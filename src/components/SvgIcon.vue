@@ -1,9 +1,9 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-20 15:04
+ * @Date         : 2026-03
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-25 09:32
- * @FilePath     : \attendance-frontend-mobile\src\components\SvgIcon.vue
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/components/SvgIcon.vue
  * @Description  : SVG 图标组件，用于动态加载和显示 SVG 图标
 -->
 <template>

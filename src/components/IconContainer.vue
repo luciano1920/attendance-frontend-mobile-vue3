@@ -1,9 +1,9 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-20 00:53
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-29 17:06
- * @FilePath     : \attendance-frontend-mobile\src\components\IconContainer.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/components/IconContainer.vue
  * @Description  : 图标容器组件
 -->
 <template>

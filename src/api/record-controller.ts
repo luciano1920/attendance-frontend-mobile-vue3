@@ -1,9 +1,9 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-22 09:02
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-22 10:12
- * @FilePath     : \attendance-frontend-mobile\src\api\record-controller.ts
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/api/record-controller.ts
  * @Description  : 考勤记录管理模块-API接口
  */
 import request from '@/libs/axios/request'

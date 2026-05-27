@@ -1,17 +1,17 @@
 <!--
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-26 14:37
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-08 17:23
- * @FilePath     : \attendance-frontend-mobile\src\components\Segmented.vue
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/components/Segmented.vue
  * @Description  : 分段控制器（Segmented）组件，选中态采用滑块风格
 -->
 <template>
   <div
     class="segmented"
     :class="{
-      'segmented-small': size == 'small',
-      'segmented-large': size == 'large',
+      'segmented-small': size === 'small',
+      'segmented-large': size === 'large',
       'segmented-block': block,
       'segmented-round': shape === 'round',
       'segmented-vertical': direction === 'vertical',

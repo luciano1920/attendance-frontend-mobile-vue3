@@ -89,7 +89,7 @@ import {
 } from 'vue'
 import { aesEncrypt } from '@/libs/cryptojs/aes'
 import { resetImgBarSize } from '@/utils/captcha'
-import { fetchImageCaptchaUsingGet, checkImageCaptchaUsingGet } from '@/api/auth-controller'
+import { fetchImageCaptchaUsingGet, checkImageCaptchaUsingGet } from '@/api/captcha-controller'
 import { useDeviceId } from '@/composables/useDeviceId'
 
 const { deviceId } = useDeviceId() // 获取设备 UUID

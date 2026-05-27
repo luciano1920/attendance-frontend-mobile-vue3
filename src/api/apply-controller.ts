@@ -1,9 +1,9 @@
 /**
- * @Author       : luciano1920 1290582790@qq.com
- * @Date         : 2026-04-23 14:56
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-07 11:25
- * @FilePath     : \attendance-frontend-mobile\src\api\apply-controller.ts
+ * @Author       : 罗钧 71233895@chinatelecom.cn
+ * @Date         : 2026-04
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/api/apply-controller.ts
  * @Description  : 考勤申请模块-API接口
  */
 import request from '@/libs/axios/request'

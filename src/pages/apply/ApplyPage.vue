@@ -1,9 +1,9 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-29 16:15
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-08 16:49
- * @FilePath     : \attendance-frontend-mobile\src\pages\apply\ApplyPage.vue
+ * @Date         : 2026-03
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/apply/ApplyPage.vue
  * @Description  : 考勤申请入口页面
 -->
 <template>
