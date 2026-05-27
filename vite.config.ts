@@ -41,6 +41,7 @@ export default defineConfig(({ mode }) => {
       outDir: env.VITE_OUT_DIR || 'dist',
       sourcemap: env.VITE_SOURCEMAP === 'true' ? 'inline' : false,
       minify: 'esbuild', // 代码压缩配置
+      chunkSizeWarningLimit: 800,
       esbuild: {
         drop: ['debugger'],
         pure: mode === 'production' ? ['console.log', 'console.warn'] : [],
