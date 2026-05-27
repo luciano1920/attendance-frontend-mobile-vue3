@@ -12,10 +12,17 @@ import skipFormatting from 'eslint-config-prettier/flat'
 export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
-    files: ['**/*.{vue,ts,mts,tsx}']
+    files: ['**/*.{vue,ts,mts,tsx}'],
   },
 
-  globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
+  globalIgnores([
+    '**/dist/**',
+    '**/dist-prod/**',
+    '**/dist-dev/**',
+    '**/dist-test/**',
+    '**/dist-ssr/**',
+    '**/coverage/**',
+  ]),
 
   ...pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
@@ -32,9 +39,19 @@ export default defineConfigWithVueTs(
       // Vue 相关
       'vue/eqeqeq': ['error', 'always'],
       'vue/html-end-tags': 'error',
-      'vue/no-template-shadow': 'error'
-    }
+      'vue/no-template-shadow': 'error',
+      'vue/multi-word-component-names': 'warn',
+
+      'max-lines': [
+        'error',
+        {
+          max: 800, // 单文件最大 800 行
+          skipBlankLines: true, // 忽略空行
+          skipComments: true, // 忽略注释行
+        },
+      ],
+    },
   },
 
-  skipFormatting
+  skipFormatting,
 )
