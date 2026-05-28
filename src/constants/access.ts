@@ -20,12 +20,12 @@ export const ROLE_ACCESS_MAP: Record<string, string> = {
   dk_checker_dept: ACCESS_ENUM.ADMIN, // 部门一把手
   dk_checker_dept2: ACCESS_ENUM.ADMIN, // 部门二把手
   super_admin: ACCESS_ENUM.ADMIN, // 超级管理员
-  HR: ACCESS_ENUM.ADMIN, // 人力资源考勤管理
-  DV: ACCESS_ENUM.ADMIN, // 研发中心管理
 
   // 普通用户角色
   person: ACCESS_ENUM.USER, // 员工
   common: ACCESS_ENUM.USER, // 普通角色
+  DV: ACCESS_ENUM.USER, // 研发中心管理
+  HR: ACCESS_ENUM.ADMIN, // 人力资源考勤管理
 }
 
 /** 权限级别权重（用于比较权限高低，数值越大权限越高）*/

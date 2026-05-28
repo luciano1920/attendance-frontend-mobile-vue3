@@ -12,16 +12,6 @@ import AuthLayout from '@/layouts/AuthLayout.vue'
 import { ACCESS_ENUM } from '@/constants/access'
 
 export const routes: Array<RouteRecordRaw> = [
-  // 天翼登录中间页
-  {
-    path: '/tianyiBox',
-    name: '天翼认证中间页',
-    component: () => import('@/pages/auth/TelecomLoginPage.vue'),
-    meta: {
-      title: '天翼认证',
-    },
-  },
-
   // 认证页面，使用 AuthLayout
   {
     path: '/auth',
@@ -39,14 +29,14 @@ export const routes: Array<RouteRecordRaw> = [
         },
       },
       // 用户登录
-      {
-        path: 'login',
-        name: '账号密码登录页',
-        component: () => import('@/pages/auth/UserLoginPage.vue'),
-        meta: {
-          title: '用户登录',
-        },
-      },
+      // {
+      //   path: 'login',
+      //   name: '账号密码登录页',
+      //   component: () => import('@/pages/auth/UserLoginPage.vue'),
+      //   meta: {
+      //     title: '用户登录',
+      //   },
+      // },
       // 用户注册
       // {
       //   path: 'register',
@@ -57,14 +47,14 @@ export const routes: Array<RouteRecordRaw> = [
       //   },
       // },
       // 用户忘记密码重置页
-      {
-        path: 'forgot',
-        name: '用户重置密码页',
-        component: () => import('@/pages/auth/UserForgotPage.vue'),
-        meta: {
-          title: '忘记密码',
-        },
-      },
+      // {
+      //   path: 'forgot',
+      //   name: '用户重置密码页',
+      //   component: () => import('@/pages/auth/UserForgotPage.vue'),
+      //   meta: {
+      //     title: '忘记密码',
+      //   },
+      // },
       // 无权限页面
       {
         path: 'unauthorized',
@@ -72,6 +62,15 @@ export const routes: Array<RouteRecordRaw> = [
         component: () => import('@/pages/auth/UnauthorizedPage.vue'),
         meta: {
           title: '无权限',
+        },
+      },
+      // 天翼登录中间页
+      {
+        path: 'tianyiBox',
+        name: '天翼认证中间页',
+        component: () => import('@/pages/auth/TelecomLoginPage.vue'),
+        meta: {
+          title: '天翼认证',
         },
       },
     ],

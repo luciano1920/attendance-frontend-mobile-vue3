@@ -1,9 +1,9 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2025-11-07 01:29
+ * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-03-24 22:12
- * @FilePath     : \attendance-frontend-mobile\src\pages\auth\UnauthorizedPage.vue
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/auth/UnauthorizedPage.vue
  * @Description  : 无权限页面
 -->
 <template>

@@ -119,10 +119,15 @@ export async function fetchUserPermissionUsingGet(params: any, options?: { [key:
 
 /** 获取天翼认证登录框地址 GET /admin-api/tianyi/auth/getLoginUrl */
 export async function fetchTelecomLoginUrlUsingGet(options?: { [key: string]: any }) {
+  const { origin, pathname } = window.location
+  const basePath = pathname.split('/')[1] || ''
+  const fullReferer = `${origin}${basePath ? `/${basePath}` : ''}/auth/`
+
   return request('/admin-api/tianyi/auth/getLoginUrl', {
     method: 'GET',
     headers: {
       redirectTarget: 'phone',
+      'X-Full-Referer': fullReferer,
     },
     ...(options || {}),
   })
@@ -140,11 +145,15 @@ export async function telecomLoginUsingGet(params: any, options?: { [key: string
 }
 
 /** 天翼认证退出登录 GET /admin-api/tianyi/auth/logout */
-export async function telecomLogoutUsingGet(params: any, options?: { [key: string]: any }) {
+export async function telecomLogoutUsingGet(options?: { [key: string]: any }) {
+  const { origin, pathname } = window.location
+  const basePath = pathname.split('/')[1] || ''
+  const fullReferer = `${origin}${basePath ? `/${basePath}` : ''}/auth/`
+
   return request('/admin-api/tianyi/auth/logout', {
     method: 'GET',
-    params: {
-      ...params,
+    headers: {
+      'X-Full-Referer': fullReferer,
     },
     ...(options || {}),
   })

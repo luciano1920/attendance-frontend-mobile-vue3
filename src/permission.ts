@@ -12,7 +12,7 @@ import router from '@/router'
 import { useUserStore } from '@/stores/user-store'
 import { ACCESS_ENUM, ACCESS_WEIGHT, ROLE_ACCESS_MAP } from '@/constants/access'
 
-const AUTH_WHITE_LIST = ['/auth/unauthorized', '/tianyiBox']
+const AUTH_WHITE_LIST = ['/auth/unauthorized', '/auth/tianyiBox']
 
 /**
  * @description 检查用户是否有权限访问
@@ -79,7 +79,11 @@ router.beforeEach(async (to) => {
   // ==================== 3. 第三层：已登录 or 未登录 ====================
   if (loginUser.value.accessToken) {
     // 拦截已登录用户访问认证页（排除无权限页）
-    if (to.path.startsWith('/auth') && to.path !== '/auth/unauthorized') {
+    if (
+      to.path.startsWith('/auth') &&
+      to.path !== '/auth/unauthorized' &&
+      to.path !== '/auth/tianyiBox'
+    ) {
       return '/'
     }
 

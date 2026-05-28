@@ -78,7 +78,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { ActionSheetPlugin, Message } from 'tdesign-mobile-vue'
 
-import { userLogoutUsingPost } from '@/api/auth-controller'
+import { telecomLogoutUsingGet } from '@/api/auth-controller'
 import { useUserStore } from '@/stores/user-store'
 import SvgIcon from '@/components/SvgIcon.vue'
 import IconContainer from '@/components/IconContainer.vue'
@@ -119,11 +119,11 @@ const handleLogout = async () => {
     onSelected: async (selected: any, selectedIndex: number) => {
       if (selected.label === '确认退出') {
         try {
-          const res = await userLogoutUsingPost()
-          if (res.data.code === 0) {
+          const res = await telecomLogoutUsingGet()
+          if (res.data.code === 0 && res.data.data) {
             userStore.resetUserState()
             Message.success({ content: '退出登录成功', offset: [10, 16] })
-            router.replace('/auth')
+            window.location.href = res.data.data
           } else {
             Message.error({
               content: '退出登录失败，' + res.data.msg,

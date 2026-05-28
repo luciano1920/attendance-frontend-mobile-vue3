@@ -395,12 +395,13 @@ const filterCache = useFilterCache({
 
 onMounted(() => {
   const userLevel = getUserAccessLevel(loginUser.value.userInfo.roles)
+  const hasCache = filterCache.restore()
 
   if (userLevel === ACCESS_ENUM.ADMIN) {
     showSegmented.value = true // 管理员显示分段控制器
 
     // 无缓存时管理员默认"审批"视角
-    if (!filterCache.restore()) {
+    if (!hasCache) {
       searchParams.checkManage = true
     }
   }

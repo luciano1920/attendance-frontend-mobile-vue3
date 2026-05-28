@@ -40,18 +40,18 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: env.VITE_OUT_DIR || 'dist',
       sourcemap: env.VITE_SOURCEMAP === 'true' ? 'inline' : false,
-      minify: 'esbuild', // 代码压缩配置
+      minify: 'terser', // 代码压缩配置
       chunkSizeWarningLimit: 800,
-      esbuild: {
-        drop: ['debugger'],
-        pure: mode === 'production' ? ['console.log', 'console.warn'] : [],
-      },
-      // terserOptions: {
-      //   compress: {
-      //     drop_console: env.VITE_DROP_CONSOLE === 'true', // 删除 console
-      //     drop_debugger: env.VITE_DROP_DEBUGGER === 'true' // 删除 debugger
-      //   }
-      // } as any,
+      // esbuild: {
+      //   drop: ['debugger'],
+      //   pure: mode === 'production' ? ['console.log', 'console.warn'] : [],
+      // },
+      terserOptions: {
+        compress: {
+          drop_console: env.VITE_DROP_CONSOLE === 'true', // 删除 console
+          drop_debugger: env.VITE_DROP_DEBUGGER === 'true', // 删除 debugger
+        },
+      } as any,
       rollupOptions: {
         output: {
           // 分包策略
