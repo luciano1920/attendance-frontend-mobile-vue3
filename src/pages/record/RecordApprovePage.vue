@@ -156,7 +156,10 @@
         />
       </Descriptions>
 
-      <div class="approve-action">
+      <div
+        v-if="recordApproveData?.orderState === APPROVE_STATUS_ENUM.PENDING"
+        class="approve-action"
+      >
         <t-button
           size="large"
           theme="danger"
@@ -277,6 +280,13 @@ const getRecordDetail = async () => {
   if (res.data.code === 0 && res.data.data) {
     recordApproveData.value = res.data.data
     formData.id = [res.data.data.id]
+
+    // 如果工单不是待审批状态，重定向到普通详情页
+    if (res.data.data.orderState !== APPROVE_STATUS_ENUM.PENDING) {
+      Message.warning({ content: '该工单已处理，无法审批', offset: [10, 16] })
+      router.replace({ path: `/record/${props.id}` })
+      return
+    }
   } else {
     Message.error({
       content: '获取详情失败，' + res.data.msg,
