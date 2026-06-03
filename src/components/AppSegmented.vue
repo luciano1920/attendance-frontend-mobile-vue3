@@ -3,30 +3,30 @@
  * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/Segmented.vue
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppSegmented.vue
  * @Description  : 分段控制器（Segmented）组件，选中态采用滑块风格
 -->
 <template>
   <div
-    class="segmented"
+    class="app-segmented"
     :class="{
-      'segmented-small': size === 'small',
-      'segmented-large': size === 'large',
-      'segmented-block': block,
-      'segmented-round': shape === 'round',
-      'segmented-vertical': direction === 'vertical',
+      'app-segmented-small': size === 'small',
+      'app-segmented-large': size === 'large',
+      'app-segmented-block': block,
+      'app-segmented-round': shape === 'round',
+      'app-segmented-vertical': direction === 'vertical',
     }"
   >
-    <div ref="groupRef" class="segmented-group">
+    <div ref="groupRef" class="app-segmented-group">
       <!-- 滑块层，根据 value 动态定位 -->
-      <div class="segmented-thumb" :style="thumbStyle" v-show="hasSelected" />
+      <div class="app-segmented-thumb" :style="thumbStyle" v-show="hasSelected" />
 
       <div
-        class="segmented-item"
+        class="app-segmented-item"
         :class="{
-          'segmented-item-selected': value === getOptionValue(option),
-          'segmented-item-disabled': disabled || getOptionDisabled(option),
-          'segmented-item-block': block,
+          'app-segmented-item-selected': value === getOptionValue(option),
+          'app-segmented-item-disabled': disabled || getOptionDisabled(option),
+          'app-segmented-item-block': block,
         }"
         v-for="(option, index) in options"
         :key="index"
@@ -37,11 +37,11 @@
       >
         <input
           type="radio"
-          class="segmented-item-input"
+          class="app-segmented-item-input"
           :checked="value === getOptionValue(option)"
           :disabled="disabled || getOptionDisabled(option)"
         />
-        <div class="segmented-item-label">
+        <div class="app-segmented-item-label">
           <slot
             name="label"
             :label="getOptionLabel(option)"
@@ -203,30 +203,30 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.segmented {
-  --segmented-bg: #eeeef0;
-  --segmented-thumb-bg: #ffffff;
-  --segmented-color: rgba(0, 0, 0, 0.65);
-  --segmented-color-active: #0052d9;
-  --segmented-color-disabled: rgba(0, 0, 0, 0.25);
+.app-segmented {
+  --app-segmented-bg: #eeeef0;
+  --app-segmented-thumb-bg: #ffffff;
+  --app-segmented-color: rgba(0, 0, 0, 0.65);
+  --app-segmented-color-active: #0052d9;
+  --app-segmented-color-disabled: rgba(0, 0, 0, 0.25);
 
   display: inline-block;
   padding: 2px;
-  color: var(--segmented-color);
+  color: var(--app-segmented-color);
   font-size: 14px;
   line-height: 1.5;
-  background-color: var(--segmented-bg);
+  background-color: var(--app-segmented-bg);
   border-radius: 6px;
   transition: all 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
 
-  .segmented-group {
+  .app-segmented-group {
     position: relative;
     display: flex;
     align-items: stretch;
     justify-items: flex-start;
     width: 100%;
 
-    .segmented-item {
+    .app-segmented-item {
       background: transparent; // 去掉选项自身背景，让滑块显示
       position: relative;
       text-align: center;
@@ -236,8 +236,8 @@ watch(
         background-color 0.2s;
       border-radius: 4px;
 
-      &:hover:not(.segmented-item-selected):not(.segmented-item-disabled) {
-        color: var(--segmented-color-active);
+      &:hover:not(.app-segmented-item-selected):not(.app-segmented-item-disabled) {
+        color: var(--app-segmented-color-active);
 
         &::after {
           background-color: rgba(0, 0, 0, 0.06);
@@ -256,7 +256,7 @@ watch(
         content: '';
       }
 
-      .segmented-item-input {
+      .app-segmented-item-input {
         position: absolute;
         inset-block-start: 0;
         inset-inline-start: 0;
@@ -266,7 +266,7 @@ watch(
         pointer-events: none;
       }
 
-      .segmented-item-label {
+      .app-segmented-item-label {
         font-weight: 500;
         min-height: 28px;
         line-height: 28px;
@@ -278,27 +278,27 @@ watch(
       }
     }
 
-    .segmented-item-selected {
+    .app-segmented-item-selected {
       // background-color: #ffffff;
       // box-shadow:
       //   0 1px 2px 0 rgba(0, 0, 0, 0.03),
       //   0 1px 6px -1px rgba(0, 0, 0, 0.02),
       //   0 2px 4px 0 rgba(0, 0, 0, 0.02);
-      color: var(--segmented-color-active);
+      color: var(--app-segmented-color-active);
     }
 
-    .segmented-item-disabled {
-      color: var(--segmented-color-disabled);
+    .app-segmented-item-disabled {
+      color: var(--app-segmented-color-disabled);
       cursor: not-allowed;
       pointer-events: none;
     }
 
     // 滑块样式
-    .segmented-thumb {
+    .app-segmented-thumb {
       position: absolute;
       top: 0;
       left: 0;
-      background-color: var(--segmented-thumb-bg);
+      background-color: var(--app-segmented-thumb-bg);
       box-shadow:
         0 1px 2px 0 rgba(0, 0, 0, 0.03),
         0 1px 6px -1px rgba(0, 0, 0, 0.02),
@@ -314,13 +314,13 @@ watch(
   }
 }
 
-.segmented-small {
+.app-segmented-small {
   border-radius: 4px;
 
-  .segmented-group .segmented-item {
+  .app-segmented-group .app-segmented-item {
     border-radius: 2px;
 
-    .segmented-item-label {
+    .app-segmented-item-label {
       min-height: 22px;
       line-height: 22px;
       padding: 0 8px;
@@ -329,13 +329,13 @@ watch(
   }
 }
 
-.segmented-large {
+.app-segmented-large {
   border-radius: 8px;
 
-  .segmented-group .segmented-item {
+  .app-segmented-group .app-segmented-item {
     border-radius: 6px;
 
-    .segmented-item-label {
+    .app-segmented-item-label {
       min-height: 36px;
       line-height: 36px;
       padding: 0 12px;
@@ -344,39 +344,39 @@ watch(
   }
 }
 
-.segmented-block {
+.app-segmented-block {
   display: flex;
   width: 100%;
 
-  .segmented-group .segmented-item {
+  .app-segmented-group .app-segmented-item {
     flex: 1;
     min-width: 0;
   }
 }
 
-.segmented-round {
+.app-segmented-round {
   border-radius: 999px; // 胶囊外框
 
-  .segmented-item {
+  .app-segmented-item {
     border-radius: 999px !important; // 每个选项也胶囊
   }
 
-  .segmented-thumb {
+  .app-segmented-thumb {
     border-radius: 999px !important; // 滑块同样胶囊
   }
 }
 
-.segmented-vertical {
-  .segmented-group {
+.app-segmented-vertical {
+  .app-segmented-group {
     flex-direction: column; // 改为纵向排列
   }
 
-  .segmented-item {
+  .app-segmented-item {
     width: 100%; // 纵向时每个选项占满宽度
   }
 
   // 如果同时开启了 block 模式，纵向平分高度
-  &.segmented-block .segmented-item {
+  &.app-segmented-block .app-segmented-item {
     flex: 1 0 auto;
     min-height: 0;
   }

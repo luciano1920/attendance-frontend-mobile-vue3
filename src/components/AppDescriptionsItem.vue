@@ -3,15 +3,15 @@
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/DescriptionsItem.vue
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppDescriptionsItem.vue
  * @Description  : 详情描述项组件
 -->
 <template>
-  <div class="descriptions-item" :class="[border ? 'is-bordered' : '']">
-    <div class="descriptions-item-label">
+  <div class="app-descriptions-item" :class="[border ? 'is-bordered' : '']">
+    <div class="app-descriptions-item-label">
       <slot name="label">{{ label }}</slot>
     </div>
-    <div class="descriptions-item-content">
+    <div class="app-descriptions-item-content">
       <slot></slot>
     </div>
   </div>
@@ -30,7 +30,7 @@ const props = withDefaults(defineProps<Props>(), {
 </script>
 
 <style scoped lang="scss">
-.descriptions-item {
+.app-descriptions-item {
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -38,7 +38,7 @@ const props = withDefaults(defineProps<Props>(), {
   min-height: 40px;
   padding: 6px 0;
 
-  .descriptions-item-label {
+  .app-descriptions-item-label {
     font-size: 14px;
     font-weight: 500;
     color: #86909c;
@@ -46,7 +46,7 @@ const props = withDefaults(defineProps<Props>(), {
     margin-right: 8px;
   }
 
-  .descriptions-item-content {
+  .app-descriptions-item-content {
     font-size: 14px;
     font-weight: 500;
     color: #171a1d;

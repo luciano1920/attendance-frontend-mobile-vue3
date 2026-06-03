@@ -16,7 +16,7 @@
           <t-tab-panel value="completed" label="已审批" />
         </t-tabs>
 
-        <Segmented
+        <AppSegmented
           v-if="showSegmented"
           v-model:value="searchParams.checkManage"
           :options="segmentOptions"
@@ -24,10 +24,10 @@
           @change="handleSegmentChange"
         >
           <template #label="{ label, payload }">
-            <SvgIcon :name="payload.icon" />
+            <AppSvgIcon :name="payload.icon" />
             <span style="margin-left: 4px">{{ label }}</span>
           </template>
-        </Segmented>
+        </AppSegmented>
       </div>
 
       <div v-if="isBatchMode" class="batch-action-bar">
@@ -83,7 +83,7 @@
       <t-pull-down-refresh v-if="!initLoading" @refresh="handleRefresh">
         <t-empty description="暂无数据">
           <template #icon>
-            <SvgIcon name="funnel" size="48px" />
+            <AppSvgIcon name="funnel" size="48px" />
           </template>
         </t-empty>
       </t-pull-down-refresh>
@@ -104,7 +104,7 @@
                   class="batch-card"
                   :class="{ 'batch-card--active': batchRecordIds.includes(recordItem.id) }"
                 >
-                  <SvgIcon
+                  <AppSvgIcon
                     v-if="batchRecordIds.includes(recordItem.id)"
                     class="batch-card-check-icon"
                     name="check"
@@ -139,7 +139,7 @@
     </div>
 
     <!-- 列表一键返回顶部 -->
-    <BackListTop text="顶部" />
+    <AppBackListTop text="顶部" />
   </div>
 </template>
 
@@ -157,9 +157,9 @@ import {
 import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
 import { APPROVE_STATUS_ENUM } from '@/constants/record'
 
-import SvgIcon from '@/components/SvgIcon.vue'
-import Segmented from '@/components/Segmented.vue'
-import BackListTop from '@/components/BackListTop.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppSegmented from '@/components/AppSegmented.vue'
+import AppBackListTop from '@/components/AppBackListTop.vue'
 import RecordListCard from './components/RecordListCard.vue'
 
 const userStore = useUserStore()
@@ -301,7 +301,7 @@ const handleTabChange = (value: TabValue) => {
   handleRefresh()
 }
 
-/** Segmented 切换事件处理函数 */
+/** AppSegmented 切换事件处理函数 */
 const handleSegmentChange = () => {
   handleRefresh()
 }
@@ -380,7 +380,7 @@ const filterCache = useFilterCache({
     checkManage: searchParams.checkManage,
   }),
   onRestore(state) {
-    // 恢复 Tab 和 Segmented 组件选中状态
+    // 恢复 Tab 和 AppSegmented 组件选中状态
     approvalStatus.value = state.approvalStatus || 'pending'
     searchParams.checkManage = !!state.checkManage
 

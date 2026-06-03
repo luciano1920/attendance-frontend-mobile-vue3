@@ -10,7 +10,7 @@
   <div id="rest-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
+      <AppSvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">调休申请</div>
         <div class="form-desc">合理调配休假时间</div>
@@ -122,7 +122,7 @@ import { useUserStore } from '@/stores/user-store'
 import { calcActualApplyDaysUsingPost, createRestApplyUsingPost } from '@/api/apply-controller'
 import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 import TimeRangePickerPopup from './components/TimeRangePickerPopup.vue'
 
 const router = useRouter()

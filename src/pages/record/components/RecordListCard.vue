@@ -14,7 +14,7 @@
     @touchend="handleTouchEnd"
   >
     <div class="list-item">
-      <IconContainer
+      <AppIconContainer
         :icon="APPLY_ICON_MAP[record?.orderType]?.icon ?? ''"
         :theme="APPLY_ICON_MAP[record?.orderType]?.theme"
       />
@@ -23,7 +23,7 @@
           <div class="list-item-title">{{ record?.orderType }}申请</div>
           <t-tag variant="light" :theme="APPROVE_TAG_MAP[record?.orderState]?.theme">
             <template #icon>
-              <SvgIcon :name="APPROVE_TAG_MAP[record?.orderState]?.icon ?? ''" size="12px" />
+              <AppSvgIcon :name="APPROVE_TAG_MAP[record?.orderState]?.icon ?? ''" size="12px" />
             </template>
             {{ APPROVE_STATUS_MAP[record?.orderState] }}
           </t-tag>
@@ -73,8 +73,8 @@ import {
   APPROVE_TAG_MAP,
 } from '@/constants/record'
 import { formatDate } from '@/utils/date'
-import IconContainer from '@/components/IconContainer.vue'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppIconContainer from '@/components/AppIconContainer.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 const router = useRouter()
 

@@ -9,7 +9,7 @@
 <template>
   <div id="attendance-rules-page" ref="container">
     <div class="nav-bar" @click="router.push('/')">
-      <SvgIcon name="chevron-left" size="22px" />
+      <AppSvgIcon name="chevron-left" size="22px" />
       帮助手册
     </div>
 
@@ -75,7 +75,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { ATTENDANCE_STATISTICS_CONFIG, RECORD_TYPE_COLOR_MAP } from '@/constants/record'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 const router = useRouter()
 

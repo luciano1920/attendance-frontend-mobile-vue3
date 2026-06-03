@@ -2,14 +2,14 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
+ * @LastEditTime : 2026-06
  * @FilePath     : /attendance-frontend-mobile/src/pages/record/RecordApprovePage.vue
  * @Description  : 记录审批页
 -->
 <template>
   <div id="record-approve-page">
     <div class="nav-bar" @click="router.push('/record')">
-      <SvgIcon name="chevron-left" size="22px" />
+      <AppSvgIcon name="chevron-left" size="22px" />
       审批详情
     </div>
 
@@ -22,7 +22,7 @@
           <div class="user-name">{{ recordApproveData?.nickname }}</div>
           <t-tag variant="light" :theme="APPROVE_TAG_MAP[recordApproveData?.orderState]?.theme">
             <template #icon>
-              <SvgIcon
+              <AppSvgIcon
                 :name="APPROVE_TAG_MAP[recordApproveData?.orderState]?.icon ?? ''"
                 size="12px"
               />
@@ -38,14 +38,14 @@
 
     <div class="description-container">
       <!-- 基础信息-->
-      <Descriptions title="申请详情" :items="baseItems" :data="recordApproveData">
+      <AppDescriptions title="申请详情" :items="baseItems" :data="recordApproveData">
         <template #item-orderType="{ value }">
           <t-tag variant="light" theme="primary">{{ value }}申请</t-tag>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 请假详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordApproveData?.orderType === '请假' && recordApproveData?.leaveOrderFlowDTO"
         title="请假详情"
         :items="leaveItems"
@@ -69,10 +69,10 @@
             />
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 调休详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordApproveData?.orderType === '调休' && recordApproveData?.compLeaveOrderFlowDTO"
         title="调休详情"
         :items="restItems"
@@ -83,10 +83,10 @@
             {{ formatDateRange(range) }}
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 外出详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordApproveData?.orderType === '外出' && recordApproveData?.travelOrderFlowDTO"
         title="外出详情"
         :items="outingItems"
@@ -110,10 +110,10 @@
             />
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 补卡详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordApproveData?.orderType === '补卡' && recordApproveData?.attenCorrectionFlowDTO"
         title="补卡详情"
         :items="makeupItems"
@@ -124,10 +124,10 @@
             {{ formatDateYMD(date) }}
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 人脸变更详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordApproveData?.orderType === '人脸' && recordApproveData?.faceChangeOrderFlowDTO"
         title="人脸变更详情"
         :items="faceUpdateItems"
@@ -142,19 +142,19 @@
             @click="handlePreview([value])"
           />
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 审批详情 -->
-      <Descriptions title="审批意见">
-        <DescriptionsItem label="审批人">
+      <AppDescriptions title="审批意见">
+        <AppDescriptionsItem label="审批人">
           {{ recordApproveData?.deptCheckerNickname }}
-        </DescriptionsItem>
+        </AppDescriptionsItem>
         <t-textarea
           v-model="formData.checkMessage"
           placeholder="请输入审批意见"
           :autosize="{ minRows: 2, maxRows: 5 }"
         />
-      </Descriptions>
+      </AppDescriptions>
 
       <div
         v-if="recordApproveData?.orderState === APPROVE_STATUS_ENUM.PENDING"
@@ -168,7 +168,7 @@
           @click="handleApprove(APPROVE_STATUS_ENUM.REJECTED)"
         >
           <template #icon>
-            <SvgIcon name="close-circle" />
+            <AppSvgIcon name="close-circle" />
           </template>
           驳回
         </t-button>
@@ -179,7 +179,7 @@
           @click="handleApprove(APPROVE_STATUS_ENUM.APPROVED)"
         >
           <template #icon>
-            <SvgIcon name="check-circle" />
+            <AppSvgIcon name="check-circle" />
           </template>
           通过
         </t-button>
@@ -202,10 +202,10 @@ import {
 } from '@/api/approve-controller'
 import { APPROVE_STATUS_ENUM, APPROVE_STATUS_MAP, APPROVE_TAG_MAP } from '@/constants/record'
 import { formatDate, formatDateRange, formatDateYMD } from '@/utils/date'
-import SvgIcon from '@/components/SvgIcon.vue'
-import Descriptions from '@/components/Descriptions.vue'
-import type { DescriptionsItemColumn } from '@/components/Descriptions.vue'
-import DescriptionsItem from '@/components/DescriptionsItem.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppDescriptions from '@/components/AppDescriptions.vue'
+import type { DescriptionsItemColumn } from '@/components/AppDescriptions.vue'
+import AppDescriptionsItem from '@/components/AppDescriptionsItem.vue'
 
 const router = useRouter()
 

@@ -2,12 +2,12 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/PictureUpload.vue
+ * @LastEditTime : 2026-06
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppPictureUpload.vue
  * @Description  : 移动端图片上传组件（二次封装）
 -->
 <template>
-  <div class="picture-upload">
+  <div class="app-picture-upload">
     <t-upload
       v-model="files"
       :action="actionUrl"
@@ -166,7 +166,7 @@ const handleRemove = (removeContext: UploadRemoveContext) => {
 </script>
 
 <style scoped lang="scss">
-.picture-upload {
+.app-picture-upload {
   --td-upload-grid-columns: 3;
 }
 </style>

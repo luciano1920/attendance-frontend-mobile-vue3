@@ -10,7 +10,7 @@
   <div id="user-forgot-page">
     <t-button theme="light" shape="circle" @click="router.push('/auth')">
       <template #icon>
-        <SvgIcon name="arrow-left" size="20px" />
+        <AppSvgIcon name="arrow-left" size="20px" />
       </template>
     </t-button>
 
@@ -21,7 +21,7 @@
       </div>
 
       <div class="logo">
-        <SvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
+        <AppSvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
       </div>
     </div>
 
@@ -37,12 +37,12 @@
       <t-form-item label="手机号" name="mobile">
         <t-input v-model="formData.mobile" borderless placeholder="请输入绑定手机号">
           <template #prefixIcon>
-            <SvgIcon name="smartphone" />
+            <AppSvgIcon name="smartphone" />
           </template>
           <template #suffix>
             <!-- 倒计时按钮组件 -->
-            <SmsCountDownButton
-              ref="smsCountDownRef"
+            <AppCountdownButton
+              ref="smsCountdownRef"
               :disabled="!formData.mobile"
               @send="sendSmsVerificationCode"
             />
@@ -62,7 +62,7 @@
       <t-form-item label="验证码" name="code">
         <t-input v-model="formData.code" borderless placeholder="请输入验证码">
           <template #prefixIcon>
-            <SvgIcon name="key-round" />
+            <AppSvgIcon name="key-round" />
           </template>
         </t-input>
       </t-form-item>
@@ -70,7 +70,7 @@
       <t-form-item label="新密码" name="password">
         <t-input v-model="formData.password" borderless type="password" placeholder="请输入新密码">
           <template #prefixIcon>
-            <SvgIcon name="lock" />
+            <AppSvgIcon name="lock" />
           </template>
         </t-input>
       </t-form-item>
@@ -83,7 +83,7 @@
           placeholder="请输入确认密码"
         >
           <template #prefixIcon>
-            <SvgIcon name="lock-keyhole" />
+            <AppSvgIcon name="lock-keyhole" />
           </template>
         </t-input>
       </t-form-item>
@@ -108,9 +108,9 @@ import {
   fetchSmsVerificationCodeUsingGet,
   resetPasswordWithSmsUsingPost,
 } from '@/api/auth-controller'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 import CaptchaWrapper from '@/components/captcha/CaptchaWrapper.vue'
-import SmsCountDownButton from '@/components/SmsCountDownButton.vue'
+import AppCountdownButton from '@/components/AppCountdownButton.vue'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -131,7 +131,7 @@ const rules = {
   code: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 }
 
-const smsCountDownRef = ref() // 验证码倒计时按钮组件实例
+const smsCountdownRef = ref() // 验证码倒计时按钮组件实例
 const captchaWrapperRef = ref() // 滑动验证弹窗组件实例
 
 /** 发送验证码前，进行图形滑动人机验证 */
@@ -153,7 +153,7 @@ const captchaSuccess = async (params: { captchaVerification: string }) => {
   })
   if (res.data.code === 0) {
     Message.success({ content: '验证码发送成功', offset: [10, 16] })
-    smsCountDownRef.value?.beginCountdown() // 启动倒计时
+    smsCountdownRef.value?.beginCountdown() // 启动倒计时
   } else {
     Message.error({
       content: res.data.msg,

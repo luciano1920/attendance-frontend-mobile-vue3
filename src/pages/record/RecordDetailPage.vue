@@ -9,7 +9,7 @@
 <template>
   <div id="record-detail-page">
     <div class="nav-bar" @click="router.push('/record')">
-      <SvgIcon name="chevron-left" size="22px" />
+      <AppSvgIcon name="chevron-left" size="22px" />
       申请详情
     </div>
 
@@ -22,7 +22,7 @@
           <div class="user-name">{{ recordDetailData?.nickname }}</div>
           <t-tag variant="light" :theme="APPROVE_TAG_MAP[recordDetailData?.orderState]?.theme">
             <template #icon>
-              <SvgIcon
+              <AppSvgIcon
                 :name="APPROVE_TAG_MAP[recordDetailData?.orderState]?.icon ?? ''"
                 size="12px"
               />
@@ -38,14 +38,14 @@
 
     <div class="description-container">
       <!-- 基础信息-->
-      <Descriptions title="申请详情" :items="baseItems" :data="recordDetailData">
+      <AppDescriptions title="申请详情" :items="baseItems" :data="recordDetailData">
         <template #item-orderType="{ value }">
           <t-tag variant="light" theme="primary">{{ value }}申请</t-tag>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 请假详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordDetailData?.orderType === '请假' && recordDetailData?.leaveOrderFlowDTO"
         title="请假详情"
         :items="leaveItems"
@@ -69,10 +69,10 @@
             />
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 调休详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordDetailData?.orderType === '调休' && recordDetailData?.compLeaveOrderFlowDTO"
         title="调休详情"
         :items="restItems"
@@ -83,10 +83,10 @@
             {{ formatDateRange(range) }}
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 外出详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordDetailData?.orderType === '外出' && recordDetailData?.travelOrderFlowDTO"
         title="外出详情"
         :items="outingItems"
@@ -110,10 +110,10 @@
             />
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 补卡详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordDetailData?.orderType === '补卡' && recordDetailData?.attenCorrectionFlowDTO"
         title="补卡详情"
         :items="makeupItems"
@@ -124,10 +124,10 @@
             {{ formatDateYMD(date) }}
           </div>
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 人脸变更详情 -->
-      <Descriptions
+      <AppDescriptions
         v-if="recordDetailData?.orderType === '人脸' && recordDetailData?.faceChangeOrderFlowDTO"
         title="人脸变更详情"
         :items="faceUpdateItems"
@@ -142,10 +142,10 @@
             @click="handlePreview([value])"
           />
         </template>
-      </Descriptions>
+      </AppDescriptions>
 
       <!-- 审批详情 -->
-      <Descriptions title="审批详情" :items="approvalItems" :data="recordDetailData" />
+      <AppDescriptions title="审批详情" :items="approvalItems" :data="recordDetailData" />
 
       <!-- 撤销申请 -->
       <t-button
@@ -174,9 +174,9 @@ import {
 } from '@/api/approve-controller'
 import { APPROVE_STATUS_ENUM, APPROVE_STATUS_MAP, APPROVE_TAG_MAP } from '@/constants/record'
 import { formatDate, formatDateRange, formatDateYMD } from '@/utils/date'
-import SvgIcon from '@/components/SvgIcon.vue'
-import type { DescriptionsItemColumn } from '@/components/Descriptions.vue'
-import Descriptions from '@/components/Descriptions.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import type { DescriptionsItemColumn } from '@/components/AppDescriptions.vue'
+import AppDescriptions from '@/components/AppDescriptions.vue'
 
 const router = useRouter()
 

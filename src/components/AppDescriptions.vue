@@ -3,33 +3,33 @@
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/Descriptions.vue
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppDescriptions.vue
  * @Description  : 详情描述容器组件（支持插槽式和配置式调用）
 -->
 <template>
-  <div class="descriptions">
+  <div class="app-descriptions">
     <!-- 标题行 -->
-    <div class="descriptions-header" v-if="hasHeader">
-      <div class="descriptions-title">
+    <div class="app-descriptions-header" v-if="hasHeader">
+      <div class="app-descriptions-title">
         <slot name="title">
           <img v-if="showTitleIcon" src="@/assets/svgs/title-icon-line.svg" />
           <span v-if="title">{{ title }}</span>
         </slot>
       </div>
-      <div class="descriptions-extra">
+      <div class="app-descriptions-extra">
         <slot name="extra"></slot>
       </div>
     </div>
 
     <!-- 插槽式 -->
-    <div class="descriptions-body" v-if="!items?.length">
+    <div class="app-descriptions-body" v-if="!items?.length">
       <slot></slot>
     </div>
 
     <!-- 配置式 -->
-    <div class="descriptions-body" v-else>
+    <div class="app-descriptions-body" v-else>
       <template v-for="(col, idx) in items" :key="idx">
-        <DescriptionsItem :label="col.label" :border="border">
+        <AppDescriptionsItem :label="col.label" :border="border">
           <!-- 标签区域插槽 -->
           <template #label v-if="$slots[`label-${col.field}`]">
             <slot :name="`label-${col.field}`" :row="data" :column="col"></slot>
@@ -61,7 +61,7 @@
                 : data?.[col.field] || '--'
             }}
           </template>
-        </DescriptionsItem>
+        </AppDescriptionsItem>
       </template>
     </div>
   </div>
@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 import { computed, useSlots } from 'vue'
-import DescriptionsItem from './DescriptionsItem.vue'
+import AppDescriptionsItem from './AppDescriptionsItem.vue'
 
 export interface DescriptionsItemColumn {
   field?: string
@@ -102,17 +102,17 @@ const hasHeader = computed(
 </script>
 
 <style scoped lang="scss">
-.descriptions {
+.app-descriptions {
   background-color: #fff;
   border-radius: 16px;
 
-  .descriptions-header {
+  .app-descriptions-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 14px 16px 10px;
 
-    .descriptions-title {
+    .app-descriptions-title {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -121,14 +121,14 @@ const hasHeader = computed(
       color: #171a1d;
     }
 
-    .descriptions-extra {
+    .app-descriptions-extra {
       display: flex;
       align-items: center;
       gap: 8px;
     }
   }
 
-  .descriptions-body {
+  .app-descriptions-body {
     display: flex;
     flex-direction: column;
     margin-bottom: 6px;

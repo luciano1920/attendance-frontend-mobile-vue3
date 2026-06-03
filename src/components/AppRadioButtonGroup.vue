@@ -3,11 +3,11 @@
  * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/RadioButtonGroup.vue
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppRadioButtonGroup.vue
  * @Description  : 单选框组按钮式组件
 -->
 <template>
-  <div class="radio-button-group" :class="computedClass">
+  <div class="app-radio-button-group" :class="computedClass">
     <div
       v-for="(option, index) in options"
       :key="index"
@@ -56,7 +56,7 @@ const emit = defineEmits<{
 }>()
 
 const computedClass = computed(() => ({
-  [`radio-button-group--${props.size}`]: true,
+  [`app-radio-button-group--${props.size}`]: true,
 }))
 
 /**
@@ -76,7 +76,7 @@ const handleClick = (value: RadioValue) => {
 </script>
 
 <style scoped lang="scss">
-.radio-button-group {
+.app-radio-button-group {
   display: inline-flex;
   gap: 6px;
   padding: 0;
@@ -113,22 +113,22 @@ const handleClick = (value: RadioValue) => {
 }
 
 /* 大小调整 */
-.radio-button-group--small {
+.app-radio-button-group--small {
   height: 24px;
 }
 
-.radio-button-group--small .radio-button {
+.app-radio-button-group--small .radio-button {
   height: 24px;
   line-height: 24px;
   font-size: 11px;
   padding: 0 8px;
 }
 
-.radio-button-group--large {
+.app-radio-button-group--large {
   height: 36px;
 }
 
-.radio-button-group--large .radio-button {
+.app-radio-button-group--large .radio-button {
   height: 36px;
   line-height: 36px;
   font-size: 14px;
@@ -136,23 +136,23 @@ const handleClick = (value: RadioValue) => {
 }
 
 /* 主题色 */
-:deep(.radio-button-group--blue .radio-button--active) {
+:deep(.app-radio-button-group--blue .radio-button--active) {
   background-color: #0052d9;
 }
 
-:deep(.radio-button-group--green .radio-button--active) {
+:deep(.app-radio-button-group--green .radio-button--active) {
   background-color: #2ba471;
 }
 
-:deep(.radio-button-group--red .radio-button--active) {
+:deep(.app-radio-button-group--red .radio-button--active) {
   background-color: #d54941;
 }
 
-:deep(.radio-button-group--orange .radio-button--active) {
+:deep(.app-radio-button-group--orange .radio-button--active) {
   background-color: #e37318;
 }
 
-:deep(.radio-button-group--purple .radio-button--active) {
+:deep(.app-radio-button-group--purple .radio-button--active) {
   background-color: #8b5cf6;
 }
 </style>

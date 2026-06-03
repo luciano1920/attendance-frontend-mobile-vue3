@@ -37,22 +37,22 @@
       <t-cell-group theme="card" class="user-action-list">
         <t-cell title="打卡设备" arrow hover @click="router.push('/device')">
           <template #leftIcon>
-            <IconContainer icon="hard-drive" theme="orange" />
+            <AppIconContainer icon="hard-drive" theme="orange" />
           </template>
         </t-cell>
         <t-cell title="应用设置" arrow hover @click="router.push('/settings')">
           <template #leftIcon>
-            <IconContainer icon="settings" theme="blue" />
+            <AppIconContainer icon="settings" theme="blue" />
           </template>
         </t-cell>
         <!-- <t-cell title="帮助中心" arrow hover @click="router.push('/help')">
           <template #leftIcon>
-            <IconContainer icon="question-mark-circle" theme="green" />
+            <AppIconContainer icon="question-mark-circle" theme="green" />
           </template>
         </t-cell>
         <t-cell title="关于应用" arrow hover @click="router.push('/about')">
           <template #leftIcon>
-            <IconContainer icon="info" theme="purple" />
+            <AppIconContainer icon="info" theme="purple" />
           </template>
         </t-cell> -->
       </t-cell-group>
@@ -64,7 +64,7 @@
         variant="outline"
         @click="handleLogout"
       >
-        <SvgIcon name="log-out" />
+        <AppSvgIcon name="log-out" />
         退出登录
       </t-button>
 
@@ -80,8 +80,8 @@ import { ActionSheetPlugin, Message } from 'tdesign-mobile-vue'
 
 import { telecomLogoutUsingGet } from '@/api/auth-controller'
 import { useUserStore } from '@/stores/user-store'
-import SvgIcon from '@/components/SvgIcon.vue'
-import IconContainer from '@/components/IconContainer.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppIconContainer from '@/components/AppIconContainer.vue'
 import defaultAvatar from '@/assets/svgs/profile-avatar.svg'
 
 const router = useRouter()

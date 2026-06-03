@@ -10,7 +10,7 @@
   <div id="face-update-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
+      <AppSvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">人脸录入</div>
         <div class="form-desc">录入人脸，开启智能打卡</div>
@@ -64,7 +64,7 @@
       <div class="face-update-wrapper">
         <div class="face-update-title">请上传清晰的正面人脸照片</div>
         <!-- 人脸上传组件 -->
-        <PictureUpload
+        <AppPictureUpload
           class="face-update-action"
           :max-count="1"
           :success-upload="handleSuccess"
@@ -72,15 +72,15 @@
         />
         <div class="face-update-tips">
           <div class="tips-item">
-            <SvgIcon name="check-circle" color="#8B5CF6" size="13px" />
+            <AppSvgIcon name="check-circle" color="#8B5CF6" size="13px" />
             <div class="tips-desc">请确保光线充足，面部清晰</div>
           </div>
           <div class="tips-item">
-            <SvgIcon name="check-circle" color="#8B5CF6" size="13px" />
+            <AppSvgIcon name="check-circle" color="#8B5CF6" size="13px" />
             <div class="tips-desc">不得佩戴口罩、墨镜等遮挡物</div>
           </div>
           <div class="tips-item">
-            <SvgIcon name="check-circle" color="#8B5CF6" size="13px" />
+            <AppSvgIcon name="check-circle" color="#8B5CF6" size="13px" />
             <div class="tips-desc">图片格式支持 jpg, png, jpeg，大小不超过 10MB</div>
           </div>
         </div>
@@ -103,8 +103,8 @@ import {
   fetchFaceUpdateRecordUsingGet,
 } from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
-import SvgIcon from '@/components/SvgIcon.vue'
-import PictureUpload from '@/components/PictureUpload.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppPictureUpload from '@/components/AppPictureUpload.vue'
 
 const router = useRouter()
 

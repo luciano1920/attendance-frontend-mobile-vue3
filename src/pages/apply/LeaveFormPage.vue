@@ -10,7 +10,7 @@
   <div id="leave-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
+      <AppSvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">请假申请</div>
         <div class="form-desc">填写请假信息，等待审批</div>
@@ -19,7 +19,7 @@
 
     <!-- 表单须知 -->
     <div class="notice-bar">
-      <SvgIcon name="triangle-alert" size="15px" color="#E37318" style="margin-top: 2px" />
+      <AppSvgIcon name="triangle-alert" size="15px" color="#E37318" style="margin-top: 2px" />
       <div class="notice-content">
         <div class="notice-title">请假须知</div>
         <div class="notice-desc">ABC类员工仅能在当前系统申请1天以内的请假</div>
@@ -133,7 +133,7 @@
         </t-form-item>
 
         <t-form-item label="附件" name="fileIds" content-align="right">
-          <PictureUpload :success-upload="handleSuccess" :remove-upload="handleRemove" />
+          <AppPictureUpload :success-upload="handleSuccess" :remove-upload="handleRemove" />
         </t-form-item>
       </t-form>
 
@@ -154,8 +154,8 @@ import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
 import { calcActualApplyDaysUsingPost, createLeaveApplyUsingPost } from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
-import SvgIcon from '@/components/SvgIcon.vue'
-import PictureUpload from '@/components/PictureUpload.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppPictureUpload from '@/components/AppPictureUpload.vue'
 import TimeRangePickerPopup from './components/TimeRangePickerPopup.vue'
 
 const router = useRouter()

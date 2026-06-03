@@ -74,7 +74,7 @@
 1.  **SFC 顺序**：严格遵守 `<template>` -> `<script setup lang="ts">` -> `<style lang="scss" scoped>`。
 2.  **Props 定义**：必须使用 TypeScript 接口（interface）定义 Props，并使用 withDefaults 提供默认值。
 3.  **样式隔离**：业务组件样式必须添加 `scoped`，全局样式仅允许在 `src/styles/global.css` 中修改，禁止直接在 `App.vue` 中写全局样式。
-4.  **SVG 图标**：新增图标可以去 [在线图标网站](https://lucide.dev/icons/) 获取想要的线框式图标，下载其svg文件后，不更改原有图标文件名，放入 `src/assets/svgs/icons/` 目录内，通过 `<SvgIcon name="xxx" />` 引用，严禁使用在线链接或 base64 大图。
+4.  **SVG 图标**：新增图标可以去 [在线图标网站](https://lucide.dev/icons/) 获取想要的线框式图标，下载其svg文件后，不更改原有图标文件名，放入 `src/assets/svgs/icons/` 目录内，通过 `<AppSvgIcon name="xxx" />` 引用，严禁使用在线链接或 base64 大图。
 5.  **组件拆分与行数限制**：
     - **硬性行数限制**：单个 Vue 组件/页面文件（含 template、script、style）的总行数**建议不超过 500 行，严禁超过 800 行**。
     - **UI 组件拆分**：当页面包含多个独立的 UI 区块、表单项过多、或存在可复用的 UI 模式时，**必须**将其抽离为子组件，存放于当前模块或者公共模块的 `components` 目录下。

@@ -10,7 +10,7 @@
   <div id="user-login-page">
     <t-button theme="light" shape="circle" @click="router.push('/auth')">
       <template #icon>
-        <SvgIcon name="arrow-left" size="20px" />
+        <AppSvgIcon name="arrow-left" size="20px" />
       </template>
     </t-button>
 
@@ -21,7 +21,7 @@
       </div>
 
       <div class="logo">
-        <SvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
+        <AppSvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
       </div>
     </div>
 
@@ -37,7 +37,7 @@
       <t-form-item label="账号" name="username">
         <t-input v-model="formData.username" borderless placeholder="请输入工号">
           <template #prefixIcon>
-            <SvgIcon name="user" />
+            <AppSvgIcon name="user" />
           </template>
         </t-input>
       </t-form-item>
@@ -45,7 +45,7 @@
       <t-form-item label="密码" name="password">
         <t-input v-model="formData.password" borderless type="password" placeholder="请输入密码">
           <template #prefixIcon>
-            <SvgIcon name="lock" />
+            <AppSvgIcon name="lock" />
           </template>
         </t-input>
       </t-form-item>
@@ -53,12 +53,12 @@
       <t-form-item label="验证码" name="smsCode">
         <t-input v-model="formData.smsCode" borderless placeholder="请输入验证码">
           <template #prefixIcon>
-            <SvgIcon name="smartphone" />
+            <AppSvgIcon name="smartphone" />
           </template>
           <template #suffix>
             <!-- 倒计时按钮组件 -->
-            <SmsCountDownButton
-              ref="smsCountDownRef"
+            <AppCountdownButton
+              ref="smsCountdownRef"
               :disabled="!formData.username"
               @send="sendSmsVerificationCode"
             />
@@ -93,9 +93,9 @@ import { Message, type SubmitContext } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
 import { initMfaLoginUsingPost, verifyMfaLoginUsingPost } from '@/api/auth-controller'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 import CaptchaWrapper from '@/components/captcha/CaptchaWrapper.vue'
-import SmsCountDownButton from '@/components/SmsCountDownButton.vue'
+import AppCountdownButton from '@/components/AppCountdownButton.vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -116,7 +116,7 @@ const rules = {
   smsCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 }
 
-const smsCountDownRef = ref()
+const smsCountdownRef = ref()
 const captchaWrapperRef = ref()
 
 /** 发送验证码前，进行图形滑动人机验证 */
@@ -148,7 +148,7 @@ const captchaSuccess = async (params: { captchaVerification: string }) => {
   if (res.data.code === 0 && res.data.data) {
     formData.challengeId = res.data.data.challengeId
     Message.success({ content: `验证码已发送到 ${res.data.data.maskedPhone}`, offset: [10, 16] })
-    smsCountDownRef.value?.beginCountdown() // 启动倒计时
+    smsCountdownRef.value?.beginCountdown() // 启动倒计时
   } else {
     formData.challengeId = undefined
     Message.error({

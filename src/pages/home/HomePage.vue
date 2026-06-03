@@ -16,13 +16,13 @@
       <div class="user-desc">
         <div class="user-name">{{ loginUserInfo.username }}</div>
         <div class="user-role">
-          <SvgIcon name="map-pin" size="12px" style="margin-right: 4px" />
+          <AppSvgIcon name="map-pin" size="12px" style="margin-right: 4px" />
           <span>{{ loginUserInfo.dept?.name }}</span>
         </div>
       </div>
 
       <t-button size="small" variant="outline" class="system-rule" @click="router.push('/rules')">
-        <SvgIcon name="file-text" />
+        <AppSvgIcon name="file-text" />
         帮助手册
       </t-button>
     </div>
@@ -59,7 +59,7 @@ import {
   recordColorCSSVariables,
 } from '@/constants/record'
 import defaultAvatar from '@/assets/svgs/home-avatar.svg'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 import AttendanceCalendar from './components/AttendanceCalendar.vue'
 import AttendanceInfo from './components/AttendanceInfo.vue'

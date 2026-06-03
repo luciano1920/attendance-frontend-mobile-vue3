@@ -3,12 +3,12 @@
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-06
- * @FilePath     : /attendance-frontend-mobile/src/components/SmsCountDownButton.vue
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppCountdownButton.vue
  * @Description  : 倒计时按钮组件（用于触发验证码获取场景）
 -->
 <template>
   <t-button
-    class="sms-countdown-button"
+    class="app-countdown-button"
     size="extra-small"
     theme="primary"
     variant="text"
@@ -104,7 +104,7 @@ defineExpose({
 </script>
 
 <style scoped lang="scss">
-.sms-countdown-button {
+.app-countdown-button {
   min-width: 100px;
   font-weight: 500;
 }

@@ -29,7 +29,7 @@
         <t-tab-bar-item v-for="item in tabMenuList" :key="item.value" :value="item.value">
           {{ item.label }}
           <template #icon>
-            <SvgIcon :name="item.icon" size="20px" />
+            <AppSvgIcon :name="item.icon" size="20px" />
           </template>
         </t-tab-bar-item>
       </t-tab-bar>
@@ -44,7 +44,7 @@ import { storeToRefs } from 'pinia'
 
 import { useUserStore } from '@/stores/user-store'
 import { ACCESS_ENUM, getUserAccessLevel } from '@/constants/access'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 const router = useRouter()
 const route = useRoute()

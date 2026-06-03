@@ -9,7 +9,7 @@
 <template>
   <div id="user-settings-page">
     <div class="nav-bar" @click="router.push('/profile')">
-      <SvgIcon name="chevron-left" size="22px" />
+      <AppSvgIcon name="chevron-left" size="22px" />
       应用设置
     </div>
 
@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user-store'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 const router = useRouter()
 const userStore = useUserStore()

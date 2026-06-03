@@ -9,7 +9,7 @@
 <template>
   <div id="help-center-page">
     <div class="nav-bar" @click="router.push('/profile')">
-      <SvgIcon name="chevron-left" size="22px" />
+      <AppSvgIcon name="chevron-left" size="22px" />
       帮助中心
     </div>
 
@@ -36,7 +36,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from 'tdesign-mobile-vue'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 const router = useRouter()
 

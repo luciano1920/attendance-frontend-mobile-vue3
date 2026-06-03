@@ -10,7 +10,7 @@
   <div id="user-register-page">
     <t-button theme="light" shape="circle" @click="router.push('/auth')">
       <template #icon>
-        <SvgIcon name="arrow-left" size="20px" />
+        <AppSvgIcon name="arrow-left" size="20px" />
       </template>
     </t-button>
 
@@ -21,7 +21,7 @@
       </div>
 
       <div class="logo">
-        <SvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
+        <AppSvgIcon name="fingerprint-pattern" color="#fff" size="36px" />
       </div>
     </div>
 
@@ -35,7 +35,7 @@
       <t-form-item label="账号" name="username">
         <t-input v-model="formData.username" borderless placeholder="请输入工号或手机号">
           <template #prefixIcon>
-            <SvgIcon name="user" />
+            <AppSvgIcon name="user" />
           </template>
         </t-input>
       </t-form-item>
@@ -43,7 +43,7 @@
       <t-form-item label="密码" name="password">
         <t-input v-model="formData.password" borderless type="password" placeholder="请输入密码">
           <template #prefixIcon>
-            <SvgIcon name="lock" />
+            <AppSvgIcon name="lock" />
           </template>
         </t-input>
       </t-form-item>
@@ -56,7 +56,7 @@
           placeholder="请输入确认密码"
         >
           <template #prefixIcon>
-            <SvgIcon name="lock-keyhole" />
+            <AppSvgIcon name="lock-keyhole" />
           </template>
         </t-input>
       </t-form-item>
@@ -64,11 +64,11 @@
       <t-form-item label="验证码" name="phoneCode">
         <t-input v-model="formData.phoneCode" borderless placeholder="请输入验证码">
           <template #prefixIcon>
-            <SvgIcon name="smartphone" />
+            <AppSvgIcon name="smartphone" />
           </template>
           <template #suffix>
             <!-- 倒计时按钮组件 -->
-            <SmsCountDownButton ref="smsCountDownRef" :disabled="!formData.username" />
+            <AppCountdownButton ref="smsCountdownRef" :disabled="!formData.username" />
           </template>
         </t-input>
       </t-form-item>
@@ -87,8 +87,8 @@
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
-import SvgIcon from '@/components/SvgIcon.vue'
-import SmsCountDownButton from '@/components/SmsCountDownButton.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppCountdownButton from '@/components/AppCountdownButton.vue'
 
 const router = useRouter()
 
@@ -100,7 +100,7 @@ interface FormData {
 
 const formData = reactive<FormData>({})
 
-const smsCountDownRef = ref() // 验证码倒计时按钮组件实例
+const smsCountdownRef = ref() // 验证码倒计时按钮组件实例
 
 const handleSubmit = async (fields: FormData) => {
   // router.replace('/auth')

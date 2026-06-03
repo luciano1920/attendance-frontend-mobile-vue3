@@ -6,7 +6,7 @@
  * @FilePath     : /attendance-frontend-mobile/src/constants/record.ts
  * @Description  : 考勤记录相关常量类
  */
-import type { ThemeType } from '@/components/IconContainer.vue'
+import type { ThemeType } from '@/components/AppIconContainer.vue'
 
 /** 考勤记录类型枚举 */
 export const RECORD_TYPE_ENUM = {

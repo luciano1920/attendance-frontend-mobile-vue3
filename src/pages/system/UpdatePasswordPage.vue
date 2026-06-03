@@ -10,7 +10,7 @@
   <div id="update-password-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="router.push('/settings')" />
+      <AppSvgIcon name="chevron-left" size="22px" @click="router.push('/settings')" />
       <div class="form-title">
         <div class="form-name">修改密码</div>
         <div class="form-desc">设置新的登录密码，保护您的账户安全</div>
@@ -19,7 +19,7 @@
 
     <!-- 表单须知 -->
     <div class="notice-bar">
-      <SvgIcon name="triangle-alert" size="15px" color="#E37318" style="margin-top: 2px" />
+      <AppSvgIcon name="triangle-alert" size="15px" color="#E37318" style="margin-top: 2px" />
       <div class="notice-content">
         <div class="notice-title">密码安全须知</div>
         <div class="notice-desc">密码修改后请妥善保管，建议定期修改以保障账户安全。</div>
@@ -76,7 +76,7 @@ import { Message } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
 import { updateUserPasswordUsingPut } from '@/api/user-controller'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 const router = useRouter()
 const userStore = useUserStore()

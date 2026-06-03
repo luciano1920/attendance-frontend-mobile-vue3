@@ -9,13 +9,13 @@
 <template>
   <div id="about-system-page">
     <div class="nav-bar" @click="router.push('/profile')">
-      <SvgIcon name="chevron-left" size="22px" />
+      <AppSvgIcon name="chevron-left" size="22px" />
       关于应用
     </div>
 
     <div class="app-header">
       <div class="app-logo">
-        <SvgIcon name="fingerprint-pattern" color="#fff" size="44px" />
+        <AppSvgIcon name="fingerprint-pattern" color="#fff" size="44px" />
       </div>
       <div class="app-name">{{ systemTitle }}</div>
       <div class="app-version">Version {{ systemVersion }}</div>
@@ -44,7 +44,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 import UserAgreementDialog from '@/pages/auth/components/UserAgreementDialog.vue'
 import PrivacyPolicyDialog from '@/pages/auth/components/PrivacyPolicyDialog.vue'
 

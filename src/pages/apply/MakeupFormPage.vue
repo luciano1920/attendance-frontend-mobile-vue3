@@ -10,7 +10,7 @@
   <div id="makeup-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
+      <AppSvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">补卡申请</div>
         <div class="form-desc">申请补录缺失的打卡记录</div>
@@ -19,7 +19,7 @@
 
     <!-- 表单须知 -->
     <div class="notice-bar">
-      <SvgIcon name="triangle-alert" size="15px" color="#E37318" style="margin-top: 2px" />
+      <AppSvgIcon name="triangle-alert" size="15px" color="#E37318" style="margin-top: 2px" />
       <div class="notice-content">
         <div class="notice-title">补卡须知</div>
         <div class="notice-desc">补卡较多会被考核通报，需在缺卡次月5日前完成申请。</div>
@@ -70,7 +70,7 @@
         </t-form-item>
 
         <t-form-item label="补卡类型" name="attenCorrectionType" content-align="right">
-          <RadioButtonGroup
+          <AppRadioButtonGroup
             v-model="formData.attenCorrectionType"
             :options="makeupTypeOptions"
             theme="red"
@@ -129,8 +129,8 @@ import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
 import { fetchAllowMakeupDayUsingPost } from '@/api/record-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
-import SvgIcon from '@/components/SvgIcon.vue'
-import RadioButtonGroup from '@/components/RadioButtonGroup.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppRadioButtonGroup from '@/components/AppRadioButtonGroup.vue'
 import MakeupCalendar from './components/MakeupCalendar.vue'
 
 const router = useRouter()

@@ -14,7 +14,7 @@
       class="info-empty"
     >
       <template #icon>
-        <SvgIcon name="inbox" size="40px" />
+        <AppSvgIcon name="inbox" size="40px" />
       </template>
     </t-empty>
 

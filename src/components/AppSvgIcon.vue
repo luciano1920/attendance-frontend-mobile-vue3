@@ -2,8 +2,8 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/SvgIcon.vue
+ * @LastEditTime : 2026-06
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppSvgIcon.vue
  * @Description  : SVG 图标组件，用于动态加载和显示 SVG 图标
 -->
 <template>
@@ -38,14 +38,14 @@ const iconName = computed(() => `#icon-${props.name}`)
 
 // 动态类名
 const svgClass = computed(() => {
-  const classes = ['svg-icon']
+  const classes = ['app-svg-icon']
   if (props.className) classes.push(props.className)
   return classes.join(' ')
 })
 </script>
 
 <style scoped lang="scss">
-.svg-icon {
+.app-svg-icon {
   width: 1em;
   height: 1em;
   vertical-align: -0.15em;

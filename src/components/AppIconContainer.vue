@@ -3,18 +3,18 @@
  * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/IconContainer.vue
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppIconContainer.vue
  * @Description  : 图标容器组件
 -->
 <template>
-  <div class="icon-container" :style="containerStyle">
-    <SvgIcon :name="icon" :color="iconColor" />
+  <div class="app-icon-container" :style="containerStyle">
+    <AppSvgIcon :name="icon" :color="iconColor" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 
 // 定义主题类型
 export type ThemeType = 'blue' | 'red' | 'orange' | 'green' | 'purple' | 'gray'
@@ -66,7 +66,7 @@ const containerStyle = computed(() => {
 </script>
 
 <style scoped>
-.icon-container {
+.app-icon-container {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -16,7 +16,7 @@
 
       <div class="apply-action-grid">
         <div class="apply-action-item short-item" @click="$router.push('/apply/leave')">
-          <IconContainer icon="coffee" theme="blue" />
+          <AppIconContainer icon="coffee" theme="blue" />
           <div class="apply-action-item-label">
             <div class="apply-action-item-name">请假申请</div>
             <div class="apply-action-item-desc">事假/病假</div>
@@ -24,7 +24,7 @@
         </div>
 
         <div class="apply-action-item short-item" @click="$router.push('/apply/outing')">
-          <IconContainer icon="plane" theme="orange" />
+          <AppIconContainer icon="plane" theme="orange" />
           <div class="apply-action-item-label">
             <div class="apply-action-item-name">外出申请</div>
             <div class="apply-action-item-desc">公差/出差/驻点</div>
@@ -32,7 +32,7 @@
         </div>
 
         <div class="apply-action-item short-item" @click="$router.push('/apply/makeup')">
-          <IconContainer icon="calendar-plus" theme="red" />
+          <AppIconContainer icon="calendar-plus" theme="red" />
           <div class="apply-action-item-label">
             <div class="apply-action-item-name">补卡申请</div>
             <div class="apply-action-item-desc">忘记打卡/设备故障</div>
@@ -40,7 +40,7 @@
         </div>
 
         <div class="apply-action-item short-item" @click="$router.push('/apply/rest')">
-          <IconContainer icon="moon" theme="green" />
+          <AppIconContainer icon="moon" theme="green" />
           <div class="apply-action-item-label">
             <div class="apply-action-item-name">调休申请</div>
             <div class="apply-action-item-desc">申请调休休假</div>
@@ -48,7 +48,7 @@
         </div>
 
         <div class="apply-action-item long-item" @click="$router.push('/apply/face-update')">
-          <IconContainer icon="scan-face" theme="purple" />
+          <AppIconContainer icon="scan-face" theme="purple" />
           <div class="apply-action-item-label">
             <div class="apply-action-item-name">人脸录入</div>
             <div class="apply-action-item-desc">录入人脸用于人脸识别打卡</div>
@@ -60,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import IconContainer from '@/components/IconContainer.vue'
+import AppIconContainer from '@/components/AppIconContainer.vue'
 </script>
 
 <style scoped lang="scss">

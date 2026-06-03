@@ -9,7 +9,7 @@
 <template>
   <div id="device-list-page">
     <div class="nav-bar" @click="router.push('/profile')">
-      <SvgIcon name="chevron-left" size="22px" />
+      <AppSvgIcon name="chevron-left" size="22px" />
       打卡设备
     </div>
 
@@ -25,7 +25,7 @@
       <t-pull-down-refresh v-if="!initLoading" @refresh="handleRefresh">
         <t-empty description="暂无数据">
           <template #icon>
-            <SvgIcon name="funnel" size="48px" />
+            <AppSvgIcon name="funnel" size="48px" />
           </template>
         </t-empty>
       </t-pull-down-refresh>
@@ -42,7 +42,7 @@
     </div>
 
     <!-- 列表一键返回顶部 -->
-    <BackListTop text="顶部" />
+    <AppBackListTop text="顶部" />
   </div>
 </template>
 
@@ -52,8 +52,8 @@ import { useRouter } from 'vue-router'
 import { Message, type ListProps } from 'tdesign-mobile-vue'
 
 import { listMachineInfoByPageUsingGet } from '@/api/machine-controller.ts'
-import SvgIcon from '@/components/SvgIcon.vue'
-import BackListTop from '@/components/BackListTop.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppBackListTop from '@/components/AppBackListTop.vue'
 import DeviceListCard from './components/DeviceListCard.vue'
 
 const router = useRouter()

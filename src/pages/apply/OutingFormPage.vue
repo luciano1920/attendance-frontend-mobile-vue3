@@ -10,7 +10,7 @@
   <div id="outing-form-page">
     <!-- 表单页头部 -->
     <div class="form-header">
-      <SvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
+      <AppSvgIcon name="chevron-left" size="22px" @click="router.push('/apply')" />
       <div class="form-title">
         <div class="form-name">外出申请</div>
         <div class="form-desc">记录外出行程，合规管理</div>
@@ -19,7 +19,7 @@
 
     <!-- 表单须知 -->
     <div class="notice-bar">
-      <SvgIcon name="triangle-alert" color="#E37318" style="margin-top: 2px" />
+      <AppSvgIcon name="triangle-alert" color="#E37318" style="margin-top: 2px" />
       <div class="notice-content">
         <div class="notice-title">外出须知</div>
         <div class="notice-desc">若当日外出时间不能覆盖当日全部工作时间，当日仍需打卡</div>
@@ -73,7 +73,7 @@
         </t-form-item>
 
         <t-form-item label="外出类型" name="travelType" content-align="right">
-          <RadioButtonGroup
+          <AppRadioButtonGroup
             v-model="formData.travelType"
             :options="outingTypeOptions"
             theme="orange"
@@ -140,8 +140,8 @@ import { fetchApproversListUsingGet } from '@/api/approve-controller'
 import { fetchDictOptionsListUsingGet } from '@/api/dict-controller'
 import { calcActualApplyDaysUsingPost, createOutingApplyUsingPost } from '@/api/apply-controller'
 import { usePicker, type PickerOptionsMap } from '@/composables/usePicker'
-import SvgIcon from '@/components/SvgIcon.vue'
-import RadioButtonGroup from '@/components/RadioButtonGroup.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
+import AppRadioButtonGroup from '@/components/AppRadioButtonGroup.vue'
 import TimeRangePickerPopup from './components/TimeRangePickerPopup.vue'
 
 const router = useRouter()

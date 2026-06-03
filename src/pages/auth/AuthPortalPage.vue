@@ -9,13 +9,13 @@
 <template>
   <div id="auth-page">
     <div class="system-logo">
-      <SvgIcon name="fingerprint-pattern" color="#fff" size="44px" />
+      <AppSvgIcon name="fingerprint-pattern" color="#fff" size="44px" />
     </div>
 
     <div class="system-title">{{ systemTitle }}</div>
     <div class="system-desc">{{ systemDescription }}</div>
     <div class="system-slogan">
-      <SvgIcon name="check-circle" />
+      <AppSvgIcon name="check-circle" />
       {{ systemSlogan }}
     </div>
 
@@ -29,7 +29,7 @@
         @click="getTelecomLoginUrl"
       >
         <template #icon>
-          <SvgIcon name="shield-check" />
+          <AppSvgIcon name="shield-check" />
         </template>
         天翼认证登录
       </t-button>
@@ -42,7 +42,7 @@
         @click="router.push({ path: '/auth/login', query: route.query })"
       >
         <template #icon>
-          <SvgIcon name="user" color="#0052d9" />
+          <AppSvgIcon name="user" color="#0052d9" />
         </template>
         账号密码登录
       </t-button>
@@ -55,7 +55,7 @@
         @click="router.push('/auth/register')"
       >
         <template #icon>
-          <SvgIcon name="user-plus" color="#0052d9" />
+          <AppSvgIcon name="user-plus" color="#0052d9" />
         </template>
         注册新账号
       </t-button> -->
@@ -84,7 +84,7 @@ import { Message } from 'tdesign-mobile-vue'
 import { fetchTelecomLoginUrlUsingGet, unifiedLoginUsingGet } from '@/api/auth-controller'
 import { useUserStore } from '@/stores/user-store'
 import { getUrlQueryParamsUtil } from '@/utils'
-import SvgIcon from '@/components/SvgIcon.vue'
+import AppSvgIcon from '@/components/AppSvgIcon.vue'
 import UserAgreementDialog from './components/UserAgreementDialog.vue'
 import PrivacyPolicyDialog from './components/PrivacyPolicyDialog.vue'
 

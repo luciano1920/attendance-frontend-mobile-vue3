@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="device-list-card">
-    <IconContainer icon="server" theme="blue" />
+    <AppIconContainer icon="server" theme="blue" />
     <div class="list-card-content">
       <div class="list-item-title">{{ device?.address }}</div>
       <div class="list-item-alias">打卡机别名：{{ device?.alias }}</div>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import IconContainer from '@/components/IconContainer.vue'
+import AppIconContainer from '@/components/AppIconContainer.vue'
 
 interface Props {
   device: any

@@ -3,20 +3,24 @@
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/components/BackListTop.vue
+ * @FilePath     : /attendance-frontend-mobile/src/components/AppBackListTop.vue
  * @Description  : 列表一键返回顶部按钮
 -->
 <template>
   <div
     v-show="visible"
-    :class="['back-list-top', `back-list-top--${theme}`, { 'back-list-top--fixed': fixed }]"
+    :class="[
+      'app-back-list-top',
+      `app-back-list-top--${theme}`,
+      { 'app-back-list-top--fixed': fixed },
+    ]"
     @click="handleClick"
   >
-    <span class="back-list-top-icon">
-      <SvgIcon name="arrow-up-to-line" size="20px" />
+    <span class="app-back-list-top-icon">
+      <AppSvgIcon name="arrow-up-to-line" size="20px" />
     </span>
 
-    <span v-if="text" class="back-list-top-text">
+    <span v-if="text" class="app-back-list-top-text">
       {{ text }}
     </span>
   </div>
@@ -75,7 +79,7 @@ const handleClick = () => {
 </script>
 
 <style lang="scss" scoped>
-.back-list-top {
+.app-back-list-top {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -112,13 +116,13 @@ const handleClick = () => {
     border-radius: 50%;
   }
 
-  .back-list-top-icon {
+  .app-back-list-top-icon {
     display: inline-flex;
     align-items: center;
     justify-content: center;
   }
 
-  .back-list-top-text {
+  .app-back-list-top-text {
     font-size: 12px;
     line-height: 1;
   }
