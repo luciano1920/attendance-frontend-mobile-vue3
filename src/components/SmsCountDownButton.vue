@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
+ * @LastEditTime : 2026-06
  * @FilePath     : /attendance-frontend-mobile/src/components/SmsCountDownButton.vue
  * @Description  : 倒计时按钮组件（用于触发验证码获取场景）
 -->
@@ -12,7 +12,7 @@
     size="extra-small"
     theme="primary"
     variant="text"
-    :disabled="isCounting"
+    :disabled="buttonDisabled"
     @click="handleSmsSend"
   >
     {{ isCounting ? `${countdown}s 后重发` : initText }}
@@ -27,11 +27,14 @@ interface Props {
   duration?: number
   // 按钮初始文本
   initText?: string
+  // 按钮的禁用状态（如手机号未填）
+  disabled?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   duration: 60,
   initText: '发送验证码',
+  disabled: false,
 })
 
 const emit = defineEmits<{
@@ -43,13 +46,18 @@ const countdown = ref(0)
 // 是否正在倒计时
 const isCounting = computed(() => countdown.value > 0)
 
+// 合并内部的倒计时禁用 与 外部传入的条件禁用
+const buttonDisabled = computed(() => {
+  return isCounting.value || props.disabled
+})
+
 // 定时器
 let timer: ReturnType<typeof setInterval> | null = null
 
 /** 处理按钮点击事件 */
 const handleSmsSend = () => {
-  // 如果正在倒计时，则不处理
-  if (!isCounting.value) {
+  // 如果按钮处于禁用状态，则不处理
+  if (!buttonDisabled.value) {
     emit('send')
   }
 }

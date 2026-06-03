@@ -67,9 +67,8 @@
             <SvgIcon name="smartphone" />
           </template>
           <template #suffix>
-            <t-button style="font-weight: 500" size="extra-small" theme="primary" variant="text">
-              发送验证码
-            </t-button>
+            <!-- 倒计时按钮组件 -->
+            <SmsCountDownButton ref="smsCountDownRef" :disabled="!formData.username" />
           </template>
         </t-input>
       </t-form-item>
@@ -85,9 +84,11 @@
 </template>
 
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+
 import SvgIcon from '@/components/SvgIcon.vue'
+import SmsCountDownButton from '@/components/SmsCountDownButton.vue'
 
 const router = useRouter()
 
@@ -98,6 +99,8 @@ interface FormData {
 }
 
 const formData = reactive<FormData>({})
+
+const smsCountDownRef = ref() // 验证码倒计时按钮组件实例
 
 const handleSubmit = async (fields: FormData) => {
   // router.replace('/auth')

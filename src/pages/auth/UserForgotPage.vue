@@ -41,7 +41,11 @@
           </template>
           <template #suffix>
             <!-- 倒计时按钮组件 -->
-            <SmsCountDownButton ref="smsCountDownRef" @send="sendSmsVerificationCode" />
+            <SmsCountDownButton
+              ref="smsCountDownRef"
+              :disabled="!formData.mobile"
+              @send="sendSmsVerificationCode"
+            />
 
             <!-- 滑动验证弹窗组件 -->
             <CaptchaWrapper
@@ -79,7 +83,7 @@
           placeholder="请输入确认密码"
         >
           <template #prefixIcon>
-            <SvgIcon name="lock" />
+            <SvgIcon name="lock-keyhole" />
           </template>
         </t-input>
       </t-form-item>

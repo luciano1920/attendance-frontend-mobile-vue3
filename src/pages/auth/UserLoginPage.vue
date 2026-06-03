@@ -57,7 +57,11 @@
           </template>
           <template #suffix>
             <!-- 倒计时按钮组件 -->
-            <SmsCountDownButton ref="smsCountDownRef" @send="sendSmsVerificationCode" />
+            <SmsCountDownButton
+              ref="smsCountDownRef"
+              :disabled="!formData.username"
+              @send="sendSmsVerificationCode"
+            />
 
             <!-- 滑动验证弹窗组件 -->
             <CaptchaWrapper
