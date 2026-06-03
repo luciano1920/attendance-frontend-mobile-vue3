@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
+ * @LastEditTime : 2026-06
  * @FilePath     : /attendance-frontend-mobile/src/permission.ts
  * @Description  : 全局权限校验核心文件
  */
@@ -12,7 +12,7 @@ import router from '@/router'
 import { useUserStore } from '@/stores/user-store'
 import { ACCESS_ENUM, ACCESS_WEIGHT, ROLE_ACCESS_MAP } from '@/constants/access'
 
-const AUTH_WHITE_LIST = ['/auth/unauthorized', '/auth/tianyiBox']
+const AUTH_WHITE_LIST = ['/auth/unauthorized', '/auth/tianyiBox', '/auth/forgot']
 
 /**
  * @description 检查用户是否有权限访问
@@ -78,12 +78,8 @@ router.beforeEach(async (to) => {
 
   // ==================== 3. 第三层：已登录 or 未登录 ====================
   if (loginUser.value.accessToken) {
-    // 拦截已登录用户访问认证页（排除无权限页）
-    if (
-      to.path.startsWith('/auth') &&
-      to.path !== '/auth/unauthorized' &&
-      to.path !== '/auth/tianyiBox'
-    ) {
+    // 拦截已登录用户访问认证页（排除白名单内的以 'auth' 开头的页面）
+    if (to.path.startsWith('/auth') && !AUTH_WHITE_LIST.includes(to.path)) {
       return '/'
     }
 
