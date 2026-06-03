@@ -22,11 +22,11 @@
   },
   "lint-staged": {
     "*.{js,ts,tsx,vue}": [
-      "eslint . --fix --cache",
-      "prettier --write --experimental-cli src/"
+      "eslint --fix --cache",
+      "prettier --write --experimental-cli"
     ],
     "*.{css,scss,md}": [
-      "prettier --write --experimental-cli src/"
+      "prettier --write --experimental-cli"
     ]
   },
   "dependencies": {
