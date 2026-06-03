@@ -5,6 +5,10 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
+import { TDesignResolver } from '@tdesign-vue-next/auto-import-resolver'
+
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   // 当前执行 node 命令时文件夹的地址(工作目录)
@@ -24,6 +28,21 @@ export default defineConfig(({ mode }) => {
         // 指定 symbolId 格式
         symbolId: 'icon-[name]',
       }),
+      // 通过 TDesign 官方的插件按需引用使用：https://tdesign.tencent.com/mobile-vue/getting-started
+      AutoImport({
+        resolvers: [
+          TDesignResolver({
+            library: 'mobile-vue',
+          }),
+        ],
+      }),
+      Components({
+        resolvers: [
+          TDesignResolver({
+            library: 'mobile-vue',
+          }),
+        ],
+      }),
     ],
     server: {
       port: Number(env.VITE_PORT) || 5173,
@@ -41,7 +60,7 @@ export default defineConfig(({ mode }) => {
       outDir: env.VITE_OUT_DIR || 'dist',
       sourcemap: env.VITE_SOURCEMAP === 'true' ? 'inline' : false,
       minify: 'terser', // 代码压缩配置
-      chunkSizeWarningLimit: 800,
+      // chunkSizeWarningLimit: 800,
       // esbuild: {
       //   drop: ['debugger'],
       //   pure: mode === 'production' ? ['console.log', 'console.warn'] : [],

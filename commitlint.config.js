@@ -25,5 +25,6 @@ export default {
 
     'subject-empty': [2, 'never'],
     'subject-case': [2, 'never', ['start-case', 'pascal-case', 'upper-case']],
+    'body-max-line-length': [0, 'always', 200],
   },
 }

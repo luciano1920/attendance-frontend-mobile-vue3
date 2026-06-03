@@ -4,7 +4,6 @@ import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 
-import TDesign from 'tdesign-mobile-vue'
 import 'tdesign-mobile-vue/es/style/index.css' // 引入组件库的少量全局样式变量
 
 import 'virtual:svg-icons-register' // 引入svg图标注册插件
@@ -20,7 +19,6 @@ const pinia = createPinia()
 
 app.use(pinia)
 app.use(router)
-app.use(TDesign)
 app.component('SvgIcon', SvgIcon)
 
 app.mount('#app')
