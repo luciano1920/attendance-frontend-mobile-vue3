@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
+ * @LastEditTime : 2026-06
  * @FilePath     : /attendance-frontend-mobile/src/pages/auth/AuthPortalPage.vue
  * @Description  : 系统认证登录门户页
 -->
@@ -34,7 +34,7 @@
         天翼认证登录
       </t-button>
 
-      <!-- <t-button
+      <t-button
         variant="outline"
         size="large"
         :disabled="loginStatus"
@@ -45,7 +45,7 @@
           <SvgIcon name="user" color="#0052d9" />
         </template>
         账号密码登录
-      </t-button> -->
+      </t-button>
 
       <!-- <t-button
         variant="outline"

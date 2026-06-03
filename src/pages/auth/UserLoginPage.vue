@@ -1,9 +1,9 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-24 22:04
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-28 16:43
- * @FilePath     : \attendance-frontend-mobile\src\pages\auth\UserLoginPage.vue
+ * @Date         : 2026-03
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-06
+ * @FilePath     : /attendance-frontend-mobile/src/pages/auth/UserLoginPage.vue
  * @Description  : 用户登录页面
 -->
 <template>
@@ -27,13 +27,15 @@
 
     <t-form
       :data="formData"
+      :rules="rules"
+      :required-mark="false"
       show-error-message
       label-align="top"
       scroll-to-first-error="auto"
       @submit="handleSubmit"
     >
       <t-form-item label="账号" name="username">
-        <t-input v-model="formData.username" borderless placeholder="请输入工号或手机号">
+        <t-input v-model="formData.username" borderless placeholder="请输入工号">
           <template #prefixIcon>
             <SvgIcon name="user" />
           </template>
@@ -48,24 +50,16 @@
         </t-input>
       </t-form-item>
 
-      <t-form-item label="验证码" name="code">
-        <t-input v-model="formData.code" borderless placeholder="请输入验证码">
+      <t-form-item label="验证码" name="smsCode">
+        <t-input v-model="formData.smsCode" borderless placeholder="请输入验证码">
           <template #prefixIcon>
             <SvgIcon name="smartphone" />
           </template>
           <template #suffix>
-            <t-button
-              style="font-weight: 500"
-              size="extra-small"
-              theme="primary"
-              variant="text"
-              @click="sendSmsVerificationCode"
-            >
-              发送验证码
-            </t-button>
+            <!-- 倒计时按钮组件 -->
+            <SmsCountDownButton ref="smsCountDownRef" @send="sendSmsVerificationCode" />
 
             <!-- 滑动验证弹窗组件 -->
-            <!-- <SliderVerify ref="verifyDialogRef" :verify="verifySuccess" /> -->
             <CaptchaWrapper
               ref="captchaWrapperRef"
               captchaType="blockPuzzle"
@@ -81,8 +75,9 @@
     </t-form>
 
     <div class="tips">
-      <t-link theme="primary" @click="router.push('/auth/register')">注册账号</t-link>
-      <t-link theme="primary" @click="router.push('/auth/forgot')">忘记密码？</t-link>
+      <!-- <t-link theme="primary" @click="router.push('/auth/register')">注册账号</t-link> -->
+      忘记密码？
+      <t-link theme="primary" @click="router.push('/auth/forgot')">重置密码</t-link>
     </div>
   </div>
 </template>
@@ -90,74 +85,68 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { Message } from 'tdesign-mobile-vue'
+import { Message, type SubmitContext } from 'tdesign-mobile-vue'
 
-import SliderVerify from '@/components/SliderVerify.vue'
-import {
-  fetchSmsVerificationCodeUsingGet,
-  loginWithSmsVerificationCode,
-} from '@/api/auth-controller'
 import { useUserStore } from '@/stores/user-store'
-import { rsaEncrypt } from '@/libs/jsencrypt/rsa'
+import { initMfaLoginUsingPost, verifyMfaLoginUsingPost } from '@/api/auth-controller'
 import SvgIcon from '@/components/SvgIcon.vue'
 import CaptchaWrapper from '@/components/captcha/CaptchaWrapper.vue'
+import SmsCountDownButton from '@/components/SmsCountDownButton.vue'
 
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 
 interface FormData {
+  challengeId?: string
   username?: string
   password?: string
-  code?: string
+  smsCode?: string
   captchaVerification?: string
 }
 
 const formData = reactive<FormData>({})
-
-const verifyDialogRef = ref()
-const captchaWrapperRef = ref()
-
-const sendSmsVerificationCode = () => {
-  // verifyDialogRef.value?.open()
-  captchaWrapperRef.value.show()
+const rules = {
+  username: [{ required: true, message: '请输入工号', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+  smsCode: [{ required: true, message: '请输入验证码', trigger: 'blur' }],
 }
 
-// /**
-//  * 图形滑动验证成功回调
-//  * @param captchaVerification 图形验证码的加密信息
-//  */
-// const verifySuccess = async (captchaVerification: any) => {
-//   verifyDialogRef.value?.close()
-//   // 发送验证码
-//   formData.captchaVerification = captchaVerification
-//   const res = await fetchSmsVerificationCodeUsingGet({
-//     captchaVerification,
-//     mobile: formData.username,
-//     scene: 1
-//   })
-//   if (res.data.code === 0) {
-//     Message.success('验证码发送成功')
-//   } else {
-//     Message.error(res.data.msg)
-//   }
-// }
+const smsCountDownRef = ref()
+const captchaWrapperRef = ref()
+
+/** 发送验证码前，进行图形滑动人机验证 */
+const sendSmsVerificationCode = () => {
+  captchaWrapperRef.value?.show()
+}
 
 /**
  * 图形滑动验证成功回调
  * @param captchaVerification 图形验证码的加密信息
  */
 const captchaSuccess = async (params: { captchaVerification: string }) => {
-  // 发送验证码
   formData.captchaVerification = params.captchaVerification
-  const res = await fetchSmsVerificationCodeUsingGet({
-    captchaVerification: params.captchaVerification,
-    mobile: formData.username,
-    scene: 1,
-  })
-  if (res.data.code === 0) {
-    Message.success({ content: '验证码发送成功', offset: [10, 16] })
+
+  let requestParams: FormData = {}
+  if (!formData.challengeId) {
+    requestParams = {
+      captchaVerification: formData.captchaVerification,
+      username: formData.username,
+      password: formData.password,
+    }
   } else {
+    requestParams = {
+      challengeId: formData.challengeId,
+    }
+  }
+
+  const res = await initMfaLoginUsingPost(requestParams)
+  if (res.data.code === 0 && res.data.data) {
+    formData.challengeId = res.data.data.challengeId
+    Message.success({ content: `验证码已发送到 ${res.data.data.maskedPhone}`, offset: [10, 16] })
+    smsCountDownRef.value?.beginCountdown() // 启动倒计时
+  } else {
+    formData.challengeId = undefined
     Message.error({
       content: res.data.msg,
       offset: [10, 16],
@@ -165,33 +154,34 @@ const captchaSuccess = async (params: { captchaVerification: string }) => {
   }
 }
 
-/** 执行登录 */
-const handleSubmit = async () => {
-  const res = await loginWithSmsVerificationCode({
-    mobile: formData.username, // TODO：这里后端拼写错误，后期要改为：mobile -> username
-    password: rsaEncrypt(formData.password as string),
-    code: formData.code,
-    captchaVerification: formData.captchaVerification,
-    sence: 1, // TODO: 这里后端拼写错误，后期要改为：sence -> scene
-  })
-  if (res.data.code === 0 && res.data.data) {
-    userStore.setLoginUserInfo({
-      accessToken: res.data.data.accessToken,
-      refreshToken: res.data.data.refreshToken,
-      expiresTime: res.data.data.expiresTime,
+/**
+ * 执行登录
+ * @param context 表单提交上下文
+ */
+const handleSubmit = async (context: SubmitContext<FormData>) => {
+  if (context.validateResult === true) {
+    const res = await verifyMfaLoginUsingPost({
+      smsCode: formData.smsCode,
+      challengeId: formData.challengeId,
     })
-    userStore.fetchLoginUserInfo()
-
-    // 判断是否有重定向地址，如果有则跳转到该地址，否则跳转到首页
-    router.push({
-      path: (route.query.redirect as string) ?? '/',
-      replace: true,
-    })
-  } else {
-    Message.error({
-      content: '登录失败，' + res.data.msg,
-      offset: [10, 16],
-    })
+    if (res.data.code === 0 && res.data.data) {
+      userStore.setLoginUserInfo({
+        accessToken: res.data.data.accessToken,
+        refreshToken: res.data.data.refreshToken,
+        expiresTime: res.data.data.expiresTime,
+      })
+      userStore.fetchLoginUserInfo()
+      // 判断是否有重定向地址，如果有则跳转到该地址，否则跳转到首页
+      router.push({
+        path: (route.query.redirect as string) ?? '/',
+        replace: true,
+      })
+    } else {
+      Message.error({
+        content: '登录失败，' + res.data.msg,
+        offset: [10, 16],
+      })
+    }
   }
 }
 </script>
@@ -247,7 +237,7 @@ const handleSubmit = async () => {
   .tips {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     font-size: 14px;
     color: #62748e;
     padding: 0 8px;

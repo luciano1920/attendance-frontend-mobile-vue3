@@ -158,3 +158,29 @@ export async function telecomLogoutUsingGet(options?: { [key: string]: any }) {
     ...(options || {}),
   })
 }
+
+// ------------------------------- MFA 多因子认证 -------------------------------
+
+/** 发起 MFA 登录或基于 challengeId 重发验证码（第一步） POST /admin-api/system/auth/mfa/login/init */
+export async function initMfaLoginUsingPost(body: any, options?: { [key: string]: any }) {
+  return request('/admin-api/system/auth/mfa/login/init', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
+/** 校验 MFA 短信验证码并完成登录（第二步） POST /admin-api/system/auth/mfa/login/verify */
+export async function verifyMfaLoginUsingPost(body: any, options?: { [key: string]: any }) {
+  return request('/admin-api/system/auth/mfa/login/verify', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}

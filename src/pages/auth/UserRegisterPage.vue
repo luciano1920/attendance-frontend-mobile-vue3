@@ -1,9 +1,9 @@
 <!--
  * @Author       : 罗钧 71233895@chinatelecom.cn
- * @Date         : 2026-03-24 22:05
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-04-19 14:29
- * @FilePath     : \attendance-frontend-mobile\src\pages\auth\UserRegisterPage.vue
+ * @Date         : 2026-03
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-05
+ * @FilePath     : /attendance-frontend-mobile/src/pages/auth/UserRegisterPage.vue
  * @Description  : 用户注册页面
 -->
 <template>
@@ -100,7 +100,7 @@ interface FormData {
 const formData = reactive<FormData>({})
 
 const handleSubmit = async (fields: FormData) => {
-  router.replace('/auth')
+  // router.replace('/auth')
 }
 </script>
 
