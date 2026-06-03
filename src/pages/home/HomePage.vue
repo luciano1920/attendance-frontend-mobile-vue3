@@ -139,8 +139,6 @@ const getAttendanceRecordDataByMonth = async (date: Date) => {
  * @param date 日期对象
  */
 const getAttendanceRecordDataByDay = async (date: Date) => {
-  recordDayData.value = {}
-
   if (!date || isFutureDate(date)) {
     return
   }

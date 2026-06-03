@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
+ * @LastEditTime : 2026-06
  * @FilePath     : /attendance-frontend-mobile/src/router/routes.ts
  * @Description  : 路由配置
  */
@@ -29,14 +29,14 @@ export const routes: Array<RouteRecordRaw> = [
         },
       },
       // 用户登录
-      // {
-      //   path: 'login',
-      //   name: '账号密码登录页',
-      //   component: () => import('@/pages/auth/UserLoginPage.vue'),
-      //   meta: {
-      //     title: '用户登录',
-      //   },
-      // },
+      {
+        path: 'login',
+        name: '账号密码登录页',
+        component: () => import('@/pages/auth/UserLoginPage.vue'),
+        meta: {
+          title: '用户登录',
+        },
+      },
       // 用户注册
       // {
       //   path: 'register',
@@ -47,14 +47,14 @@ export const routes: Array<RouteRecordRaw> = [
       //   },
       // },
       // 用户忘记密码重置页
-      // {
-      //   path: 'forgot',
-      //   name: '用户重置密码页',
-      //   component: () => import('@/pages/auth/UserForgotPage.vue'),
-      //   meta: {
-      //     title: '忘记密码',
-      //   },
-      // },
+      {
+        path: 'forgot',
+        name: '用户重置密码页',
+        component: () => import('@/pages/auth/UserForgotPage.vue'),
+        meta: {
+          title: '忘记密码',
+        },
+      },
       // 无权限页面
       {
         path: 'unauthorized',
@@ -115,7 +115,7 @@ export const routes: Array<RouteRecordRaw> = [
       {
         path: 'profile',
         name: '用户中心页（我的）',
-        component: () => import('@/pages/user/UserCenterPage.vue'),
+        component: () => import('@/pages/system/UserCenterPage.vue'),
         meta: {
           title: '我的',
           access: ACCESS_ENUM.USER,
@@ -204,16 +204,34 @@ export const routes: Array<RouteRecordRaw> = [
   {
     path: '/settings',
     name: '用户设置页',
-    component: () => import('@/pages/user/UserSettingsPage.vue'),
+    component: () => import('@/pages/system/UserSettingsPage.vue'),
     meta: {
       title: '应用设置',
+      access: ACCESS_ENUM.USER,
+    },
+  },
+  {
+    path: '/device',
+    name: '打卡设备列表页',
+    component: () => import('@/pages/system/DeviceListPage.vue'),
+    meta: {
+      title: '打卡机列表',
+      access: ACCESS_ENUM.USER,
+    },
+  },
+  {
+    path: '/update-password',
+    name: '用户修改个人密码页',
+    component: () => import('@/pages/system/UpdatePasswordPage.vue'),
+    meta: {
+      title: '修改密码',
       access: ACCESS_ENUM.USER,
     },
   },
   // {
   //   path: '/about',
   //   name: '关于系统页',
-  //   component: () => import('@/pages/user/AboutSystemPage.vue'),
+  //   component: () => import('@/pages/system/AboutSystemPage.vue'),
   //   meta: {
   //     title: '关于系统',
   //     access: ACCESS_ENUM.USER,
@@ -222,7 +240,7 @@ export const routes: Array<RouteRecordRaw> = [
   // {
   //   path: '/help',
   //   name: '帮助中心页',
-  //   component: () => import('@/pages/user/HelpCenterPage.vue'),
+  //   component: () => import('@/pages/system/HelpCenterPage.vue'),
   //   meta: {
   //     title: '帮助中心',
   //     access: ACCESS_ENUM.USER,

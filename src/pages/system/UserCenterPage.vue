@@ -2,8 +2,8 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/pages/user/UserCenterPage.vue
+ * @LastEditTime : 2026-06
+ * @FilePath     : /attendance-frontend-mobile/src/pages/system/UserCenterPage.vue
  * @Description  : 用户中心（我的）页面
 -->
 <template>
@@ -35,11 +35,11 @@
     <!-- 用户操作区域 -->
     <div class="user-action">
       <t-cell-group theme="card" class="user-action-list">
-        <!-- <t-cell title="消息中心" arrow hover>
+        <t-cell title="打卡设备" arrow hover @click="router.push('/device')">
           <template #leftIcon>
-            <IconContainer icon="bell" theme="orange" />
+            <IconContainer icon="hard-drive" theme="orange" />
           </template>
-        </t-cell> -->
+        </t-cell>
         <t-cell title="应用设置" arrow hover @click="router.push('/settings')">
           <template #leftIcon>
             <IconContainer icon="settings" theme="blue" />

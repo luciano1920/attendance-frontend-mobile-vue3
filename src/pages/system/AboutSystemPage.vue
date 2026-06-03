@@ -3,7 +3,7 @@
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
  * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/pages/user/AboutSystemPage.vue
+ * @FilePath     : /attendance-frontend-mobile/src/pages/system/AboutSystemPage.vue
  * @Description  : 关于系统页面
 -->
 <template>

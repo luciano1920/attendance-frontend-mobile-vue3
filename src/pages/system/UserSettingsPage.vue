@@ -2,8 +2,8 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
- * @FilePath     : /attendance-frontend-mobile/src/pages/user/UserSettingsPage.vue
+ * @LastEditTime : 2026-06
+ * @FilePath     : /attendance-frontend-mobile/src/pages/system/UserSettingsPage.vue
  * @Description  : 用户应用设置页
 -->
 <template>
@@ -16,7 +16,7 @@
     <!-- 账号与安全设置 -->
     <t-cell-group title="账号与安全" theme="card">
       <t-cell title="已绑定手机号" hover :note="loginUserInfo.mobile" />
-      <t-cell title="修改密码" arrow hover />
+      <t-cell title="修改密码" arrow hover @click="router.push('/update-password')" />
     </t-cell-group>
   </div>
 </template>
