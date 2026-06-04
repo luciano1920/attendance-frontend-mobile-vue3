@@ -442,7 +442,7 @@ onMounted(() => {
       --td-tab-nav-background: transparent;
       --td-tab-item-height: 36px;
 
-      .t-tabs__scroll--split::after {
+      .t-tabs__nav--split::after {
         height: 0;
       }
     }
