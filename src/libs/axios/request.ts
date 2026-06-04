@@ -1,12 +1,16 @@
 /**
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-03-20 16:47
- * @LastEditors  : luciano1920 1290582790@qq.com
- * @LastEditTime : 2026-05-21 15:58
- * @FilePath     : \attendance-frontend-mobile\src\libs\axios\request.ts
+ * @LastEditors  : 罗钧 71233895@chinatelecom.cn
+ * @LastEditTime : 2026-06
+ * @FilePath     : /attendance-frontend-mobile/src/libs/axios/request.ts
  * @Description  : 全局请求 AXIOS 封装配置
  */
-import axios from 'axios'
+import axios, {
+  type AxiosInstance,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from 'axios'
 import qs from 'qs'
 import { Message } from 'tdesign-mobile-vue'
 
@@ -18,7 +22,7 @@ import { userRefreshTokenUsingPost } from '@/api/auth-controller'
 const BASE_PATH = (import.meta.env.VITE_BASE_PATH || '').replace(/\/+$/, '')
 
 // 创建 Axios 实例
-const axiosInstance = axios.create({
+const axiosInstance: AxiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   timeout: 60000,
   withCredentials: true,
@@ -85,7 +89,7 @@ async function handleRefreshToken(currentPath: string): Promise<string> {
 
 // 全局请求拦截器
 axiosInstance.interceptors.request.use(
-  function (config) {
+  function (config: InternalAxiosRequestConfig) {
     const userStore = useUserStore()
     const accessToken = userStore.loginUser.accessToken ?? getAccessTokenUtil()
     if (accessToken) {
@@ -101,7 +105,7 @@ axiosInstance.interceptors.request.use(
 
 // 全局响应拦截器
 axiosInstance.interceptors.response.use(
-  async function (response) {
+  async function (response: AxiosResponse) {
     const { data, config } = response
 
     // 401：登录过期/未认证

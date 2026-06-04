@@ -11,6 +11,7 @@ import AppSvgIcon from '@/components/AppSvgIcon.vue' // 引入图标雪碧图组
 
 import '@/styles/global.css' // 引入全局样式
 import '@/styles/fonts.css' // 引入全局字体样式
+import '@/styles/nprogress.css' // 引入 NProgress 进度条样式
 
 import './permission' // 引入全局权限控制
 

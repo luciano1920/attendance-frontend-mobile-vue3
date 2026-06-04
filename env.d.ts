@@ -27,6 +27,9 @@ interface ImportMetaEnv {
   readonly VITE_SOURCEMAP: string
   readonly VITE_BASE_PATH: string
   readonly VITE_OUT_DIR: string
+
+  // 进度条配置
+  readonly VITE_PROGRESS_SHOW: string
 }
 
 interface ImportMeta {
