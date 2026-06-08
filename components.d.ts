@@ -16,6 +16,7 @@ declare module 'vue' {
     AppDescriptions: typeof import('./src/components/AppDescriptions.vue')['default']
     AppDescriptionsItem: typeof import('./src/components/AppDescriptionsItem.vue')['default']
     AppIconContainer: typeof import('./src/components/AppIconContainer.vue')['default']
+    AppInfiniteList: typeof import('./src/components/AppInfiniteList.vue')['default']
     AppPictureUpload: typeof import('./src/components/AppPictureUpload.vue')['default']
     AppRadioButtonGroup: typeof import('./src/components/AppRadioButtonGroup.vue')['default']
     AppSegmented: typeof import('./src/components/AppSegmented.vue')['default']

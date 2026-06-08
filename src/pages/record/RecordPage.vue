@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-05
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
+ * @LastEditTime : 2026-06
  * @FilePath     : /attendance-frontend-mobile/src/pages/record/RecordPage.vue
  * @Description  : 审批/申请记录列表页
 -->
@@ -21,7 +21,6 @@
           v-model:value="searchParams.checkManage"
           :options="segmentOptions"
           shape="round"
-          @change="handleSegmentChange"
         >
           <template #label="{ label, payload }">
             <AppSvgIcon :name="payload.icon" />
@@ -68,75 +67,56 @@
       </div>
     </div>
 
-    <div
-      v-if="applyRecordDataList.length === 0"
-      :style="{ paddingTop: isBatchMode ? '178px' : '128px' }"
+    <AppInfiniteList
+      ref="infiniteListRef"
+      class="record-list"
+      :class="{ 'is-batch-mode': isBatchMode }"
+      :search-params="searchParams"
+      :fetch-method="getApplyRecordList"
+      :on-error="handleError"
+      @refresh="exitBatchMode"
     >
-      <t-loading
-        text="数据加载中"
-        layout="vertical"
-        theme="dots"
-        size="32px"
-        :loading="initLoading"
-      />
-
-      <t-pull-down-refresh v-if="!initLoading" @refresh="handleRefresh">
-        <t-empty description="暂无数据">
-          <template #icon>
-            <AppSvgIcon name="funnel" size="48px" />
-          </template>
-        </t-empty>
-      </t-pull-down-refresh>
-    </div>
-
-    <div v-else class="record-list" :style="{ paddingTop: isBatchMode ? '158px' : '108px' }">
-      <t-pull-down-refresh @refresh="handleRefresh">
-        <t-list :async-loading="scrollStatus" :on-scroll="handleScroll">
-          <t-checkbox-group v-model:value="batchRecordIds" borderless>
-            <div
-              v-for="recordItem in applyRecordDataList"
-              :key="recordItem.id"
-              class="list-card-wrapper"
-            >
-              <!-- 批量模式下 -->
-              <template v-if="isBatchMode">
-                <div
-                  class="batch-card"
-                  :class="{ 'batch-card--active': batchRecordIds.includes(recordItem.id) }"
-                >
-                  <AppSvgIcon
-                    v-if="batchRecordIds.includes(recordItem.id)"
-                    class="batch-card-check-icon"
-                    name="check"
-                    color="#ffffff"
-                  />
-                  <t-checkbox
-                    :value="recordItem.id"
-                    icon="none"
-                    style="position: absolute; opacity: 0"
-                  />
-                  <div class="batch-card-content">
-                    <RecordListCard
-                      :record="recordItem"
-                      :is-approve-view="searchParams.checkManage"
-                    />
-                  </div>
-                </div>
-              </template>
-
-              <!-- 普通模式下 -->
-              <template v-else>
-                <RecordListCard
-                  :record="recordItem"
-                  :is-approve-view="searchParams.checkManage"
-                  @long-press="enterBatchMode(recordItem.id)"
+      <template #content="{ dataList }">
+        <t-checkbox-group v-model:value="batchRecordIds" borderless>
+          <div v-for="recordItem in dataList" :key="recordItem.id" class="list-card-wrapper">
+            <!-- 批量模式下 -->
+            <template v-if="isBatchMode">
+              <div
+                class="batch-card"
+                :class="{ 'batch-card--active': batchRecordIds.includes(recordItem.id) }"
+              >
+                <AppSvgIcon
+                  v-if="batchRecordIds.includes(recordItem.id)"
+                  class="batch-card-check-icon"
+                  name="check"
+                  color="#ffffff"
                 />
-              </template>
-            </div>
-          </t-checkbox-group>
-        </t-list>
-      </t-pull-down-refresh>
-    </div>
+                <t-checkbox
+                  :value="recordItem.id"
+                  icon="none"
+                  style="position: absolute; opacity: 0"
+                />
+                <div class="batch-card-content">
+                  <RecordListCard
+                    :record="recordItem"
+                    :is-approve-view="searchParams.checkManage"
+                  />
+                </div>
+              </div>
+            </template>
+
+            <!-- 普通模式下 -->
+            <template v-else>
+              <RecordListCard
+                :record="recordItem"
+                :is-approve-view="searchParams.checkManage"
+                @long-press="enterBatchMode(recordItem.id)"
+              />
+            </template>
+          </div>
+        </t-checkbox-group>
+      </template>
+    </AppInfiniteList>
 
     <!-- 列表一键返回顶部 -->
     <AppBackListTop text="顶部" />
@@ -146,10 +126,11 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue'
 import { storeToRefs } from 'pinia'
-import { Message, type ListProps, type TabValue } from 'tdesign-mobile-vue'
+import { Message, type TabValue } from 'tdesign-mobile-vue'
 
 import { useUserStore } from '@/stores/user-store'
 import { useFilterCache } from '@/composables/useFilterCache'
+import type { PageParams } from '@/composables/useInfiniteList.ts'
 import {
   approveApplicationUsingPost,
   fetchApprovalRecordByPageUsingPost,
@@ -160,6 +141,7 @@ import { APPROVE_STATUS_ENUM } from '@/constants/record'
 import AppSvgIcon from '@/components/AppSvgIcon.vue'
 import AppSegmented from '@/components/AppSegmented.vue'
 import AppBackListTop from '@/components/AppBackListTop.vue'
+import AppInfiniteList from '@/components/AppInfiniteList.vue'
 import RecordListCard from './components/RecordListCard.vue'
 
 const userStore = useUserStore()
@@ -169,7 +151,6 @@ const { loginUser } = storeToRefs(userStore)
 const pageTitle = ref<string>('申请记录')
 
 const approvalStatus = ref<string>('pending') // 审批状态，绑定 TabValue
-
 // 分段控制选项，用于区分个人申请清单还是管理员审批清单
 const showSegmented = ref<boolean>(false) // 管理员角色才能看到分段控制器
 const segmentOptions = [
@@ -177,115 +158,42 @@ const segmentOptions = [
   { label: '我的申请', value: false, payload: { icon: 'list' } },
 ]
 
-// ==================== 列表数据 ====================
-const isFetching = ref(false) // 请求锁：防止并发请求
-const isFinished = ref(false) // 截断锁：数据到底 or 接口报错，停止滚动加载
-
-const initLoading = computed(() => isFetching.value && searchParams.pageNo === 1)
-const scrollStatus = computed<ListProps['asyncLoading']>(() => {
-  if (isFetching.value && searchParams.pageNo > 1) {
-    return 'loading'
-  }
-  return ''
-})
+const infiniteListRef = ref()
 
 // 查询参数
 const searchParams = reactive({
-  pageNo: 1,
   pageSize: 10,
   orderState: [APPROVE_STATUS_ENUM.PENDING],
   checkManage: false,
 })
 
-const recordTotal = ref<number>(0)
-const applyRecordDataList = ref<any[]>([]) // 申请记录数据列表
-
-// ==================== 列表数据获取 ====================
-/*
-  用于取消进行中网络请求的控制器，在发起新请求前，主动取消上一次未完成的请求
-  当用户快速切换筛选条件时，会连续触发多次请求。由于网络返回顺序不确定，如果前一次请求比后一次请求晚返回，会发生旧数据覆盖新数据的竞态错误。
+// ==================== 获取列表数据 ====================
+/**
+ * 获取申请列表数据
+ * @param params 分页参数
+ * @param signal 请求取消信号
  */
-let abortController: AbortController | null = null
-
-/** 获取申请记录数据列表 */
-const getApplyRecordDataList = async () => {
-  // 如果存在未完成的上一次请求，直接取消它
-  if (abortController) {
-    abortController.abort()
+const getApplyRecordList = async (params: PageParams, signal?: AbortSignal) => {
+  const res = await fetchApprovalRecordByPageUsingPost({ ...params }, { signal })
+  if (res.data.code !== 0) {
+    throw new Error('获取记录失败，' + res.data.msg)
   }
-  const currentController = new AbortController() // 每次发起新请求，都创建一个新的 AbortController 实例
-  abortController = currentController
 
-  // 发请求开始就加上请求锁
-  isFetching.value = true
-
-  try {
-    const res = await fetchApprovalRecordByPageUsingPost(
-      { ...searchParams },
-      { signal: currentController.signal },
-    )
-
-    if (res.data.code === 0 && res.data.data) {
-      const newList = res.data.data.list ?? []
-      if (searchParams.pageNo === 1) {
-        applyRecordDataList.value = newList // 如果是第一页，直接替换；否则追加数据
-      } else {
-        applyRecordDataList.value = [...applyRecordDataList.value, ...newList]
-      }
-      recordTotal.value = res.data.data.total ?? 0
-
-      // 如果当前数据量 >= 分页总量，上截断锁
-      if (applyRecordDataList.value.length >= recordTotal.value) {
-        isFinished.value = true
-      }
-    } else {
-      Message.error({ content: '获取记录失败，' + res.data.msg, offset: [10, 16] })
-      // 如果获取数据失败，也要上截断锁
-      isFinished.value = true
-    }
-  } catch (error: any) {
-    if (error.name === 'CanceledError' || error.name === 'AbortError') {
-      return
-    }
-
-    Message.error({ content: '网络异常，请稍后重试', offset: [10, 16] })
-    console.log(error)
-
-    // 如果获取数据失败，也要上截断锁
-    isFinished.value = true
-  } finally {
-    if (!currentController?.signal.aborted) {
-      isFetching.value = false // 无论成功失败，只解请求锁
-    }
-    abortController = null // 断开引用，防止闭包导致内存泄漏
+  return {
+    list: res.data.data.list ?? [],
+    total: res.data.data.total ?? 0,
   }
 }
 
 /**
- * 处理列表滑动事件
- * @param scrollBottom 滚动条距离底部的距离
+ * 请求失败统一处理
+ * @param error 错误信息
  */
-const handleScroll = (scrollBottom: number) => {
-  // 只有触底，且没在加载，且没被截断，才允许请求下一页
-  if (scrollBottom < 1 && !isFetching.value && !isFinished.value) {
-    searchParams.pageNo += 1
-    getApplyRecordDataList()
-  }
-}
-
-/** 处理列表下拉刷新 */
-const handleRefresh = () => {
-  // 只要重新加载数据，无条件退出批量模式
-  if (isBatchMode.value) {
-    exitBatchMode()
-  }
-
-  searchParams.pageNo = 1
-  applyRecordDataList.value = []
-  recordTotal.value = 0
-  // 下拉刷新时，打开截断锁
-  isFinished.value = false
-  getApplyRecordDataList()
+const handleError = (error: any) => {
+  Message.error({
+    content: error.message ?? '网络异常，请稍后重试',
+    offset: [10, 16],
+  })
 }
 
 /**
@@ -298,12 +206,6 @@ const handleTabChange = (value: TabValue) => {
   } else {
     searchParams.orderState = [APPROVE_STATUS_ENUM.APPROVED, APPROVE_STATUS_ENUM.REJECTED]
   }
-  handleRefresh()
-}
-
-/** AppSegmented 切换事件处理函数 */
-const handleSegmentChange = () => {
-  handleRefresh()
 }
 
 // ========== 批量操作 ==========
@@ -312,10 +214,11 @@ const batchRecordIds = ref<Array<number>>([]) // 批量操作的记录 id 列表
 
 // 是否全选
 const isAllSelected = computed(() => {
-  if (applyRecordDataList.value.length === 0) {
+  const currentList = infiniteListRef.value?.dataList || []
+  if (currentList.length === 0) {
     return false
   }
-  return applyRecordDataList.value.every((item) => batchRecordIds.value.includes(item.id))
+  return currentList.every((item: any) => batchRecordIds.value.includes(item.id))
 })
 
 /**
@@ -341,11 +244,8 @@ const exitBatchMode = () => {
  * @param checked 是否全选
  */
 const handleCheckAllChange = (checked: boolean) => {
-  if (checked) {
-    batchRecordIds.value = applyRecordDataList.value.map((item: any) => Number(item.id))
-  } else {
-    batchRecordIds.value = []
-  }
+  const currentList = infiniteListRef.value?.dataList || []
+  batchRecordIds.value = checked ? currentList.map((item: any) => Number(item.id)) : []
 }
 
 /**
@@ -365,7 +265,7 @@ const handleBatchApprove = async (state: number) => {
     Message.success({ content: '批量处理成功', offset: [10, 16] })
     exitBatchMode()
     // 刷新列表
-    handleRefresh()
+    infiniteListRef.value?.refresh()
   } else {
     Message.error({ content: '批量处理失败，' + res.data.msg, offset: [10, 16] })
   }
@@ -407,7 +307,6 @@ onMounted(() => {
   }
 
   pageTitle.value = searchParams.checkManage ? '考勤审批' : '申请记录'
-  getApplyRecordDataList()
 })
 </script>
 
@@ -489,7 +388,26 @@ onMounted(() => {
   padding-left: 16px;
   padding-right: 16px;
   padding-bottom: 96px;
-  transition: padding-top 0.3s ease;
+  transition: padding-top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* 动态 paddingTop 状态控制 */
+  &.is-empty,
+  &.is-loading {
+    padding-top: 128px;
+  }
+
+  &.is-has-data {
+    padding-top: 108px;
+  }
+
+  &.is-batch-mode.is-empty,
+  &.is-batch-mode.is-loading {
+    padding-top: 178px;
+  }
+
+  &.is-batch-mode.is-has-data {
+    padding-top: 158px;
+  }
 
   .list-card-wrapper {
     margin-bottom: 10px;
