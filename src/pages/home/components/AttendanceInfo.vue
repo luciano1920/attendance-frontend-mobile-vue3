@@ -2,7 +2,7 @@
  * @Author       : 罗钧 71233895@chinatelecom.cn
  * @Date         : 2026-04
  * @LastEditors  : 罗钧 71233895@chinatelecom.cn
- * @LastEditTime : 2026-05
+ * @LastEditTime : 2026-06
  * @FilePath     : /attendance-frontend-mobile/src/pages/home/components/AttendanceInfo.vue
  * @Description  : 当日考勤打卡记录详情展示组件
 -->
@@ -22,15 +22,8 @@
       <div class="info-header">
         <div class="info-date">{{ formatDateCN(recordData.date) }}</div>
         <div class="info-week">{{ RECORD_WEEK_MAP[recordData.week] }}</div>
-        <t-tag v-if="recordData.transactionList?.length !== 0" variant="light" theme="primary">
-          已打卡
-        </t-tag>
-        <t-tag
-          v-else-if="recordData.transactionList?.length === 0 && recordData.typeList?.length === 0"
-          variant="light"
-          theme="danger"
-        >
-          缺卡
+        <t-tag variant="light" :theme="RECORD_TYPE_THEME_MAP[recordData.recordType]">
+          {{ RECORD_TYPE_MAP[recordData.recordType] }}
         </t-tag>
       </div>
 
@@ -38,10 +31,10 @@
         <t-tag
           v-for="typeItem in recordData.typeList"
           :key="typeItem"
-          variant="light"
+          variant="outline"
           theme="success"
         >
-          {{ typeItem.type }}({{ typeItem.period }})
+          {{ typeItem.type }} ({{ typeItem.period }})
         </t-tag>
       </div>
 
@@ -58,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { RECORD_WEEK_MAP } from '@/constants/record'
+import { RECORD_TYPE_MAP, RECORD_TYPE_THEME_MAP, RECORD_WEEK_MAP } from '@/constants/record'
 import { formatDateCN, formatTime } from '@/utils/date'
 
 interface Props {

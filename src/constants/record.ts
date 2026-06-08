@@ -21,7 +21,7 @@ export const RECORD_TYPE_ENUM = {
 
 /** 考勤记录类型文本映射 */
 export const RECORD_TYPE_MAP: Record<number, string> = {
-  1: '正常打卡',
+  1: '已打卡',
   2: '缺卡',
   3: '补卡',
   4: '请假',
@@ -50,6 +50,17 @@ export const RECORD_TYPE_COLOR_MAP: Record<number, string> = {
   5: '#2ba471',
   6: '#2ba471',
   7: '#c9cdd4',
+}
+
+/** 考勤记录类型主体映射 */
+export const RECORD_TYPE_THEME_MAP: Record<number, string> = {
+  1: 'primary',
+  2: 'danger',
+  3: 'warning',
+  4: 'success',
+  5: 'success',
+  6: 'success',
+  7: 'default',
 }
 
 /** 考勤记录类型选项映射 */
