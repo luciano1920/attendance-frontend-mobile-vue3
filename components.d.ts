@@ -48,6 +48,7 @@ declare module 'vue' {
     TPopup: typeof import('tdesign-mobile-vue')['Popup']
     TPullDownRefresh: typeof import('tdesign-mobile-vue')['PullDownRefresh']
     TResult: typeof import('tdesign-mobile-vue')['Result']
+    TSearch: typeof import('tdesign-mobile-vue')['Search']
     TTabBar: typeof import('tdesign-mobile-vue')['TabBar']
     TTabBarItem: typeof import('tdesign-mobile-vue')['TabBarItem']
     TTabPanel: typeof import('tdesign-mobile-vue')['TabPanel']

@@ -8,12 +8,23 @@
 -->
 <template>
   <div id="device-list-page">
-    <div class="nav-bar" @click="router.push('/profile')">
-      <AppSvgIcon name="chevron-left" size="22px" />
-      打卡设备
+    <div class="page-header">
+      <div class="nav-bar" @click="router.push('/profile')">
+        <AppSvgIcon name="chevron-left" size="22px" />
+        打卡设备
+      </div>
+
+      <div class="search-filter">
+        <t-search v-model="searchParams.keyword" shape="round" placeholder="搜索打卡机位置或别名" />
+      </div>
     </div>
 
-    <AppInfiniteList :fetch-method="getDevicesList" :on-error="handleError" class="device-list">
+    <AppInfiniteList
+      :search-params="searchParams"
+      :fetch-method="getDevicesList"
+      :on-error="handleError"
+      class="device-list"
+    >
       <template #content="{ dataList }">
         <div v-for="item in dataList" :key="item.id" class="list-card-wrapper">
           <DeviceListCard :device="item" />
@@ -27,6 +38,7 @@
 </template>
 
 <script setup lang="ts">
+import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { Message } from 'tdesign-mobile-vue'
 
@@ -38,6 +50,12 @@ import AppSvgIcon from '@/components/AppSvgIcon.vue'
 import DeviceListCard from './components/DeviceListCard.vue'
 
 const router = useRouter()
+
+// 查询参数
+const searchParams = reactive({
+  pageSize: 10,
+  keyword: '',
+})
 
 /**
  * 获取打卡设备列表数据
@@ -69,17 +87,30 @@ const handleError = (error: any) => {
 </script>
 
 <style scoped lang="scss">
-.nav-bar {
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  font-size: 18px;
-  font-weight: 600;
-  gap: 8px;
+.page-header {
+  position: fixed;
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(8px);
+  z-index: 999;
+  border-bottom: 1px solid #e5e8eb;
+
+  .nav-bar {
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    gap: 8px;
+  }
+
+  .search-filter {
+    padding: 8px 16px;
+  }
 }
 
 .device-list {
-  padding: 8px 16px 96px;
+  padding: 118px 16px 96px;
 
   .list-card-wrapper {
     margin-bottom: 10px;
